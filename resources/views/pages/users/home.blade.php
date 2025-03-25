@@ -83,31 +83,31 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Category 1 -->
-        <div class="relative group bg-linen">
-            <img src="{{ asset('images/banner.png') }}" alt="Tops" class="w-full h-auto object-cover">
+        <div class="relative group w-full h-80 bg-linen overflow-hidden">
+            <img src="{{ asset('images/kemeja2.png') }}" alt="Tops" class="w-full h-auto object-cover">
             <div class="absolute mx-6 bottom-4 left-0 right-0 bg-white text-center py-2">
-                <span class="font-semibold text-gray-800">TOPS</span>
+                <span class="font-semibold text-gray-800">KEMEJA</span>
             </div>
         </div>
 
         <!-- Category 2 -->
-        <div class="relative group bg-linen">
-            <img src="{{ asset('images/banner.png') }}" alt="Shoes" class="w-full h-auto object-cover">
+        <div class="relative group bg-slate-100 overflow-hidden h-80">
+            <img src="{{ asset('images/hoddie2.png') }}" alt="Shoes" class="w-full h-auto object-cover">
             <div class="absolute mx-6 bottom-4 left-0 right-0 bg-white text-center py-2">
-                <span class="font-semibold text-gray-800">SHOES</span>
+                <span class="font-semibold text-gray-800">Hoddie</span>
             </div>
         </div>
 
         <!-- Category 3 -->
-        <div class="relative group bg-linen">
-            <img src="{{ asset('images/banner.png') }}" alt="Accessories" class="w-full h-auto object-cover">
+        <div class="relative group bg-linen overflow-hidden h-80">
+            <img src="{{ asset('images/celana.png') }}" alt="Accessories" class="w-full h-auto object-cover">
             <div class="absolute mx-6 bottom-4 left-0 right-0 bg-white text-center py-2">
-                <span class="font-semibold text-gray-800">ACCESSORIES</span>
+                <span class="font-semibold text-gray-800">CELANA</span>
             </div>
         </div>
 
         <!-- Category 4 -->
-        <div class="relative group bg-linen">
+        <div class="relative group bg-slate-100 overflow-hidden h-80">
             <img src="{{ asset('images/banner.png') }}" alt="Sweatshirts" class="w-full h-auto object-cover">
             <div class="absolute mx-6 bottom-4 left-0 right-0 bg-white text-center py-2">
                 <span class="font-semibold text-gray-800">SWEATSHIRTS</span>
