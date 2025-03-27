@@ -1,16 +1,15 @@
 @props(['path', 'title'])
 
 @php
-    // Menentukan apakah path ini adalah path yang aktif
-    $isActive = request()->routeIs(ltrim($path, '/'));
+    $isActive = request()->is(trim($path, '/'));
 @endphp
 
 <li>
-    <a href="{{ $path }}"
+    <a href="{{ $path }}" 
         class="flex items-center p-2 rounded-lg 
-        {{ $isActive ? 'bg-gray-100 text-slate-900' : 'hover:bg-gray-100 dark:hover:bg-gray-700' }}
-        group text-slate-50 hover hover:text-slate-900">
+            {{ $isActive ? 'bg-linen text-slate-900' : 'hover:bg-linen hover:text-slate-950' }} 
+            group">
         {{ $slot }}
-        <span class="ms-3 text-lg">{{ $title }}</span>
+        <span class="ms-3 text-lg text-slate-950 group-hover:text-yellow-700">{{ $title }}</span>
     </a>
 </li>

@@ -61,7 +61,7 @@ class TransaksiController extends Controller
         // Ambil semua transaksi beserta relasi pelanggan dan produk
         $transaksi = Transaksi::with(['pelanggan', 'produk'])->get();
 
-        return view('dashboard.transaksi.index', compact('transaksi'));
+        return view('pages.admin.transaksi.index', compact('transaksi'));
     }
 
     // Mengupdate status transaksi
@@ -130,11 +130,12 @@ class TransaksiController extends Controller
         // Calculate total transaksi
         $totalTransaksi = $transaksis->sum('harga_total');
 
-        return view('dashboard.transaksi.laporan', [
+        return view('pages.admin.transaksi.laporan', [
             'transaksi'      => $transaksis,
             'totalTransaksi' => $totalTransaksi,
         ]);
     }
+
     public function destroy($id)
     {
         // Temukan transaksi berdasarkan ID
@@ -146,5 +147,4 @@ class TransaksiController extends Controller
         // Kembali ke halaman sebelumnya dengan pesan sukses
         return redirect()->back()->with('success', 'Transaksi berhasil dihapus.');
     }
-    
 }

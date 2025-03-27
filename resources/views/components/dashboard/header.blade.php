@@ -1,8 +1,9 @@
-<div class="w-full">
-    <header class="w-[81%] left-64 top-0 flex fixed items-center justify-between p-4 bg-white shadow z-50 px-9 pl-6">
+<div class="w-full ">
+    <header class="w-[81%] left-64 top-0 flex fixed items-center justify-between p-4 bg-white shadow z-50 px-9 pl-6 ">
         <div class="flex flex-col">
-            <h1 class="font-bold text-2xl text-slate-950">Dashboard</h1>
+            <h1 class="font-semibold text-2xl text-slate-950">Administator</h1>
         </div>
+        
         <div class="flex items-center  space-x-4">
             <label class="input input-bordered flex items-center gap-2 invisible">
                 <input type="text" class="grow" placeholder="Search" />
@@ -14,15 +15,16 @@
                 </svg>
             </label>
             <div class="dropdown dropdown-end">
-    <div class="flex gap-2 items-center font-semibold bg-green-600 rounded-full p-1 px-4 text-slate-50">
-        <div>{{ Auth::user()->name }}</div>
-        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+                
+    <div class="flex gap-2 items-center font-semibold p-1 px-4 ">
+        <div>Username</div>
+        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar bg-slate-400">
             
-            <div class="w-10 rounded-full">
+            {{-- <div class="w-10 rounded-full">
                 <img alt="Tailwind CSS Navbar component"
                 src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('images/produk.png') }}" 
                 alt="Avatar" />
-            </div>
+            </div> --}}
         </div>
     </div>
 

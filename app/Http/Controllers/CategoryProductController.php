@@ -20,7 +20,7 @@ class CategoryProductController extends Controller
     public function kategori_dashboard()
     {
         $categories = CategoryProduct::all();
-        return view('dashboard.kategori.index', compact('categories'));
+        return view('pages.admin.kategori.index', compact('categories'));
     }
 
     public function create()

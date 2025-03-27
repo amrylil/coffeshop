@@ -43,7 +43,7 @@ class ProductController extends Controller
     {
         $products = Product::with('category')->get();
 
-        return view('dashboard.produk.product', [
+        return view('pages.admin.produk.product', [
             'title'    => 'Daftar Produk',
             'products' => $products
         ]);
