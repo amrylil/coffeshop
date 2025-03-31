@@ -12,7 +12,7 @@ class LoginController extends Controller
     // Menampilkan form login
     public function showLoginForm()
     {
-        return view('login');
+        return view('pages.auth.login');
     }
 
     // Proses login
