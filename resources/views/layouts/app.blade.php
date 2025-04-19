@@ -37,7 +37,7 @@
     @include('components.navbar')
 
     <!-- Main Content -->
-    <main class="relative ">
+    <main class="relative {{ Request::is('/') ? '' : 'px-24 py-14' }} bg-[#523433]">
         <div id="dark-body"
             class="transition-all duration-150 ease-in-out w-screen h-screen hidden start-0 bg-slate-50 opacity-45 z-40">
         </div>

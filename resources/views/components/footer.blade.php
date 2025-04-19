@@ -14,7 +14,7 @@
             </ul>
         </div>
         <hr class="my-6 border-gray-200 sm:mx-auto  lg:my-8" />
-        <span class="block text-sm text-slate-50 sm:text-center ">© 2025 Magang Rumah Logic™. All Rights
+        <span class="block text-sm text-slate-50 sm:text-center ">© 2025 Coffee Shop™. All Rights
             Reserved.</span>
     </div>
 </footer>

@@ -1,68 +1,56 @@
-<header x-data="{ scrolled: false }" @scroll.window="scrolled = (window.scrollY > window.innerHeight * 0.1)"
-    :class="scrolled ? 'bg-white transition-all duration-200' : ''"
-    class="flex top-0 justify-between items-center py-4 px-24  z-50  w-full fixed font-jost">
+<header x-data="{
+    scrolled: false,
+    isHome: window.location.pathname === '/'
+}" @scroll.window="scrolled = (window.scrollY > window.innerHeight * 0.1)"
+    :class="isHome && scrolled ? 'bg-[#e6dbd1] transition-all duration-200' : ''"
+    class="flex {{ Request::is('/') ? '' : 'bg-[#e6dbd1]' }} top-0 justify-between items-center py-4 px-24  z-50  w-full fixed font-jost">
     {{-- logo --}}
-    <div x-data="{ scrolled: false }" @scroll.window="scrolled = (window.scrollY > window.innerHeight * 0.1)"
-        :class="scrolled ? 'text-slate-950' : 'text-slate-50'" class="text-2xl font-semibold text-slate-50">
+    <div x-data="{
+        scrolled: false,
+        isHome: window.location.pathname === '/'
+    }" @scroll.window="scrolled = (window.scrollY > window.innerHeight * 0.1)"
+        :class="scrolled ? 'text-slate-950' : 'text-slate-50'"
+        class="text-2xl font-semibold  {{ Request::is('/') ? '' : 'text-slate-950' }}">
         Coffee Shop
     </div>
 
 
 
     {{-- menu --}}
-    <nav class="space-x-5 text-sm flex ">
-        <a href="/" x-data="{ scrolled: false }" @scroll.window="scrolled = (window.scrollY > window.innerHeight * 0.1)"
-            :class="scrolled ? 'text-slate-950' : 'text-slate-50'"
-            class="text-slate-50 hover:text-white {{ Request::is('/') ? 'bg-slate-900 text-white' : '' }} px-4 py-2 "
-            style="transition: background-color 0.3s;"
-            onmouseover="this.style.backgroundColor='var(--color-slate-900)';"
-            onmouseout="this.style.backgroundColor='';">Beranda</a>
+    <nav class="space-x-5    flex ">
+        <a href="/" x-data="{
+            scrolled: false,
+            isHome: window.location.pathname === '/'
+        }" @scroll.window="scrolled = (window.scrollY > window.innerHeight * 0.1)"
+            :class="isHome && scrolled ? 'text-slate-950' : 'text-slate-50'"
+            class="rounded text-slate-50 hover:text-white {{ Request::is('/') ? 'bg-[#422424] text-white' : 'text-slate-950 ' }} px-4 py-2 hover:bg-[#422424]"
+            style="transition: background-color 0.3s;">Beranda</a>
 
-        <a href="/shop" x-data="{ scrolled: false }"
+        <a href="/shop" x-data="{
+            scrolled: false,
+            isHome: window.location.pathname === '/'
+        }"
             @scroll.window="scrolled = (window.scrollY > window.innerHeight * 0.1)"
-            :class="scrolled ? 'text-slate-950' : 'text-slate-50'"
-            class="text-slate-50 hover:text-white {{ Request::is('shop') ? 'bg-slate-900 text-white' : '' }} px-4 py-2 "
-            style="transition: background-color 0.3s;"
-            onmouseover="this.style.backgroundColor='var(--color-slate-900)';"
-            onmouseout="this.style.backgroundColor='';">Toko</a>
+            :class="isHome && scrolled ? 'text-slate-950' : 'text-slate-50'"
+            class="rounded hover:bg-[#422424] hover:text-white {{ Request::is('/') ? 'text-slate-50' : (Request::is('shop') ? 'text-white bg-[#422424]' : 'text-slate-950') }} px-4 py-2 "
+            style="transition: background-color 0.3s;">Toko</a>
 
-        <a href="/kategori" x-data="{ scrolled: false }"
+        <a href="/kategori" x-data="{
+            scrolled: false,
+            isHome: window.location.pathname === '/'
+        }"
             @scroll.window="scrolled = (window.scrollY > window.innerHeight * 0.1)"
-            :class="scrolled ? 'text-slate-950' : 'text-slate-50'"
-            class="text-slate-50 hover:text-white {{ Request::is('kategori') ? 'bg-slate-900 text-white' : '' }} px-4 py-2 "
-            style="transition: background-color 0.3s;"
-            onmouseover="this.style.backgroundColor='var(--color-slate-900)';"
-            onmouseout="this.style.backgroundColor='';">Kategori</a>
+            :class="isHome && scrolled ? 'text-slate-950' : 'text-slate-50'"
+            class="rounded hover:bg-[#422424] text-slate-50 hover:text-white {{ Request::is('/') ? 'text-slate-50' : (Request::is('kategori') ? 'text-white bg-[#422424]' : 'text-slate-950') }}  px-4 py-2 "
+            style="transition: background-color 0.3s;">Reservasi</a>
 
         <a href="/about"
-            class="text-gray-900 hover:text-white {{ Request::is('about') ? 'bg-slate-900 text-white' : '' }} px-4 py-2 "
-            style="transition: background-color 0.3s;"
-            onmouseover="this.style.backgroundColor='var(--color-slate-900)';"
-            onmouseout="this.style.backgroundColor='';">Tentang Kami</a>
+            class="rounded hover:bg-[#422424] text-gray-900 hover:text-white {{ Request::is('about') ? 'bg-[#422424] text-white' : '' }} px-4 py-2 "
+            style="transition: background-color 0.3s;">Tentang Kami</a>
 
         <a href="/contact-us"
-            class="text-gray-900 hover:text-white {{ Request::is('contact-us') ? 'bg-slate-900 text-white' : '' }} px-4 py-2 "
-            style="transition: background-color 0.3s;"
-            onmouseover="this.style.backgroundColor='var(--color-slate-900)';"
-            onmouseout="this.style.backgroundColor='';">Kontak</a>
-        <div x-data="{ open: false }" class="relative">
-            <button @click="open = !open"
-                class=" flex justify-center items-center h-full w-full cursor-pointer hover:scale-105">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="-0.5 -0.5 16 16" fill="none" stroke="#000000"
-                    stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"
-                    id="Search--Streamline-Feather" height="16" width="16">
-                    <desc>Search Streamline Icon: https://streamlinehq.com</desc>
-                    <path d="M1.875 6.875a5 5 0 1 0 10 0 5 5 0 1 0 -10 0" stroke-width="1"></path>
-                    <path d="m13.125 13.125 -2.71875 -2.71875" stroke-width="1"></path>
-                </svg>
-            </button>
-
-            <!-- Search Form -->
-            <div x-show="open" x-transition class="absolute top-10 right-0 bg-white shadow-md p-2 rounded-md">
-                <input type="text" placeholder="Cari..."
-                    class="border p-2 rounded-md focus:outline-none focus:ring focus:ring-green-500">
-            </div>
-        </div>
+            class="rounded hover:bg-[#422424] text-gray-900 hover:text-white {{ Request::is('contact-us') ? 'bg-[#422424] text-white' : '' }} px-4 py-2 "
+            style="transition: background-color 0.3s;">Kontak</a>
 
     </nav>
 
@@ -212,8 +200,8 @@
     @else
         {{-- Jika pengguna belum login --}}
         <div class="space-x-2">
-            <a href="/login" class="text-gray-900 hover:text-black">Login</a>
-            <a href="/signup" class="border  py-1 px-4 -lg text-slate-950 ">Register</a>
+            <a href="/login"
+                class="border rounded hover:bg-[#422424] hover:text-slate-50  py-2 px-4 -lg text-slate-950 ">Masuk</a>
         </div>
     @endif
 </header>

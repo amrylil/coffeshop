@@ -6,17 +6,17 @@
 
     <!-- Hero Section -->
     <section class="text-center flex">
-        <div class="bg-[#523433] w-1/2 pl-24 px-10 flex flex-col justify-center items-center">
-            <h1 class="font text-slate-50 font-playfair text-5xl md:text-7xl font-bold mb-8">
+        <div class="bg-[#523433] w-1/2 pl-24 pt-40 px-10 flex flex-col justify-center items-center">
+            <h1 class="font text-[#e6dbd1] font-playfair text-5xl md:text-7xl font-bold mb-8 ">
                 It's a Coffee Break
             </h1>
-            <p class="text-gray-400 text-lg mb-12 max-w-2xl mx-auto">
+            <p class="text-[#e6dbd1] text-lg mb-12 max-w-2xl mx-auto">
                 If you drink coffee regularly you will know the difference between fresh coffee and old coffee.
                 Our goal is to provide two relevant coffee books in each day.
             </p>
 
             <div class="flex justify-center gap-6 mb-20">
-                <button class="bg-amber-600 text-white px-8 py-4 rounded-full hover:bg-amber-700 transition">
+                <button class="bg-amber-600 text-[#e6dbd1] px-8 py-4 rounded-full hover:bg-amber-700 transition">
                     Explore The Shop
                 </button>
                 <button
@@ -36,14 +36,14 @@
     <!-- Features Section -->
     <section class=" bg-[#422424] p-24">
         <div class="flex justify-between items-center mb-20">
-            <h3 class="text-5xl  text-slate-50 font-playfair font-bold  ">
+            <h3 class="text-5xl  text-[#e6dbd1] font-playfair font-bold  ">
                 The Best Treat <br /> From The Process
             </h3>
-            <p class="w-96 text-slate-50">Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident soluta fugit
+            <p class="w-96 text-[#e6dbd1]">Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident soluta fugit
                 rem ut mollitia! Nulla enim incidunt asperiores ab cupiditate</p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-8 text-slate-50">
+        <div class="grid md:grid-cols-3 gap-8 text-[#e6dbd1]">
             <div class="p-6 bg-[#523433] rounded-lg flex justify-center items-center flex-col gap-4">
                 <svg viewBox="0 0 16 16" fill="#f8fafc" xmlns="http://www.w3.org/2000/svg" id="Java-Line--Streamline-Remix"
                     height="60" width="60">
@@ -82,7 +82,7 @@
     </section>
 
     <!-- Product Section -->
-    <section class="bg-[#523433] py-16 px-24 text-white text-center">
+    <section class="bg-[#523433] py-16 px-24 text-[#e6dbd1] text-center">
         <h2 class="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow font-jost">Our Popular Products</h2>
         <p class="max-w-xl mx-auto mb-12 text-gray-300">We always tries to bring single origin from various regions which a
             distinctive taste. That is intended for real coffee connoisseur.</p>
@@ -118,6 +118,31 @@
             <span class="w-3 h-3 rounded-full bg-white opacity-50"></span>
         </div>
     </section>
+    <section class="bg-[#e6dbd1] py-16 px-24">
+        <div class="flex justify-between items-center ">
+
+            <!-- Left Content -->
+            <div class="space-y-6 ">
+                <h2 class="text-4xl font-bold text-[#3C1E1E] leading-tight">
+                    Reservasi Meja Lebih Mudah
+                </h2>
+                <p class="text-gray-700 text-lg pr-40">
+                    Hindari antrian dan pastikan kenyamananmu. Reservasi meja secara online hanya dengan beberapa klik.
+                    Waktu berharga kamu tak akan terbuang sia-sia.
+                </p>
+                <a href="/reservasi"
+                    class="inline-block bg-[#3C1E1E] text-white px-6 py-3 rounded-full font-medium hover:bg-[#2a1616] transition">
+                    Reservasi Sekarang
+                </a>
+            </div>
+
+            <!-- Right Image -->
+            <img src="{{ asset('images/reservasi.jpg') }}" alt="Reservasi Meja"
+                class="max-w-md w-full rounded-xl shadow-lg object-cover">
+
+        </div>
+    </section>
+
 
 @endsection
 
