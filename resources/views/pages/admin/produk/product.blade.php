@@ -1,84 +1,154 @@
 @extends('layouts.dashboard-layout')
 
 @section('content')
-    <!-- Dashboard Header -->
-    <div class="rounded-xl pt-20 w-full ">
-        <div class="flex justify-between items-center mb-4 p-4 text-slate-950 rounded-t-xl bg-linen " > 
-            <h1 class="text-2xl font-bold">Kelola Semua Data Produk</h1>
-            <a href="#">
+    <!-- Coffee Menu Header -->
+    <div class="rounded-xl pt-20 w-full  mx-auto font-jost">
+        <div
+            class="flex justify-between items-center mb-4 p-3 text-amber-900 rounded-t-lg bg-amber-50 border-b-2 border-amber-200">
+            <h1 class="text-2xl font-bold">Kelola Menu Kopi</h1>
+            <a href="/admin/produk/create">
                 <button
-                    class="btn bg-white text-slate-900 hover:bg-gray-200 font-semibold px-4 py-2 rounded-lg shadow-md">Tambah
-                    Produk</button>
+                    class="bg-amber-800 text-amber-50 hover:bg-amber-900 font-medium text-sm px-3 py-1.5 rounded-md shadow-sm transition duration-300">
+                    <span class="flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                            stroke="currentColor" class="w-4 h-4 mr-1">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                        Tambah Varian
+                    </span>
+                </button>
             </a>
         </div>
-        <div class="overflow-x-auto px-4">
-            <!-- Input Pencarian -->
+        <div class="bg-white rounded-b-lg shadow-md px-3 py-4">
+            <!-- Search Input -->
             <div class="mb-4 flex gap-2">
-                <input type="text" id="search" placeholder="Cari produk..."
-                       class="border-2 border-gray-300 p-2 rounded-lg w-full"
-                       onkeyup="searchProducts()">
-                <div class="flex items-center justify-center">
-                    <svg id="Horizontal-Sliders-Lines--Streamline-Atlas" xmlns="http://www.w3.org/2000/svg" viewBox="-0.5 -0.5 16 16" height="24" width="24"><desc>Horizontal Sliders Lines Streamline Icon: https://streamlinehq.com</desc><defs></defs><path d="m4.50625 2.1125 10.181249999999999 -0.00625" fill="none" stroke="#000000" stroke-miterlimit="10" stroke-width="1"></path><path d="m0.3125 2.1125 2.39375 0" fill="none" stroke="#000000" stroke-miterlimit="10" stroke-width="1"></path><path d="m12.293750000000001 7.5 2.39375 0" fill="none" stroke="#000000" stroke-miterlimit="10" stroke-width="1"></path><path d="m0.3125 7.5 10.181249999999999 0" fill="none" stroke="#000000" stroke-miterlimit="10" stroke-width="1"></path><path d="m8.7 12.893749999999999 5.9875 -0.00625" fill="none" stroke="#000000" stroke-miterlimit="10" stroke-width="1"></path><path d="m0.3125 12.893749999999999 6.5874999999999995 0" fill="none" stroke="#000000" stroke-miterlimit="10" stroke-width="1"></path><path d="m2.70625 0.3125 0 3.59375" fill="none" stroke="#000000" stroke-miterlimit="10" stroke-width="1"></path><path d="m10.493749999999999 5.699999999999999 0 3.59375" fill="none" stroke="#000000" stroke-miterlimit="10" stroke-width="1"></path><path d="m6.8999999999999995 11.09375 0 3.59375" fill="none" stroke="#000000" stroke-miterlimit="10" stroke-width="1"></path></svg>
+                <input type="text" id="search" placeholder="Cari kopi..."
+                    class="border border-amber-200 p-2 text-sm rounded-md w-full bg-amber-50 focus:border-amber-500 focus:outline-none"
+                    onkeyup="searchCoffee()">
+                <div class="flex items-center justify-center bg-amber-100 p-2 rounded-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                        class="h-4 w-4 text-amber-800">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
                 </div>
             </div>
-            
-            <table class="table-auto w-full border-collapse rounded-xl overflow-hidden shadow-lg">
-                <thead class="bg-gray-200 text-gray-800 text-lg">
-                    <tr>
-                        <th class="py-4 px-6 text-left">No</th>
-                        <th class="py-4 px-6 text-left">Nama</th>
-                        <th class="py-4 px-6 text-left">Deskripsi</th>
-                        <th class="py-4 px-6 text-left">Kategori</th>
-                        <th class="py-4 px-6 text-left">Harga</th>
-                        <th class="py-4 px-6 text-left">Jumlah</th>
-                        <th class="py-4 px-6 text-center">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="product-table" class="text-gray-700">
-                    <tr class="odd:bg-gray-50 even:bg-gray-100 hover:bg-linen">
-                        <td class="py-4 px-6">1</td>
-                        <td class="py-4 px-6 font-semibold">Produk A</td>
-                        <td class="py-4 px-6">Deskripsi singkat produk A...</td>
-                        <td class="py-4 px-6">Elektronik</td>
-                        <td class="py-4 px-6">Rp 500.000</td>
-                        <td class="py-4 px-6">10</td>
-                        <td class="py-4 px-6 text-center">
-                            <div class="flex justify-center space-x-2">
-                                <a href="#" class="btn btn-warning p-2 rounded-lg">Edit</a>
-                                <button onclick="confirmDelete()" class="btn btn-error p-2 rounded-lg">Hapus</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="odd:bg-gray-50 even:bg-gray-100 hover:bg-slate-200 transition">
-                        <td class="py-4 px-6">2</td>
-                        <td class="py-4 px-6 font-semibold">Produk B</td>
-                        <td class="py-4 px-6">Deskripsi singkat produk B...</td>
-                        <td class="py-4 px-6">Furnitur</td>
-                        <td class="py-4 px-6">Rp 1.200.000</td>
-                        <td class="py-4 px-6">5</td>
-                        <td class="py-4 px-6 text-center">
-                            <div class="flex justify-center space-x-2">
-                                <a href="#" class="btn btn-warning p-2 rounded-lg">Edit</a>
-                                <button onclick="confirmDelete()" class="btn btn-error p-2 rounded-lg">Hapus</button>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+
+            <!-- Coffee Table (Compact) -->
+            <div class="overflow-x-auto">
+                <table class="table-auto w-full border-collapse rounded-lg overflow-hidden text-sm">
+                    <thead class="bg-amber-800 text-amber-50">
+                        <tr>
+                            <th class="py-2 px-3 text-left">No</th>
+                            <th class="py-2 px-3 text-left">Kode Menu</th>
+                            <th class="py-2 px-3 text-left">Nama</th>
+                            <th class="py-2 px-3 text-left">Deskripsi</th>
+                            <th class="py-2 px-3 text-left">Kategori</th>
+                            <th class="py-2 px-3 text-left">Harga</th>
+                            <th class="py-2 px-3 text-left">Jumlah</th>
+                            <th class="py-2 px-3 text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="coffee-table" class="text-amber-900">
+                        <tr class="odd:bg-amber-50 even:bg-white hover:bg-amber-100 transition duration-200">
+                            <td class="py-2 px-3">1</td>
+                            <td class="py-2 px-3">ESP001</td>
+                            <td class="py-2 px-3 font-medium">Espresso Single Origin</td>
+                            <td class="py-2 px-3 text-xs max-w-xs truncate">Kopi pekat dengan aroma kuat dari biji pilihan
+                                Sumatra...</td>
+                            <td class="py-2 px-3">Espresso</td>
+                            <td class="py-2 px-3">Rp 25.000</td>
+                            <td class="py-2 px-3">50</td>
+                            <td class="py-2 px-3 text-center">
+                                <div class="flex justify-center space-x-1">
+                                    <a href="#"
+                                        class="bg-amber-500 text-white px-2 py-1 text-xs rounded hover:bg-amber-600 transition">Edit</a>
+                                    <button onclick="confirmDelete()"
+                                        class="bg-red-500 text-white px-2 py-1 text-xs rounded hover:bg-red-600 transition">Hapus</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="odd:bg-amber-50 even:bg-white hover:bg-amber-100 transition duration-200">
+                            <td class="py-2 px-3">2</td>
+                            <td class="py-2 px-3">CAP002</td>
+                            <td class="py-2 px-3 font-medium">Cappuccino Vanilla</td>
+                            <td class="py-2 px-3 text-xs max-w-xs truncate">Perpaduan espresso, susu, dan foam dengan
+                                sentuhan vanilla...</td>
+                            <td class="py-2 px-3">Cappuccino</td>
+                            <td class="py-2 px-3">Rp 35.000</td>
+                            <td class="py-2 px-3">35</td>
+                            <td class="py-2 px-3 text-center">
+                                <div class="flex justify-center space-x-1">
+                                    <a href="#"
+                                        class="bg-amber-500 text-white px-2 py-1 text-xs rounded hover:bg-amber-600 transition">Edit</a>
+                                    <button onclick="confirmDelete()"
+                                        class="bg-red-500 text-white px-2 py-1 text-xs rounded hover:bg-red-600 transition">Hapus</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="odd:bg-amber-50 even:bg-white hover:bg-amber-100 transition duration-200">
+                            <td class="py-2 px-3">3</td>
+                            <td class="py-2 px-3">V60003</td>
+                            <td class="py-2 px-3 font-medium">V60 Toraja</td>
+                            <td class="py-2 px-3 text-xs max-w-xs truncate">Kopi seduh manual dengan karakter fruity dan
+                                nutty khas Toraja...</td>
+                            <td class="py-2 px-3">Manual Brew</td>
+                            <td class="py-2 px-3">Rp 40.000</td>
+                            <td class="py-2 px-3">20</td>
+                            <td class="py-2 px-3 text-center">
+                                <div class="flex justify-center space-x-1">
+                                    <a href="#"
+                                        class="bg-amber-500 text-white px-2 py-1 text-xs rounded hover:bg-amber-600 transition">Edit</a>
+                                    <button onclick="confirmDelete()"
+                                        class="bg-red-500 text-white px-2 py-1 text-xs rounded hover:bg-red-600 transition">Hapus</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="odd:bg-amber-50 even:bg-white hover:bg-amber-100 transition duration-200">
+                            <td class="py-2 px-3">4</td>
+                            <td class="py-2 px-3">CAR004</td>
+                            <td class="py-2 px-3 font-medium">Caramel Macchiato</td>
+                            <td class="py-2 px-3 text-xs max-w-xs truncate">Espresso dengan lapisan susu dan caramel yang
+                                manis...</td>
+                            <td class="py-2 px-3">Latte</td>
+                            <td class="py-2 px-3">Rp 38.000</td>
+                            <td class="py-2 px-3">30</td>
+                            <td class="py-2 px-3 text-center">
+                                <div class="flex justify-center space-x-1">
+                                    <a href="#"
+                                        class="bg-amber-500 text-white px-2 py-1 text-xs rounded hover:bg-amber-600 transition">Edit</a>
+                                    <button onclick="confirmDelete()"
+                                        class="bg-red-500 text-white px-2 py-1 text-xs rounded hover:bg-red-600 transition">Hapus</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Coffee Bean Decoration -->
+            <div class="flex justify-center items-center mt-4 gap-1 text-amber-800 opacity-70">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    viewBox="0 0 16 16">
+                    <path
+                        d="M13.354 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
+                </svg>
+                <span class="text-xs">Menampilkan 4 dari 24 kopi</span>
+            </div>
         </div>
     </div>
 
     <!-- Confirmation Dialog for Delete -->
     <script>
         function confirmDelete() {
-            return confirm('Apakah Anda yakin ingin menghapus barang ini?');
+            return confirm('Apakah Anda yakin ingin menghapus kopi ini dari menu?');
         }
 
-        // Fungsi untuk mencari produk
-        function searchProducts() {
+        // Fungsi untuk mencari kopi
+        function searchCoffee() {
             const input = document.getElementById('search');
             const filter = input.value.toLowerCase();
-            const table = document.getElementById('product-table');
+            const table = document.getElementById('coffee-table');
             const rows = table.getElementsByTagName('tr');
 
             for (let i = 0; i < rows.length; i++) {

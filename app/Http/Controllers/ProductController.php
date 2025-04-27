@@ -53,7 +53,7 @@ class ProductController extends Controller
     {
         $categories = CategoryProduct::all();
 
-        return view('dashboard.produk.add', compact('categories'));
+        return view('pages.admin.produk.add', compact('categories'));
     }
 
     public function store(Request $request)

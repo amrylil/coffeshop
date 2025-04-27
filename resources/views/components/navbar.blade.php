@@ -1,55 +1,59 @@
-<header
-    class="flex top-0 justify-between items-center py-4 px-24 bg-white z-50 bg-gradient-to-r from-cream to-gray-100 w-full fixed font-jost">
+<header x-data="{
+    scrolled: false,
+    isHome: window.location.pathname === '/'
+}" @scroll.window="scrolled = (window.scrollY > window.innerHeight * 0.1)"
+    :class="isHome && scrolled ? 'bg-[#e6dbd1] transition-all duration-200' : ''"
+    class="flex {{ Request::is('/') ? '' : 'bg-[#e6dbd1]' }} top-0 justify-between items-center py-4 px-24  z-50  w-full fixed font-jost">
     {{-- logo --}}
-    <div class="text-2xl text-slate-700">
-        <img src="{{ asset('images/lumbung-pangan.png') }}" alt="" class="w-[200px]">
+    <div x-data="{
+        scrolled: false,
+        isHome: window.location.pathname === '/'
+    }" @scroll.window="scrolled = (window.scrollY > window.innerHeight * 0.1)"
+        :class="scrolled ? 'text-slate-950' : 'text-slate-50'"
+        class="text-2xl font-semibold  {{ Request::is('/') ? '' : 'text-slate-950' }}">
+        Coffee Shop
     </div>
 
 
 
     {{-- menu --}}
-    <nav class="space-x-5 text-sm font-bold ">
-    <a href="/"
-        class="text-gray-900 hover:text-white {{ Request::is('/') ? 'bg-slate-900 text-white' : '' }} px-4 py-2 rounded"
-        style="transition: background-color 0.3s;"
-        onmouseover="this.style.backgroundColor='#20750b';"
-        onmouseout="this.style.backgroundColor='';">Beranda</a>
+    <nav class="space-x-5    flex ">
+        <a href="/" x-data="{
+            scrolled: false,
+            isHome: window.location.pathname === '/'
+        }" @scroll.window="scrolled = (window.scrollY > window.innerHeight * 0.1)"
+            :class="isHome && scrolled ? 'text-slate-950' : 'text-slate-50'"
+            class="rounded text-slate-50 hover:text-white {{ Request::is('/') ? 'bg-[#422424] text-white' : 'text-slate-950 ' }} px-4 py-2 hover:bg-[#422424]"
+            style="transition: background-color 0.3s;">Beranda</a>
 
-    <a href="/shop"
-        class="text-gray-900 hover:text-white {{ Request::is('shop') ? 'bg-slate-900 text-white' : '' }} px-4 py-2 rounded"
-        style="transition: background-color 0.3s;"
-        onmouseover="this.style.backgroundColor='#20750b';"
-        onmouseout="this.style.backgroundColor='';">Toko</a>
+        <a href="/shop" x-data="{
+            scrolled: false,
+            isHome: window.location.pathname === '/'
+        }"
+            @scroll.window="scrolled = (window.scrollY > window.innerHeight * 0.1)"
+            :class="isHome && scrolled ? 'text-slate-950' : 'text-slate-50'"
+            class="rounded hover:bg-[#422424] hover:text-white {{ Request::is('/') ? 'text-slate-50' : (Request::is('shop') ? 'text-white bg-[#422424]' : 'text-slate-950') }} px-4 py-2 "
+            style="transition: background-color 0.3s;">Toko</a>
 
-    <a href="/kategori"
-        class="text-gray-900 hover:text-white {{ Request::is('kategori') ? 'bg-slate-900 text-white' : '' }} px-4 py-2 rounded"
-        style="transition: background-color 0.3s;"
-        onmouseover="this.style.backgroundColor='#20750b';"
-        onmouseout="this.style.backgroundColor='';">Kategori</a>
+        <a href="/kategori" x-data="{
+            scrolled: false,
+            isHome: window.location.pathname === '/'
+        }"
+            @scroll.window="scrolled = (window.scrollY > window.innerHeight * 0.1)"
+            :class="isHome && scrolled ? 'text-slate-950' : 'text-slate-50'"
+            class="rounded hover:bg-[#422424] text-slate-50 hover:text-white {{ Request::is('/') ? 'text-slate-50' : (Request::is('kategori') ? 'text-white bg-[#422424]' : 'text-slate-950') }}  px-4 py-2 "
+            style="transition: background-color 0.3s;">Reservasi</a>
 
-    <a href="/about"
-        class="text-gray-900 hover:text-white {{ Request::is('about') ? 'bg-slate-900 text-white' : '' }} px-4 py-2 rounded"
-        style="transition: background-color 0.3s;"
-        onmouseover="this.style.backgroundColor='#20750b';"
-        onmouseout="this.style.backgroundColor='';">Tentang Kami</a>
+        <a href="/about"
+            class="rounded hover:bg-[#422424] text-gray-900 hover:text-white {{ Request::is('about') ? 'bg-[#422424] text-white' : '' }} px-4 py-2 "
+            style="transition: background-color 0.3s;">Tentang Kami</a>
 
-    <a href="/contact-us"
-        class="text-gray-900 hover:text-white {{ Request::is('contact-us') ? 'bg-slate-900 text-white' : '' }} px-4 py-2 rounded"
-        style="transition: background-color 0.3s;"
-        onmouseover="this.style.backgroundColor='#20750b';"
-        onmouseout="this.style.backgroundColor='';">Kontak</a>
-        
+        <a href="/contact-us"
+            class="rounded hover:bg-[#422424] text-gray-900 hover:text-white {{ Request::is('contact-us') ? 'bg-[#422424] text-white' : '' }} px-4 py-2 "
+            style="transition: background-color 0.3s;">Kontak</a>
+
     </nav>
-    <div x-data="{ open: false }" class="relative">
-        <button @click="open = !open" class="text-gray-900 hover:text-white px-3 py-2 rounded transition duration-300 hover:bg-green-700">
-            🔍
-        </button>
 
-        <!-- Search Form -->
-        <div x-show="open" x-transition class="absolute top-10 right-0 bg-white shadow-md p-2 rounded-md">
-            <input type="text" placeholder="Cari..." class="border p-2 rounded-md focus:outline-none focus:ring focus:ring-green-500">
-        </div>
-    </div>
 
 
     {{-- auth --}}
@@ -74,13 +78,12 @@
                 <div class="drawer-content">
                     <!-- Page content here -->
                     <label for="my-drawer-4" class="drawer-button ">
-                        
+
                         <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
                             <div class="w-10 rounded-full">
                                 <img alt="Tailwind CSS Navbar component"
-                                src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('images/produk.png') }}" 
-                                alt="Avatar" 
-                                />
+                                    src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('images/produk.png') }}"
+                                    alt="Avatar" />
                             </div>
                         </div>
                     </label>
@@ -94,8 +97,8 @@
                             <div class="rounded-lg w-full max-w-md p-6 text-center bg-white shadow-md">
                                 <div class="flex justify-center">
                                     <img class="w-32 h-32 rounded-full border-4 border-green-600 object-cover"
-                                    src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('images/produk.png') }}" 
-                                    alt="Avatar">
+                                        src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('images/produk.png') }}"
+                                        alt="Avatar">
                                 </div>
                                 <h2 class="mt-4 text-2xl font-semibold text-gray-800">{{ session('name') }}</h2>
                                 <p class="text-gray-500 text-sm">{{ session('email') }}</p>
@@ -107,12 +110,13 @@
                                 <a href="{{ route('user.profile') }}"
                                     class="flex items-center justify-between py-3 border-b border-gray-200">
                                     <div class="flex items-center space-x-3">
-                                    <svg class="group-hover:stroke-black stroke-black" xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" height="20" width="20">
-                                        <path d="M12 20h9" />
-                                        <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4Z" />
-                                    </svg>
+                                        <svg class="group-hover:stroke-black stroke-black"
+                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                            stroke="black" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round" height="20" width="20">
+                                            <path d="M12 20h9" />
+                                            <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4Z" />
+                                        </svg>
                                         <p class="text-gray-700">Profile Saya</p>
                                     </div>
                                 </a>
@@ -120,23 +124,24 @@
                                 <a href="{{ route('pesanan') }}"
                                     class="flex items-center justify-between py-3 border-b border-gray-200">
                                     <div class="flex items-center space-x-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                        stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                        height="16" width="16">
-                                        <path d="M6 6h15l-1.5 9H7.5L6 6z" />
-                                        <circle cx="9" cy="20" r="1" />
-                                        <circle cx="18" cy="20" r="1" />
-                                        <path d="M6 6l-2 0" />
-                                    </svg>
-                                    <p class="text-gray-700">Pesanan Saya</p>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                            stroke="#000000" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round" height="16" width="16">
+                                            <path d="M6 6h15l-1.5 9H7.5L6 6z" />
+                                            <circle cx="9" cy="20" r="1" />
+                                            <circle cx="18" cy="20" r="1" />
+                                            <path d="M6 6l-2 0" />
+                                        </svg>
+                                        <p class="text-gray-700">Pesanan Saya</p>
                                     </div>
                                 </a>
                                 <a href="{{ route('transaksi.index') }}"
                                     class="flex items-center justify-between py-3 border-b border-gray-200">
                                     <div class="flex items-center space-x-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="-0.5 -0.5 16 16" fill="none"
-                                            stroke="#000000" stroke-linecap="round" stroke-linejoin="round"
-                                            id="History--Streamline-Tabler" height="16" width="16">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="-0.5 -0.5 16 16"
+                                            fill="none" stroke="#000000" stroke-linecap="round"
+                                            stroke-linejoin="round" id="History--Streamline-Tabler" height="16"
+                                            width="16">
                                             <desc>History Streamline Icon: https://streamlinehq.com</desc>
                                             <path d="m7.5 5 0 2.5 1.25 1.25" stroke-width="1"></path>
                                             <path
@@ -149,9 +154,10 @@
                                 <a href={{ route('cart.view') }}
                                     class="cursor-pointer flex items-center justify-between py-3 border-b border-gray-200">
                                     <div class="flex items-center space-x-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="-0.5 -0.5 16 16" fill="none"
-                                            stroke="#000000" stroke-linecap="round" stroke-linejoin="round"
-                                            id="Shopping-Cart--Streamline-Tabler" height="16" width="16">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="-0.5 -0.5 16 16"
+                                            fill="none" stroke="#000000" stroke-linecap="round"
+                                            stroke-linejoin="round" id="Shopping-Cart--Streamline-Tabler"
+                                            height="16" width="16">
                                             <desc>Shopping Cart Streamline Icon: https://streamlinehq.com</desc>
                                             <path d="M2.5 11.875a1.25 1.25 0 1 0 2.5 0 1.25 1.25 0 1 0 -2.5 0"
                                                 stroke-width="1"></path>
@@ -167,9 +173,10 @@
 
                                 <div class="cursor-pointer flex items-center justify-between py-3">
                                     <div class="flex items-center space-x-3 text-red-600">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="-0.5 -0.5 16 16" fill="none"
-                                            stroke="#dc2626" stroke-linecap="round" stroke-linejoin="round"
-                                            id="Logout-2--Streamline-Tabler" height="16" width="16">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="-0.5 -0.5 16 16"
+                                            fill="none" stroke="#dc2626" stroke-linecap="round"
+                                            stroke-linejoin="round" id="Logout-2--Streamline-Tabler" height="16"
+                                            width="16">
                                             <desc>Logout 2 Streamline Icon: https://streamlinehq.com</desc>
                                             <path
                                                 d="M6.25 5V3.75a1.25 1.25 0 0 1 1.25 -1.25h4.375a1.25 1.25 0 0 1 1.25 1.25v7.5a1.25 1.25 0 0 1 -1.25 1.25h-4.375a1.25 1.25 0 0 1 -1.25 -1.25v-1.25"
@@ -193,8 +200,8 @@
     @else
         {{-- Jika pengguna belum login --}}
         <div class="space-x-2">
-            <a href="/login" class="text-gray-900 hover:text-black">Log In</a>
-            <a href="/signup" class="bg-slate-900 text-white py-2 px-4 rounded-lg hover:bg-green-800">Sign Up</a>
+            <a href="/login"
+                class="border rounded hover:bg-[#422424] hover:text-slate-50  py-2 px-4 -lg text-slate-950 ">Masuk</a>
         </div>
     @endif
 </header>

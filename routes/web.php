@@ -10,6 +10,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductDetailsController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReservasiController;
 use App\Http\Controllers\SignupController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\UserController;
@@ -64,20 +65,23 @@ Route::prefix('admin')->group(function () {
         Route::get('/', [ProductController::class, 'showProduct'])->name('dashboard.products');
         Route::get('/create', [ProductController::class, 'create'])->name('products.create');
         Route::post('/', [ProductController::class, 'store'])->name('products.store');
-        Route::get('/{id}', [ProductController::class, 'show'])->name('products.show');
+        Route::get('/{id}', [ProductDetailsController::class, 'showProductDetails'])->name('products.show');
         Route::get('/{id}/edit', [ProductController::class, 'edit'])->name('products.edit');
         Route::put('/{id}', [ProductController::class, 'update'])->name('products.update');
         Route::delete('/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
     });
 
     // Kategori di Dashboard
-    Route::prefix('categories')->group(function () {
+    Route::prefix('kategori')->group(function () {
         Route::get('/', [CategoryProductController::class, 'kategori_dashboard'])->name('dashboard.kategori.index');
         Route::get('/tambah', [CategoryProductController::class, 'create'])->name('dashboard.category_products.create');
         Route::post('/', [CategoryProductController::class, 'store'])->name('dashboard.category_products.store');
         Route::get('/{id}/edit', [CategoryProductController::class, 'edit'])->name('dashboard.category_products.edit');
         Route::put('/{id}', [CategoryProductController::class, 'update'])->name('dashboard.category_products.update');
         Route::delete('/{id}', [CategoryProductController::class, 'destroy'])->name('dashboard.category_products.destroy');
+    });
+    Route::prefix('reservasi')->group(function () {
+        Route::get('/', [ReservasiController::class, 'index'])->name('admin.reservasi.index');
     });
 
     // Transaksi di Dashboard

@@ -1,73 +1,167 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login</title>
+    <title>Masuk | Terra Shop</title>
     @vite('resources/css/app.css')
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Montserrat:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
-<body class="">
-
-    <div class="relative flex items-center w-full justify-center h-screen">
-        <!-- Background Image -->
-       
-
-        <!-- Login Form -->
-        <div class="relative   py-12 shadow-md rounded-md overflow-hidden max-w-md w-full border border-slate-400">
-          <div class="absolute top-0 -z-10">
-            <div class="w-full h-20 bg-linen"></div>
-            <svg class="w-screen h-full " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#FAF0E6" fill-opacity="1" d="M0,224L26.7,224C53.3,224,107,224,160,213.3C213.3,203,267,181,320,149.3C373.3,117,427,75,480,90.7C533.3,107,587,181,640,202.7C693.3,224,747,192,800,154.7C853.3,117,907,75,960,69.3C1013.3,64,1067,96,1120,101.3C1173.3,107,1227,85,1280,96C1333.3,107,1387,149,1413,170.7L1440,192L1440,0L1413.3,0C1386.7,0,1333,0,1280,0C1226.7,0,1173,0,1120,0C1066.7,0,1013,0,960,0C906.7,0,853,0,800,0C746.7,0,693,0,640,0C586.7,0,533,0,480,0C426.7,0,373,0,320,0C266.7,0,213,0,160,0C106.7,0,53,0,27,0L0,0Z"></path></svg>
-          </div>
-            <!-- Logo -->
-            <div class="p-5 z-20 px-10">
-              <h1 class="font-bold text-2xl text-center mb-5">TERRA SHOP</h1>
-            
-            <!-- Title -->
-            <h2 class="text-center text-2xl  text-gray-800 mb-1">Enter your Account</h2>
-            <p class="font-light text-center mb-4">Lorem ipsum dolor sit amet consectetur adipisicing.</p>
-
-            <!-- Error Messages -->
-            @if ($errors->any())
-                <div class="mb-5 text-red-500 text-sm">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
+<body class="bg-[#f8f7f4]">
+    <div class="flex min-h-screen w-full">
+        <!-- Sisi Kiri - Gambar -->
+        <div class="hidden lg:block lg:w-1/2 bg-cover bg-center"
+            style="background-image: url('{{ asset('images/login.jpg') }}')">
+            <div
+                class="h-full flex flex-col justify-between p-12 bg-gradient-to-t from-black/60 via-black/40 to-transparent">
+                <div class="text-white">
+                    <h2 class="font-playfair text-3xl font-bold">COFFE SHOP</h2>
                 </div>
-            @endif
-
-            <!-- Form -->
-            <form action="{{ route('login') }}" method="POST" class="space-y-4">
-                @csrf
-                <div class="flex flex-col space-y-3">
-                    <input
-                        class="w-full border bg-slate-50 border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-green-700 focus:outline-none mb-4 text-sm"
-                        type="text" name="email" placeholder="Username or Email" required />
-                    <input
-                        class="w-full border bg-slate-50 border-gray-300 rounded-md p-3 focus:ring-2 focus:ring-green-700 focus:outline-none mb-6 text-sm"
-                        type="password" name="password" placeholder="Password" required />
+                <div class="text-white max-w-md">
+                    <h3 class="font-playfair text-4xl font-bold mb-4">Nikmati Kopi Premium Pilihan</h3>
+                    <p class="font-montserrat opacity-80">
+                        Rasakan cita rasa terbaik dari biji kopi pilihan yang disajikan dengan penuh cinta dan dedikasi.
+                    </p>
                 </div>
-                <button
-                    type="submit"
-                    class="w-full bg-gray-950 rounded-md text-white py-3 hover:bg-green-800 transition duration-300 font-semibold">
-                    Sign in
-                </button>
-            </form>
-
-            <!-- Signup Link -->
-            <div class="mt-4 text-center text-sm text-gray-500">
-                Belum memiliki akun? 
-                <a href="{{ route('signup') }}" class="text-slate-950 font-semibold hover:underline">Buat Akun</a>
             </div>
+        </div>
+
+        <!-- Sisi Kanan - Form Login -->
+        <div class="w-full lg:w-1/2 flex items-center justify-center p-6">
+            <div class="w-full max-w-md">
+                <!-- Logo untuk Mobile -->
+                <div class="lg:hidden text-center mb-10">
+                    <h1 class="font-playfair text-3xl font-bold text-[#1a1a1a]">TERRA</h1>
+                </div>
+
+                <!-- Kontainer Form -->
+                <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+                    <div class="text-center mb-8">
+                        <h2 class="font-playfair text-3xl font-semibold text-[#1a1a1a] mb-2">Selamat Datang Kembali</h2>
+                        <p class="font-montserrat text-gray-500 text-sm">Masuk ke akun Anda untuk melanjutkan</p>
+                    </div>
+
+                    <!-- Pesan Kesalahan -->
+                    @if ($errors->any())
+                        <div class="mb-6 bg-red-50 border border-red-200 text-red-700 p-4 rounded-lg text-sm">
+                            <ul class="list-disc pl-4">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <!-- Form -->
+                    <form action="{{ route('login') }}" method="POST" class="space-y-6">
+                        @csrf
+                        <div class="space-y-5">
+                            <div class="relative">
+                                <label for="email"
+                                    class="font-montserrat text-xs font-medium text-gray-700 ml-1 mb-1 block">Alamat
+                                    Email</label>
+                                <div class="relative">
+                                    <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                        <i class="far fa-envelope"></i>
+                                    </span>
+                                    <input id="email"
+                                        class="w-full border border-gray-200 bg-gray-50/50 rounded-lg py-3 pl-10 pr-4 font-montserrat text-sm focus:outline-none focus:ring-2 focus:ring-[#a07942] focus:border-transparent"
+                                        type="email" name="email" placeholder="email@anda.com" required />
+                                </div>
+                            </div>
+
+                            <div class="relative">
+                                <div class="flex justify-between items-center mb-1">
+                                    <label for="password"
+                                        class="font-montserrat text-xs font-medium text-gray-700 ml-1">Kata
+                                        Sandi</label>
+                                    <a href="#"
+                                        class="text-xs text-[#a07942] hover:underline font-montserrat">Lupa
+                                        kata sandi?</a>
+                                </div>
+                                <div class="relative">
+                                    <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                    <input id="password"
+                                        class="w-full border border-gray-200 bg-gray-50/50 rounded-lg py-3 pl-10 pr-4 font-montserrat text-sm focus:outline-none focus:ring-2 focus:ring-[#a07942] focus:border-transparent"
+                                        type="password" name="password" placeholder="••••••••" required />
+                                    <button type="button"
+                                        class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                        id="togglePassword">
+                                        <i class="far fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <button type="submit"
+                            class="w-full bg-[#1a1a1a] text-white font-montserrat font-medium py-3 rounded-lg hover:bg-[#333] transition duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                            Masuk
+                        </button>
+                    </form>
+
+                    <!-- Tautan Pendaftaran -->
+                    <div class="text-center font-montserrat text-sm mt-6">
+                        <span class="text-gray-600">Belum memiliki akun?</span>
+                        <a href="{{ route('signup') }}" class="text-[#a07942] font-medium ml-1 hover:underline">Buat
+                            akun</a>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="mt-8 text-center">
+                    <p class="text-xs text-gray-500 font-montserrat">
+                        &copy; 2025 Coffe Shop. Seluruh hak cipta dilindungi.
+                    </p>
+                </div>
             </div>
         </div>
     </div>
 
+    <script>
+        // Toggle visibilitas kata sandi
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+
+        // Menambahkan kelas animasi
+        document.addEventListener('DOMContentLoaded', function() {
+            const formElements = document.querySelectorAll('form, .text-center h2, .text-center p');
+
+            formElements.forEach((element, index) => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(20px)';
+                element.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                element.style.transitionDelay = `${index * 0.1}s`;
+
+                setTimeout(() => {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }, 100);
+            });
+        });
+    </script>
 </body>
 
 </html>
