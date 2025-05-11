@@ -1,119 +1,222 @@
-<!-- resources/views/dashboard.blade.php -->
-@extends('layouts.dashboard-layout') <!-- Menggunakan layout utama yang sudah dibuat -->
+@extends('layouts.dashboard-layout')
 
-@section('title', $title) <!-- Mengisi judul halaman -->
+@section('title', 'Admin Dashboard')
 
 @section('content')
-    <!-- Dashboard Stat Cards -->
-    <div class="bg-white shadow rounded-lg p-4 pt-20">
-        <div class="grid grid-cols-4 gap-4 mb-4">
-            <div class="flex flex-col items-center justify-center h-24 rounded bg-gray-100 dark:bg-gray-800 gap-2">
-                <div class="flex gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="-0.5 -0.5 16 16" fill="none" stroke="#000000"
-                        stroke-linecap="round" stroke-linejoin="round" id="List-Details--Streamline-Tabler" height="40"
-                        width="40">
-                        <desc>List Details Streamline Icon: https://streamlinehq.com</desc>
-                        <path d="M8.125 3.125h5" stroke-width="1"></path>
-                        <path d="M8.125 5.625h3.125" stroke-width="1"></path>
-                        <path d="M8.125 9.375h5" stroke-width="1"></path>
-                        <path d="M8.125 11.875h3.125" stroke-width="1"></path>
-                        <path
-                            d="M1.875 3.125a0.625 0.625 0 0 1 0.625 -0.625h2.5a0.625 0.625 0 0 1 0.625 0.625v2.5a0.625 0.625 0 0 1 -0.625 0.625H2.5a0.625 0.625 0 0 1 -0.625 -0.625z"
-                            stroke-width="1"></path>
-                        <path
-                            d="M1.875 9.375a0.625 0.625 0 0 1 0.625 -0.625h2.5a0.625 0.625 0 0 1 0.625 0.625v2.5a0.625 0.625 0 0 1 -0.625 0.625H2.5a0.625 0.625 0 0 1 -0.625 -0.625z"
-                            stroke-width="1"></path>
-                    </svg>
-
-                </div>
-                <div class="text-xl text-gray-900 flex gap-2 ">
-                    <h5>80</h5>
-                    <p class="text-xl text-gray-900 ">
-                        Produk
-                    </p>
-                </div>
-            </div>
-            <div class="flex flex-col items-center justify-center h-24 rounded bg-gray-100 dark:bg-gray-800 gap-2">
-                <div class="flex gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="-0.5 -0.5 16 16" fill="none" stroke="#000000"
-                        stroke-linecap="round" stroke-linejoin="round" id="Table-Column--Streamline-Tabler" height="40"
-                        width="40">
-                        <desc>Table Column Streamline Icon: https://streamlinehq.com</desc>
-                        <path
-                            d="M1.875 3.125a1.25 1.25 0 0 1 1.25 -1.25h8.75a1.25 1.25 0 0 1 1.25 1.25v8.75a1.25 1.25 0 0 1 -1.25 1.25H3.125a1.25 1.25 0 0 1 -1.25 -1.25V3.125z"
-                            stroke-width="1"></path>
-                        <path d="M6.25 6.25h6.875" stroke-width="1"></path>
-                        <path d="M6.25 1.875v11.25" stroke-width="1"></path>
-                        <path d="M5.625 1.875 1.875 5.625" stroke-width="1"></path>
-                        <path d="m6.25 4.375 -4.375 4.375" stroke-width="1"></path>
-                        <path d="m6.25 7.5 -4.375 4.375" stroke-width="1"></path>
-                        <path d="m6.25 10.625 -2.5 2.5" stroke-width="1"></path>
-                    </svg>
-
-                </div>
-                <div class="text-xl text-gray-900 flex gap-2 ">
-                    <h5>8</h5>
-                    <p class="text-xl text-gray-900 ">
-                        Kategori
-                    </p>
-                </div>
-            </div>
-            <div class="flex flex-col items-center justify-center h-24 rounded bg-gray-100 dark:bg-gray-800 gap-2">
-                <div class="flex gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="-0.5 -0.5 16 16" fill="none" stroke="#000000"
-                        stroke-linecap="round" stroke-linejoin="round" id="Devices-Dollar--Streamline-Tabler" height="40"
-                        width="40">
-                        <desc>Devices Dollar Streamline Icon: https://streamlinehq.com</desc>
-                        <path
-                            d="M8.125 11.875V5.625a0.625 0.625 0 0 1 0.625 -0.625h3.75a0.625 0.625 0 0 1 0.625 0.625v0.9375"
-                            stroke-width="1"></path>
-                        <path
-                            d="M11.25 5V3.125a0.625 0.625 0 0 0 -0.625 -0.625H2.5a0.625 0.625 0 0 0 -0.625 0.625v7.5a0.625 0.625 0 0 0 0.625 0.625h5.625"
-                            stroke-width="1"></path>
-                        <path d="M10 5.625h1.25" stroke-width="1"></path>
-                        <path d="M13.125 9.375h-1.5625a0.9375 0.9375 0 0 0 0 1.875h0.625a0.9375 0.9375 0 0 1 0 1.875H10.625"
-                            stroke-width="1"></path>
-                        <path d="M11.875 13.125v0.625m0 -5v0.625" stroke-width="1"></path>
-                    </svg>
-
-                </div>
-                <div class="text-xl text-gray-900 flex gap-2 ">
-                    <h5>20</h5>
-                    <p class="text-xl text-gray-900 ">
-                        Transaksi
-                    </p>
-                </div>
-            </div>
-            <div class="flex flex-col items-center justify-center h-24 rounded bg-gray-100 dark:bg-gray-800 gap-2">
-                <div class="flex gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="-0.5 -0.5 16 16" fill="none" stroke="#000000"
-                        stroke-linecap="round" stroke-linejoin="round" id="Users--Streamline-Tabler" height="40"
-                        width="40">
-                        <desc>Users Streamline Icon: https://streamlinehq.com</desc>
-                        <path d="M3.125 4.375a2.5 2.5 0 1 0 5 0 2.5 2.5 0 1 0 -5 0" stroke-width="1"></path>
-                        <path d="M1.875 13.125v-1.25a2.5 2.5 0 0 1 2.5 -2.5h2.5a2.5 2.5 0 0 1 2.5 2.5v1.25"
-                            stroke-width="1"></path>
-                        <path d="M10 1.9562499999999998a2.5 2.5 0 0 1 0 4.84375" stroke-width="1"></path>
-                        <path d="M13.125 13.125v-1.25a2.5 2.5 0 0 0 -1.875 -2.40625" stroke-width="1"></path>
-                    </svg>
-
-                </div>
-                <div class="text-xl text-gray-900 flex gap-2 ">
-                    <h5>12</h5>
-                    <p class="text-xl text-gray-900 ">
-                        Users
-                    </p>
-                </div>
+    <div class="bg-white min-h-screen py-8 px-4 sm:px-6 lg:px-8 pt-20">
+        <div class="max-w-7xl mx-auto">
+            <!-- Page Heading -->
+            <div class="flex items-center justify-between mb-8">
+                <h1 class="text-3xl font-bold text-[#6F4E37]">Dashboard</h1>
             </div>
 
+            <!-- Content Row - Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Menu Count Card -->
+                <div class="bg-white rounded-lg shadow overflow-hidden border-l-4 border-blue-500">
+                    <div class="px-4 py-5 sm:p-6">
+                        <div class="flex items-center">
+                            <div class="flex-1">
+                                <div class="text-xs font-semibold text-blue-500 uppercase tracking-wider mb-1">
+                                    Total Menu Items
+                                </div>
+                                <div class="text-2xl font-bold text-gray-800">
+                                    {{ \App\Models\Menu::count() }}
+                                </div>
+                            </div>
+                            <div class="text-gray-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category Count Card -->
+                <div class="bg-white rounded-lg shadow overflow-hidden border-l-4 border-green-500">
+                    <div class="px-4 py-5 sm:p-6">
+                        <div class="flex items-center">
+                            <div class="flex-1">
+                                <div class="text-xs font-semibold text-green-500 uppercase tracking-wider mb-1">
+                                    Categories
+                                </div>
+                                <div class="text-2xl font-bold text-gray-800">
+                                    {{ \App\Models\KategoriProduk::count() }}
+                                </div>
+                            </div>
+                            <div class="text-gray-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Out of Stock Alert Card -->
+                <div class="bg-white rounded-lg shadow overflow-hidden border-l-4 border-yellow-500">
+                    <div class="px-4 py-5 sm:p-6">
+                        <div class="flex items-center">
+                            <div class="flex-1">
+                                <div class="text-xs font-semibold text-yellow-500 uppercase tracking-wider mb-1">
+                                    Out of Stock Items
+                                </div>
+                                <div class="text-2xl font-bold text-gray-800">
+                                    {{ \App\Models\Menu::where('jumlah_222297', 0)->count() }}
+                                </div>
+                            </div>
+                            <div class="text-gray-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Transactions Card -->
+                <div class="bg-white rounded-lg shadow overflow-hidden border-l-4 border-[#6F4E37]">
+                    <div class="px-4 py-5 sm:p-6">
+                        <div class="flex items-center">
+                            <div class="flex-1">
+                                <div class="text-xs font-semibold text-[#6F4E37] uppercase tracking-wider mb-1">
+                                    Total Transactions
+                                </div>
+                                <div class="text-2xl font-bold text-gray-800">
+                                    {{ \App\Models\Transaksi::count() }}
+                                </div>
+                            </div>
+                            <div class="text-gray-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Row - Tables -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Recent Menus Card -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-lg shadow overflow-hidden">
+                        <div class="px-4 py-5 border-b border-gray-200 sm:px-6 flex justify-between items-center">
+                            <h3 class="text-lg font-medium text-[#6F4E37]">Recent Menu Items</h3>
+                            <a href="{{ route('admin.menu.index') }}"
+                                class="px-3 py-1 bg-[#6F4E37] text-white text-sm rounded hover:bg-[#5D4037] transition">
+                                View All
+                            </a>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Code
+                                        </th>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Name
+                                        </th>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Category
+                                        </th>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Price
+                                        </th>
+                                        <th scope="col"
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Stock
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @forelse(\App\Models\Menu::with('kategori')->orderBy('created_at_222297', 'desc')->take(5)->get() as $menu)
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                {{ $menu->kode_menu_222297 }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-[#6F4E37]">
+                                                {{ $menu->nama_222297 }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                {{ $menu->kategori ? $menu->kategori->nama_222297 : 'Unknown' }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                Rp {{ number_format($menu->harga_222297, 0, ',', '.') }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                @if ($menu->jumlah_222297 > 0)
+                                                    <span
+                                                        class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                                        {{ $menu->jumlah_222297 }}
+                                                    </span>
+                                                @else
+                                                    <span
+                                                        class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
+                                                        Out of Stock
+                                                    </span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
+                                                No menu items found.
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Low Stock Items Card -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-lg shadow overflow-hidden h-full">
+                        <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
+                            <h3 class="text-lg font-medium text-[#6F4E37]">Low Stock Items</h3>
+                        </div>
+                        <div class="p-4">
+                            <div class="space-y-2">
+                                @forelse(\App\Models\Menu::where('jumlah_222297', '<=', 5)->where('jumlah_222297', '>', 0)->orderBy('jumlah_222297', 'asc')->take(5)->get() as $menu)
+                                    <a href="{{ route('admin.menu.edit', $menu->kode_menu_222297) }}"
+                                        class="block p-3 rounded-md border border-gray-200 hover:bg-[#F5E6DD] transition flex justify-between items-center">
+                                        <span class="text-sm text-gray-800">{{ $menu->nama_222297 }}</span>
+                                        <span
+                                            class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                            {{ $menu->jumlah_222297 }}
+                                        </span>
+                                    </a>
+                                @empty
+                                    <div class="text-center py-8">
+                                        <svg class="mx-auto h-12 w-12 text-green-500" xmlns="http://www.w3.org/2000/svg"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <p class="mt-2 text-gray-500">No low stock items.</p>
+                                    </div>
+                                @endforelse
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
-    <div class="flex overflow-hidden gap-3 mt-3">
-        <x-dashboard.chart></x-dashboard.chart>
-        <x-dashboard.piechart></x-dashboard.piechart>
-    </div>
-
-
-
 @endsection

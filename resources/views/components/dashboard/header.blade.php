@@ -8,10 +8,16 @@
         <div class="flex items-center space-x-4">
             <div class="dropdown dropdown-end relative" x-data="{ open: false }">
                 <div class="flex gap-3 items-center">
-                    <div class="text-amber-800 font-medium">Alya</div>
+                    <div class="text-amber-800 font-medium">{{ Auth::user()->name_222297 }}</div>
                     <div @click="open = !open" tabindex="0" role="button"
                         class="relative flex items-center justify-center w-10 h-10 rounded-full bg-gray-600 text-white cursor-pointer hover:shadow-md transition-all duration-200">
-                        <span class=" font-semibold">AL</span>
+                        <div
+                            class="relative w-10 h-10 overflow-hidden  rounded-full border-2 border-white bg-[#422424] shadow-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">
+                                {{ strtoupper(substr(Auth::user()->name_222297, 0, 1)) }}{{ strpos(Auth::user()->name_222297, ' ') ? strtoupper(substr(Auth::user()->name_222297, strpos(Auth::user()->name_222297, ' ') + 1, 1)) : '' }}
+                            </span>
+                            <div class="absolute inset-0 bg-white opacity-10 rounded-full mix-blend-overlay"></div>
+                        </div>
                     </div>
                 </div>
 
@@ -49,8 +55,8 @@
                     </li>
                     <div class="border-t border-amber-100 my-1"></div>
                     <li>
-                        <form action="/logout" method="POST" class="w-full">
-                            <!-- @csrf -->
+                        <form action="{{ route('logout') }}" method="POST" class="w-full">
+                            @csrf
                             <button type="submit"
                                 class="flex items-center w-full text-left text-amber-900 hover:bg-amber-50 rounded-md px-4 py-2 transition-colors duration-150">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none"

@@ -113,7 +113,7 @@
                     <!-- Tautan Pendaftaran -->
                     <div class="text-center font-montserrat text-sm mt-6">
                         <span class="text-gray-600">Belum memiliki akun?</span>
-                        <a href="{{ route('signup') }}" class="text-[#a07942] font-medium ml-1 hover:underline">Buat
+                        <a href="{{ route('register') }}" class="text-[#a07942] font-medium ml-1 hover:underline">Buat
                             akun</a>
                     </div>
                 </div>
