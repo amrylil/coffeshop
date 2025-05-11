@@ -1,167 +1,116 @@
 @extends('layouts.dashboard-layout')
 
 @section('content')
-    <!-- Dashboard Header -->
-    <div class="rounded-xl pt-20 w-full">
-        <div class="flex justify-between items-center mb-4 p-3 text-slate-950 rounded-t-xl bg-amber-50">
-            <div>
-                <h1 class="text-xl font-bold text-amber-900">Kelola Kategori Menu Kopi</h1>
-                <p class="text-sm text-amber-700">Atur semua kategori untuk menu kopi Anda</p>
-            </div>
-            <a href="#">
-                <button
-                    class="btn bg-amber-800 text-slate-950 hover:bg-amber-900 font-semibold px-3 py-1.5 rounded-lg shadow-md">
-                    Tambah Kategori
-                </button>
-            </a>
-        </div>
-        <div class="bg-white rounded-b-xl shadow-md p-4">
-            <!-- Input Pencarian dan Filter -->
-            <div class="mb-4 flex gap-2">
-                <input type="text" id="search" placeholder="Cari kategori kopi..."
-                    class="border-2 border-amber-200 p-2 rounded-lg w-full focus:border-amber-500 focus:ring-2 focus:ring-amber-200 transition duration-200"
-                    onkeyup="searchProducts()">
-                <div class="flex items-center justify-center bg-amber-100 p-2 rounded-md">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                        class="h-4 w-4 text-amber-800">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </div>
+    <div class="bg-white min-h-screen py-8 px-4 sm:px-6 lg:px-8 pt-20">
+        <div class="max-w-7xl mx-auto">
+            <!-- Header Section -->
+            <div class="mb-6 flex justify-between items-center">
+                <h1 class="text-3xl font-bold text-[#6F4E37]">Category Management</h1>
+                <a href="{{ route('admin.kategori.create') }}"
+                    class="px-4 py-2 bg-[#6F4E37] text-white rounded-md hover:bg-[#5D4037] transition">
+                    Add New Category
+                </a>
             </div>
 
-            <div class="overflow-x-auto">
-                <table class="table-auto w-full border-collapse rounded-xl overflow-hidden">
-                    <thead class="bg-amber-800 text-white">
-                        <tr>
-                            <th class="py-2 px-3 text-left text-sm rounded-tl-lg">No</th>
-                            <th class="py-2 px-3 text-left text-sm">Kategori</th>
-                            <th class="py-2 px-3 text-left text-sm">Deskripsi</th>
-                            <th class="py-2 px-3 text-center text-sm">Jumlah</th>
-                            <th class="py-2 px-3 text-center text-sm rounded-tr-lg">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="product-table" class="text-gray-700 text-sm">
-                        <tr class="border-b border-amber-100 hover:bg-amber-50 transition duration-200">
-                            <td class="py-2 px-3">1</td>
-                            <td class="py-2 px-3 font-semibold text-amber-900">Espresso Based</td>
-                            <td class="py-2 px-3">Minuman kopi berbasis espresso shot, termasuk cappuccino, latte, dan
-                                americano</td>
-                            <td class="py-2 px-3 text-center">12</td>
-                            <td class="py-2 px-3">
-                                <div class="flex justify-center space-x-1">
-                                    <a href="#"
-                                        class="bg-amber-500 hover:bg-amber-600 text-white px-2 py-1 rounded-lg transition duration-200">Edit</a>
-                                    <button onclick="confirmDelete()"
-                                        class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-lg transition duration-200">Hapus</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="border-b border-amber-100 hover:bg-amber-50 transition duration-200">
-                            <td class="py-2 px-3">2</td>
-                            <td class="py-2 px-3 font-semibold text-amber-900">Manual Brew</td>
-                            <td class="py-2 px-3">Kopi yang diseduh secara manual seperti V60, Chemex, French Press, dan
-                                Aeropress</td>
-                            <td class="py-2 px-3 text-center">8</td>
-                            <td class="py-2 px-3">
-                                <div class="flex justify-center space-x-1">
-                                    <a href="#"
-                                        class="bg-amber-500 hover:bg-amber-600 text-white px-2 py-1 rounded-lg transition duration-200">Edit</a>
-                                    <button onclick="confirmDelete()"
-                                        class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-lg transition duration-200">Hapus</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="border-b border-amber-100 hover:bg-amber-50 transition duration-200">
-                            <td class="py-2 px-3">3</td>
-                            <td class="py-2 px-3 font-semibold text-amber-900">Coffee Blend</td>
-                            <td class="py-2 px-3">Biji kopi campuran dengan komposisi yang berbeda untuk menciptakan profil
-                                rasa unik</td>
-                            <td class="py-2 px-3 text-center">6</td>
-                            <td class="py-2 px-3">
-                                <div class="flex justify-center space-x-1">
-                                    <a href="#"
-                                        class="bg-amber-500 hover:bg-amber-600 text-white px-2 py-1 rounded-lg transition duration-200">Edit</a>
-                                    <button onclick="confirmDelete()"
-                                        class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-lg transition duration-200">Hapus</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="border-b border-amber-100 hover:bg-amber-50 transition duration-200">
-                            <td class="py-2 px-3">4</td>
-                            <td class="py-2 px-3 font-semibold text-amber-900">Non-Coffee</td>
-                            <td class="py-2 px-3">Minuman non-kopi seperti teh, coklat, dan minuman berbasis susu</td>
-                            <td class="py-2 px-3 text-center">10</td>
-                            <td class="py-2 px-3">
-                                <div class="flex justify-center space-x-1">
-                                    <a href="#"
-                                        class="bg-amber-500 hover:bg-amber-600 text-white px-2 py-1 rounded-lg transition duration-200">Edit</a>
-                                    <button onclick="confirmDelete()"
-                                        class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-lg transition duration-200">Hapus</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-amber-50 transition duration-200">
-                            <td class="py-2 px-3">5</td>
-                            <td class="py-2 px-3 font-semibold text-amber-900">Food & Snacks</td>
-                            <td class="py-2 px-3">Makanan ringan dan camilan yang cocok untuk menemani kopi</td>
-                            <td class="py-2 px-3 text-center">15</td>
-                            <td class="py-2 px-3">
-                                <div class="flex justify-center space-x-1">
-                                    <a href="#"
-                                        class="bg-amber-500 hover:bg-amber-600 text-white px-2 py-1 rounded-lg transition duration-200">Edit</a>
-                                    <button onclick="confirmDelete()"
-                                        class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-lg transition duration-200">Hapus</button>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Pagination -->
-            <div class="mt-4 flex justify-between items-center text-sm">
-                <div class="text-gray-600">
-                    Showing 5 of 5 entries
+            <!-- Flash Messages -->
+            @if (session('success'))
+                <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded">
+                    <p>{{ session('success') }}</p>
                 </div>
-                <div class="flex space-x-1">
-                    <button class="px-2 py-1 bg-amber-100 text-amber-800 rounded-md disabled opacity-50">Previous</button>
-                    <button class="px-2 py-1 bg-amber-800 text-white rounded-md">1</button>
-                    <button class="px-2 py-1 bg-amber-100 text-amber-800 rounded-md disabled opacity-50">Next</button>
+            @endif
+
+            @if (session('error'))
+                <div class="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded">
+                    <p>{{ session('error') }}</p>
+                </div>
+            @endif
+
+            <!-- Categories Table -->
+            <div class="bg-white shadow overflow-hidden rounded-lg">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-[#6F4E37] text-white">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                    Image
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                    Code
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                    Name
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                    Description
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                    Menu Count
+                                </th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @forelse($categories as $category)
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        @if ($category->path_img_222297)
+                                            <img src="{{ asset('storage/' . $category->path_img_222297) }}"
+                                                alt="{{ $category->nama_222297 }}" class="h-16 w-16 object-cover rounded">
+                                        @else
+                                            <div class="h-16 w-16 bg-gray-200 flex items-center justify-center rounded">
+                                                <span class="text-gray-400">No Image</span>
+                                            </div>
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ $category->kode_kategori_222297 }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-[#6F4E37]">
+                                        {{ $category->nama_222297 }}
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">
+                                        {{ $category->deskripsi_222297 ?? 'No description' }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ $category->menu->count() }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-center">
+                                        <div class="flex items-center justify-center space-x-2">
+                                            <a href="{{ route('admin.kategori.show', $category->kode_kategori_222297) }}"
+                                                class="text-blue-600 hover:text-blue-800">
+                                                <span class="px-2 py-1 bg-blue-100 rounded-md">View</span>
+                                            </a>
+                                            <a href="{{ route('admin.kategori.edit', $category->kode_kategori_222297) }}"
+                                                class="text-[#6F4E37] hover:text-[#5D4037]">
+                                                <span class="px-2 py-1 bg-[#F5E6DD] rounded-md">Edit</span>
+                                            </a>
+                                            <form
+                                                action="{{ route('admin.kategori.destroy', $category->kode_kategori_222297) }}"
+                                                method="POST"
+                                                onsubmit="return confirm('Are you sure you want to delete this category?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-red-600 hover:text-red-800">
+                                                    <span class="px-2 py-1 bg-red-100 rounded-md">Delete</span>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                                        No categories found.
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Confirmation Dialog for Delete -->
-    <script>
-        function confirmDelete() {
-            return confirm('Apakah Anda yakin ingin menghapus kategori ini?');
-        }
-
-        // Fungsi untuk mencari produk
-        function searchProducts() {
-            const input = document.getElementById('search');
-            const filter = input.value.toLowerCase();
-            const table = document.getElementById('product-table');
-            const rows = table.getElementsByTagName('tr');
-
-            for (let i = 0; i < rows.length; i++) {
-                const cells = rows[i].getElementsByTagName('td');
-                let match = false;
-
-                for (let j = 0; j < cells.length; j++) {
-                    if (cells[j]) {
-                        const cellValue = cells[j].textContent || cells[j].innerText;
-                        if (cellValue.toLowerCase().indexOf(filter) > -1) {
-                            match = true;
-                            break;
-                        }
-                    }
-                }
-
-                rows[i].style.display = match ? '' : 'none';
-            }
-        }
-    </script>
 @endsection

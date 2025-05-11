@@ -41,13 +41,12 @@
 
                 <!-- Users -->
                 <li>
-                    <a href="/pages/admin/profile"
-                        class="flex items-center p-2.5 rounded-lg transition-all duration-200 group"
-                        :class="activeLink === '/pages/admin/profile' ? 'bg-[#6F4E37] text-white' :
+                    <a href="/admin/users" class="flex items-center p-2.5 rounded-lg transition-all duration-200 group"
+                        :class="activeLink === '/admin/users' ? 'bg-[#6F4E37] text-white' :
                             'text-amber-800 hover:bg-amber-100'"
-                        @click="activeLink = '/pages/admin/profile'">
+                        @click="activeLink = '/admin/users'">
                         <svg class="w-5 h-5 transition-colors duration-200"
-                            :class="activeLink === '/pages/admin/profile' ? 'stroke-white' : 'stroke-amber-900'"
+                            :class="activeLink === '/admin/users' ? 'stroke-white' : 'stroke-amber-900'"
                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -80,11 +79,11 @@
                 <li>
                     <a href="/admin/kategori"
                         class="flex items-center p-2.5 rounded-lg transition-all duration-200 group"
-                        :class="activeLink === '/dashboard/kategori' ? 'bg-[#6F4E37] text-white' :
+                        :class="activeLink === '/admin/kategori' ? 'bg-[#6F4E37] text-white' :
                             'text-amber-800 hover:bg-amber-100'"
-                        @click="activeLink = '/dashboard/kategori'">
+                        @click="activeLink = '/admin/kategori'">
                         <svg class="w-5 h-5 transition-colors duration-200"
-                            :class="activeLink === '/dashboard/kategori' ? 'stroke-white' : 'stroke-amber-900'"
+                            :class="activeLink === '/admin/kategori' ? 'stroke-white' : 'stroke-amber-900'"
                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
                             <rect x="3" y="3" width="7" height="7" rx="1"></rect>

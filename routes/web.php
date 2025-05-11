@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserMenuController;
 use Illuminate\Support\Facades\Route;
 
@@ -47,4 +48,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Menu routes
     Route::resource('menu', MenuController::class);
+    // Add these routes to your web.php file inside the admin group
+    Route::resource('kategori', App\Http\Controllers\KategoriProdukController::class);
+    Route::resource('users', App\Http\Controllers\UserController::class);
+    Route::patch('users/{id}/change-role', [UserController::class, 'changeRole'])->name('users.change-role');
 });
