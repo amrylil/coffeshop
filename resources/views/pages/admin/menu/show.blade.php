@@ -8,7 +8,7 @@
                 <h1 class="text-3xl font-bold text-[#6F4E37]">Menu Details</h1>
                 <div class="flex space-x-3">
                     <a href="{{ route('admin.menu.edit', $menu->kode_menu_222297) }}"
-                        class="px-4 py-2 bg-[#6F4E37] text-white rounded-md hover:bg-[#5D4037] transition">
+                        class="px-4 py-2 bg-black text-white transition">
                         Edit Menu
                     </a>
                     <a href="{{ route('admin.menu.index') }}"
@@ -26,8 +26,8 @@
                         <div class="col-span-1 flex flex-col items-center">
                             @if ($menu->path_img_222297)
                                 <div class="w-full h-64 bg-gray-100 rounded-lg overflow-hidden">
-                                    <img src="{{ asset('storage/' . $menu->path_img_222297) }}"
-                                        alt="{{ $menu->nama_222297 }}" class="w-full h-full object-cover">
+                                    <img src="{{ asset($menu->path_img_222297) }}" alt="{{ $menu->nama_222297 }}"
+                                        class="w-full h-full object-cover">
                                 </div>
                             @else
                                 <div class="w-full h-64 bg-gray-200 flex items-center justify-center rounded-lg">

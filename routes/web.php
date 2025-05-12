@@ -50,6 +50,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('menu', MenuController::class);
     // Add these routes to your web.php file inside the admin group
     Route::resource('kategori', App\Http\Controllers\KategoriProdukController::class);
+
     Route::resource('users', App\Http\Controllers\UserController::class);
     Route::patch('users/{id}/change-role', [UserController::class, 'changeRole'])->name('users.change-role');
 });

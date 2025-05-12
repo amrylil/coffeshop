@@ -54,8 +54,8 @@
                                 <tr class="hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         @if ($menu->path_img_222297)
-                                            <img src="{{ asset('storage/' . $menu->path_img_222297) }}"
-                                                alt="{{ $menu->nama_222297 }}" class="h-16 w-16 object-cover rounded">
+                                            <img src="{{ asset($menu->path_img_222297) }}" alt="{{ $menu->nama_222297 }}"
+                                                class="h-16 w-16 object-cover rounded">
                                         @else
                                             <div class="h-16 w-16 bg-gray-200 flex items-center justify-center rounded">
                                                 <span class="text-gray-400">No Image</span>

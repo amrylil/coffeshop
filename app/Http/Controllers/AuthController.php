@@ -110,13 +110,14 @@ class AuthController extends Controller
   public function register(Request $request)
   {
     $validator = Validator::make($request->all(), [
-      'name'       => 'required|string|max:255',
-      'email'      => 'required|string|email|max:255|unique:users_222297,email_222297',
-      'password'   => 'required|string|min:8|confirmed',
-      'gender'     => '',
-      'phone'      => '',
-      'address'    => '',
-      'birth_date' => '',
+      'name'          => 'required|string|max:255',
+      'email'         => 'required|string|email|max:255|unique:users_222297,email_222297',
+      'password'      => 'required|string|min:8|confirmed',
+      'gender'        => 'nullable|string',
+      'phone'         => 'nullable|string',
+      'address'       => 'nullable|string',
+      'birth_date'    => 'nullable|date',
+      'profile_photo' => 'nullable|image|max:2048',  // Menambahkan validasi untuk file gambar
     ]);
 
     if ($validator->fails()) {
@@ -137,22 +138,18 @@ class AuthController extends Controller
 
     // Create user
     $user = User::create([
-      'user_id_222297'       => Str::uuid()->toString(),
       'name_222297'          => $request->name,
       'email_222297'         => $request->email,
       'password_222297'      => Hash::make($request->password),
-      'gender_222297'        => $request->gender,
-      'address_222297'       => $request->address,
-      'phone_222297'         => $request->phone,
-      'birth_date_222297'    => $request->birth_date,
+      'gender_222297'        => $request->gender ?? null,
+      'address_222297'       => $request->address ?? null,
+      'phone_222297'         => $request->phone ?? null,
+      'birth_date_222297'    => $request->birth_date ?? null,
       'profile_photo_222297' => $profilePhoto,
-      'role_222297'          => 'user',  // Default role
+      'role_222297'          => 'customer',  // Default role
     ]);
 
-    // Login the user
-    // Auth::login($user);
-
-    return redirect('/admin');
+    return redirect('/login');
   }
 
   /**
@@ -168,7 +165,7 @@ class AuthController extends Controller
     $request->session()->invalidate();
     $request->session()->regenerateToken();
 
-    return redirect('/');
+    return redirect('/login');
   }
 
   /**

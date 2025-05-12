@@ -98,8 +98,8 @@
                                     {{ $menu->kategori->nama_kategori_222297 }}
                                 </span>
                                 @if ($menu->path_img_222297)
-                                    <img src="{{ asset('storage/' . $menu->path_img_222297) }}"
-                                        alt="{{ $menu->nama_222297 }}" class="w-full h-full scale-110 object-cover">
+                                    <img src="{{ asset($menu->path_img_222297) }}" alt="{{ $menu->nama_222297 }}"
+                                        class="w-full h-full scale-110 object-cover">
                                 @else
                                     <img src="{{ asset('images/coffe.png') }}" alt="{{ $menu->nama_222297 }}"
                                         class="w-full h-full scale-110 object-cover">

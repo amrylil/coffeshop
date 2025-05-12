@@ -1,8 +1,8 @@
 @extends('layouts.dashboard-layout')
 
 @section('content')
-    <div class="bg-white min-h-screen py-8 px-4 sm:px-6 lg:px-8 pt-20">
-        <div class="max-w-4xl mx-auto">
+    <div class="bg-white min-h-screen py-8 px-4 sm:px-6 lg:px-8 pt-20 w-full">
+        <div class=" mx-auto">
             <!-- Header Section -->
             <div class="mb-6">
                 <h1 class="text-3xl font-bold text-[#6F4E37]">Edit Menu Item</h1>
@@ -88,8 +88,7 @@
                             @if ($menu->path_img_222297)
                                 <div class="mt-2">
                                     <p class="text-xs text-gray-500 mb-1">Current image:</p>
-                                    <img src="{{ asset('storage/' . $menu->path_img_222297) }}"
-                                        alt="{{ $menu->nama_222297 }}"
+                                    <img src="{{ asset(path: $menu->path_img_222297) }}" alt="{{ $menu->nama_222297 }}"
                                         class="h-24 w-24 object-cover rounded border border-gray-200">
                                 </div>
                             @endif
@@ -111,7 +110,7 @@
                             Cancel
                         </a>
                         <button type="submit"
-                            class="px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-[#6F4E37] hover:bg-[#5D4037] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6F4E37]">
+                            class="px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black">
                             Update Menu Item
                         </button>
                     </div>

@@ -57,7 +57,7 @@
                     <!-- Gambar Produk -->
                     <div class="lg:w-1/2 h-96 lg:h-auto">
                         @if ($menu->path_img_222297)
-                            <img src="{{ asset('storage/' . $menu->path_img_222297) }}" alt="{{ $menu->nama_222297 }}"
+                            <img src="{{ asset($menu->path_img_222297) }}" alt="{{ $menu->nama_222297 }}"
                                 class="w-full h-full object-cover">
                         @else
                             <img src="{{ asset('images/coffe.png') }}" alt="{{ $menu->nama_222297 }}"
@@ -183,7 +183,7 @@
                                 <a href="{{ route('menu.show', $relatedMenu->kode_menu_222297) }}">
                                     <div class="h-48 w-full overflow-hidden">
                                         @if ($relatedMenu->path_img_222297)
-                                            <img src="{{ asset('storage/' . $relatedMenu->path_img_222297) }}"
+                                            <img src="{{ asset($relatedMenu->path_img_222297) }}"
                                                 alt="{{ $relatedMenu->nama_222297 }}"
                                                 class="w-full h-full object-cover transform hover:scale-110 transition duration-500">
                                         @else

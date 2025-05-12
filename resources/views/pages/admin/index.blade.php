@@ -1,24 +1,24 @@
 @extends('layouts.dashboard-layout')
 
-@section('title', 'Admin Dashboard')
+@section('title', 'Dashboard Admin')
 
 @section('content')
     <div class="bg-white min-h-screen py-8 px-4 sm:px-6 lg:px-8 pt-20">
         <div class="max-w-7xl mx-auto">
-            <!-- Page Heading -->
+            <!-- Judul Halaman -->
             <div class="flex items-center justify-between mb-8">
                 <h1 class="text-3xl font-bold text-[#6F4E37]">Dashboard</h1>
             </div>
 
-            <!-- Content Row - Stats Cards -->
+            <!-- Baris Konten - Kartu Statistik -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <!-- Menu Count Card -->
+                <!-- Kartu Jumlah Menu -->
                 <div class="bg-white rounded-lg shadow overflow-hidden border-l-4 border-blue-500">
                     <div class="px-4 py-5 sm:p-6">
                         <div class="flex items-center">
                             <div class="flex-1">
                                 <div class="text-xs font-semibold text-blue-500 uppercase tracking-wider mb-1">
-                                    Total Menu Items
+                                    Total Item Menu
                                 </div>
                                 <div class="text-2xl font-bold text-gray-800">
                                     {{ \App\Models\Menu::count() }}
@@ -35,13 +35,13 @@
                     </div>
                 </div>
 
-                <!-- Category Count Card -->
+                <!-- Kartu Jumlah Kategori -->
                 <div class="bg-white rounded-lg shadow overflow-hidden border-l-4 border-green-500">
                     <div class="px-4 py-5 sm:p-6">
                         <div class="flex items-center">
                             <div class="flex-1">
                                 <div class="text-xs font-semibold text-green-500 uppercase tracking-wider mb-1">
-                                    Categories
+                                    Kategori
                                 </div>
                                 <div class="text-2xl font-bold text-gray-800">
                                     {{ \App\Models\KategoriProduk::count() }}
@@ -58,13 +58,13 @@
                     </div>
                 </div>
 
-                <!-- Out of Stock Alert Card -->
+                <!-- Kartu Peringatan Stok Habis -->
                 <div class="bg-white rounded-lg shadow overflow-hidden border-l-4 border-yellow-500">
                     <div class="px-4 py-5 sm:p-6">
                         <div class="flex items-center">
                             <div class="flex-1">
                                 <div class="text-xs font-semibold text-yellow-500 uppercase tracking-wider mb-1">
-                                    Out of Stock Items
+                                    Item Stok Habis
                                 </div>
                                 <div class="text-2xl font-bold text-gray-800">
                                     {{ \App\Models\Menu::where('jumlah_222297', 0)->count() }}
@@ -81,13 +81,13 @@
                     </div>
                 </div>
 
-                <!-- Total Transactions Card -->
+                <!-- Kartu Total Transaksi -->
                 <div class="bg-white rounded-lg shadow overflow-hidden border-l-4 border-[#6F4E37]">
                     <div class="px-4 py-5 sm:p-6">
                         <div class="flex items-center">
                             <div class="flex-1">
                                 <div class="text-xs font-semibold text-[#6F4E37] uppercase tracking-wider mb-1">
-                                    Total Transactions
+                                    Total Transaksi
                                 </div>
                                 <div class="text-2xl font-bold text-gray-800">
                                     {{ \App\Models\Transaksi::count() }}
@@ -105,16 +105,16 @@
                 </div>
             </div>
 
-            <!-- Content Row - Tables -->
+            <!-- Baris Konten - Tabel -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Recent Menus Card -->
+                <!-- Kartu Menu Terbaru -->
                 <div class="lg:col-span-2">
                     <div class="bg-white rounded-lg shadow overflow-hidden">
                         <div class="px-4 py-5 border-b border-gray-200 sm:px-6 flex justify-between items-center">
-                            <h3 class="text-lg font-medium text-[#6F4E37]">Recent Menu Items</h3>
+                            <h3 class="text-lg font-medium text-[#6F4E37]">Item Menu Terbaru</h3>
                             <a href="{{ route('admin.menu.index') }}"
                                 class="px-3 py-1 bg-[#6F4E37] text-white text-sm rounded hover:bg-[#5D4037] transition">
-                                View All
+                                Lihat Semua
                             </a>
                         </div>
                         <div class="overflow-x-auto">
@@ -123,23 +123,23 @@
                                     <tr>
                                         <th scope="col"
                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Code
+                                            Kode
                                         </th>
                                         <th scope="col"
                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Name
+                                            Nama
                                         </th>
                                         <th scope="col"
                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Category
+                                            Kategori
                                         </th>
                                         <th scope="col"
                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Price
+                                            Harga
                                         </th>
                                         <th scope="col"
                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Stock
+                                            Stok
                                         </th>
                                     </tr>
                                 </thead>
@@ -153,7 +153,7 @@
                                                 {{ $menu->nama_222297 }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {{ $menu->kategori ? $menu->kategori->nama_222297 : 'Unknown' }}
+                                                {{ $menu->kategori ? $menu->kategori->nama_222297 : 'Tidak Diketahui' }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                 Rp {{ number_format($menu->harga_222297, 0, ',', '.') }}
@@ -167,7 +167,7 @@
                                                 @else
                                                     <span
                                                         class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
-                                                        Out of Stock
+                                                        Stok Habis
                                                     </span>
                                                 @endif
                                             </td>
@@ -175,7 +175,7 @@
                                     @empty
                                         <tr>
                                             <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
-                                                No menu items found.
+                                                Tidak ada item menu yang ditemukan.
                                             </td>
                                         </tr>
                                     @endforelse
@@ -185,11 +185,11 @@
                     </div>
                 </div>
 
-                <!-- Low Stock Items Card -->
+                <!-- Kartu Item Stok Menipis -->
                 <div class="lg:col-span-1">
                     <div class="bg-white rounded-lg shadow overflow-hidden h-full">
                         <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
-                            <h3 class="text-lg font-medium text-[#6F4E37]">Low Stock Items</h3>
+                            <h3 class="text-lg font-medium text-[#6F4E37]">Item Stok Menipis</h3>
                         </div>
                         <div class="p-4">
                             <div class="space-y-2">
@@ -209,7 +209,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
-                                        <p class="mt-2 text-gray-500">No low stock items.</p>
+                                        <p class="mt-2 text-gray-500">Tidak ada item stok menipis.</p>
                                     </div>
                                 @endforelse
                             </div>

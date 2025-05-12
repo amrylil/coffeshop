@@ -1,8 +1,8 @@
 @extends('layouts.dashboard-layout')
 
 @section('content')
-    <div class="bg-white min-h-screen py-8 px-4 sm:px-6 lg:px-8 pt-20">
-        <div class="max-w-3xl mx-auto">
+    <div class="bg-white min-h-screen py-8 px-4 sm:px-6 lg:px-8 pt-20 w-full">
+        <div class=" mx-auto">
             <!-- Header Section -->
             <div class="mb-6">
                 <h1 class="text-3xl font-bold text-[#6F4E37]">Edit Category</h1>
@@ -31,7 +31,7 @@
                     <div class="mb-4">
                         <label for="kode" class="block text-sm font-medium text-gray-700 mb-1">Category Code</label>
                         <input type="text" value="{{ $category->kode_kategori_222297 }}"
-                            class="form-input w-full rounded-md border-gray-300 bg-gray-100 text-gray-700" readonly>
+                            class="form-input p-2 w-full rounded-md border-gray-300 bg-gray-100 text-gray-700" readonly>
                     </div>
 
                     <!-- Category Name -->
@@ -39,7 +39,7 @@
                         <label for="nama_222297" class="block text-sm font-medium text-gray-700 mb-1">Category Name</label>
                         <input type="text" name="nama_222297" id="nama_222297"
                             value="{{ old('nama_222297', $category->nama_222297) }}"
-                            class="form-input w-full rounded-md border-gray-300 shadow-sm focus:border-[#6F4E37] focus:ring focus:ring-[#F5E6DD]"
+                            class="form-input p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-[#6F4E37] focus:ring focus:ring-[#F5E6DD]"
                             required>
                     </div>
 
@@ -48,7 +48,7 @@
                         <label for="deskripsi_222297"
                             class="block text-sm font-medium text-gray-700 mb-1">Description</label>
                         <textarea name="deskripsi_222297" id="deskripsi_222297" rows="4"
-                            class="form-textarea w-full rounded-md border-gray-300 shadow-sm focus:border-[#6F4E37] focus:ring focus:ring-[#F5E6DD]">{{ old('deskripsi_222297', $category->deskripsi_222297) }}</textarea>
+                            class="form-textarea p-2 w-full rounded-md border-gray-300 shadow-sm focus:border-[#6F4E37] focus:ring focus:ring-[#F5E6DD]">{{ old('deskripsi_222297', $category->deskripsi_222297) }}</textarea>
                     </div>
 
                     <!-- Category Image -->
@@ -82,8 +82,7 @@
                             class="px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition">
                             Cancel
                         </a>
-                        <button type="submit"
-                            class="px-4 py-2 bg-[#6F4E37] text-white rounded-md hover:bg-[#5D4037] transition">
+                        <button type="submit" class="px-4 py-2 bg-black text-white transition">
                             Update Category
                         </button>
                     </div>
