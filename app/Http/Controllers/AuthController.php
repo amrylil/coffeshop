@@ -71,7 +71,7 @@ class AuthController extends Controller
 
       // Redirect berdasarkan peran pengguna
       if (Auth::user()->role_222297 === 'admin') {
-        return redirect()->intended(route('admin.dashboard'))->with('success', 'Login berhasil!');
+        return redirect()->intended(route('admin.menu.index'))->with('success', 'Login berhasil!');
       } else {
         return redirect()->intended('/')->with('success', 'Login berhasil!');
       }
