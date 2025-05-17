@@ -17,9 +17,9 @@ class UserSeeder extends Seeder
         // Admin user
         User::create([
             'user_id_222297'    => 'USR' . Str::random(5),
-            'email_222297'      => 'admin@kedaikopi.com',
+            'email_222297'      => 'adminkedai@gmail.com',
             'name_222297'       => 'Admin Kedai Kopi',
-            'password_222297'   => Hash::make('password'),
+            'password_222297'   => Hash::make('admin123'),
             'gender_222297'     => 'male',
             'role_222297'       => 'admin',
             'address_222297'    => 'Jl. Admin No. 1',
