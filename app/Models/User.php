@@ -13,7 +13,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $table      = 'users_222297';
-    protected $primaryKey = 'user_id_222297';
+    protected $primaryKey = 'email_222297';
     public $incrementing  = false;
     protected $keyType    = 'string';
     public $timestamps    = false;
@@ -24,7 +24,6 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'user_id_222297',
         'email_222297',
         'name_222297',
         'password_222297',
@@ -36,17 +35,6 @@ class User extends Authenticatable
         'profile_photo_222297',
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            if (!$model->user_id_222297) {
-                $model->user_id_222297 = IDGeneratorHelper::generateUserID();
-            }
-        });
-    }
-
     public function getAuthPassword()
     {
         return $this->password_222297;
@@ -54,7 +42,7 @@ class User extends Authenticatable
 
     public function getAuthIdentifierName()
     {
-        return 'user_id_222297';
+        return 'email_222297';
     }
 
     /**
@@ -89,11 +77,11 @@ class User extends Authenticatable
 
     public function keranjang()
     {
-        return $this->hasMany(Keranjang::class, 'user_id_222297', 'user_id_222297');
+        return $this->hasMany(Keranjang::class, 'email_222297', 'email_222297');
     }
 
     public function transaksi()
     {
-        return $this->hasMany(Transaksi::class, 'user_id_222297', 'user_id_222297');
+        return $this->hasMany(Transaksi::class, 'email_222297', 'email_222297');
     }
 }

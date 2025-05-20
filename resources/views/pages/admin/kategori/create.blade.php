@@ -9,6 +9,11 @@
             @csrf
 
             <div class="mb-5">
+                <label for="kode_kategori_222297" class="block text-gray-700 font-semibold mb-2">Kode Kategori</label>
+                <input type="text" name="kode_kategori_222297" id="kode_kategori_222297"
+                    class="border border-gray-300 p-3 rounded-lg w-full" placeholder="Masukkan nama kategori">
+            </div>
+            <div class="mb-5">
                 <label for="nama_222297" class="block text-gray-700 font-semibold mb-2">Nama Kategori</label>
                 <input type="text" name="nama_222297" id="nama_222297"
                     class="border border-gray-300 p-3 rounded-lg w-full" placeholder="Masukkan nama kategori">

@@ -63,7 +63,7 @@ class AuthController extends Controller
 
       // Menyimpan data tambahan ke session, termasuk role
       session([
-        'user_id'   => Auth::user()->user_id_222297,
+        // 'user_id'   => Auth::user()->email_222297,
         'user_role' => Auth::user()->role_222297,  // Role user, misalnya 'admin' atau 'user'
         'email'     => Auth::user()->email_222297,  // Role user, misalnya 'admin' atau 'user'
         'name'      => Auth::user()->name_222297,

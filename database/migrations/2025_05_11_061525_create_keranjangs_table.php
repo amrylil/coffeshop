@@ -12,13 +12,13 @@ return new class extends Migration {
     {
         Schema::create('keranjang_222297', function (Blueprint $table) {
             $table->string('kode_keranjang_222297', 20)->primary();
-            $table->string('user_id_222297', 20)->nullable();
+            $table->string('email_222297', 20)->nullable();
             $table->timestamp('created_at_222297')->nullable();
             $table->timestamp('updated_at_222297')->nullable();
 
             $table
-                ->foreign('user_id_222297')
-                ->references('user_id_222297')
+                ->foreign('email_222297')
+                ->references('email_222297')
                 ->on('users_222297');
         });
     }

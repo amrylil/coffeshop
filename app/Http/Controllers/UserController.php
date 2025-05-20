@@ -112,7 +112,7 @@ class UserController extends Controller
     $user = User::findOrFail($id);
 
     $validator = Validator::make($request->all(), [
-      'email_222297'         => 'required|email|unique:users_222297,email_222297,' . $id . ',user_id_222297',
+      'email_222297'         => 'required|email|unique:users_222297,email_222297,' . $id . ',email_222297',
       'name_222297'          => 'required|string|max:255',
       'gender_222297'        => 'required|in:L,P',
       'role_222297'          => 'required|string',

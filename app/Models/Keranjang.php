@@ -20,7 +20,7 @@ class Keranjang extends Model
 
     protected $fillable = [
         'kode_keranjang_222297',
-        'user_id_222297',
+        'email_222297',
     ];
 
     protected static function boot()
@@ -41,7 +41,7 @@ class Keranjang extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id_222297', 'user_id_222297');
+        return $this->belongsTo(User::class, 'email_222297', 'email_222297');
     }
 
     public function items()

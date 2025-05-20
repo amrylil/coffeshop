@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('transaksi_222297', function (Blueprint $table) {
             $table->string('kode_transaksi_222297', 20)->primary();
-            $table->string('user_id_222297', 20)->nullable();
+            $table->string('email_222297', 20)->nullable();
             $table->string('kode_menu_222297', 20)->nullable();
             $table->integer('jumlah_222297')->nullable();
             $table->decimal('harga_total_222297', 10, 2)->nullable();
@@ -23,8 +23,8 @@ return new class extends Migration {
             $table->timestamp('updated_at_222297')->nullable();
 
             $table
-                ->foreign('user_id_222297')
-                ->references('user_id_222297')
+                ->foreign('email_222297')
+                ->references('email_222297')
                 ->on('users_222297');
             $table
                 ->foreign('kode_menu_222297')

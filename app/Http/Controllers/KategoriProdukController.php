@@ -33,12 +33,13 @@ class KategoriProdukController extends RoutingController
   public function store(Request $request)
   {
     $request->validate([
-      'nama_222297'      => 'required|string|max:255',
-      'deskripsi_222297' => 'nullable|string',
-      'path_img_222297'  => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+      'kode_kategori_222297' => 'required|string|max:50|unique:kategori_produk_222297,kode_kategori_222297',  // Added validation for manual category ID
+      'nama_222297'          => 'required|string|max:255',
+      'deskripsi_222297'     => 'nullable|string',
+      'path_img_222297'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
     ]);
 
-    $data = $request->only(['nama_222297', 'deskripsi_222297']);
+    $data = $request->only(['kode_kategori_222297', 'nama_222297', 'deskripsi_222297']);
 
     if ($request->hasFile('path_img_222297')) {
       $path                    = $request->file('path_img_222297')->store('kategori', 'public');

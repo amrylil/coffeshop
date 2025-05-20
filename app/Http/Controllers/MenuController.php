@@ -43,6 +43,7 @@ class MenuController extends RoutingController
     public function store(Request $request)
     {
         $request->validate([
+            'kode_menu_222297'     => 'required|string|max:50|unique:menu_222297,kode_menu_222297',  // Added validation for manual ID
             'nama_222297'          => 'required|string|max:255',
             'deskripsi_222297'     => 'required|string',
             'harga_222297'         => 'required|numeric|min:0',
@@ -55,7 +56,7 @@ class MenuController extends RoutingController
 
         // Handle image upload
         if ($request->hasFile('image')) {
-            // Store in public/images directory instead
+            // Store in public/images directory
             $image     = $request->file('image');
             $imageName = time() . '_' . Str::slug($request->nama_222297) . '.' . $image->getClientOriginalExtension();
 
