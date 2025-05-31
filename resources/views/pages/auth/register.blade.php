@@ -102,7 +102,7 @@
                                 <label class="font-montserrat text-xs font-medium text-gray-700 ml-1 mb-1 block">Daftar
                                     Sebagai
                                     <span class="text-red-500">*</span></label>
-                                <div class="flex space-x-4">
+                                <div class="flex space-x-4 px-4">
                                     <label class="flex items-center space-x-2 cursor-pointer">
                                         <input type="radio" name="role" value="customer"
                                             class="form-radio text-[#a07942] focus:ring-[#a07942]"
