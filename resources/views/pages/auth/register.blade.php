@@ -97,6 +97,27 @@
                                 </div>
                             </div>
 
+                            <!-- Role Selection -->
+                            <div class="relative">
+                                <label class="font-montserrat text-xs font-medium text-gray-700 ml-1 mb-1 block">Daftar
+                                    Sebagai
+                                    <span class="text-red-500">*</span></label>
+                                <div class="flex space-x-4">
+                                    <label class="flex items-center space-x-2 cursor-pointer">
+                                        <input type="radio" name="role" value="customer"
+                                            class="form-radio text-[#a07942] focus:ring-[#a07942]"
+                                            {{ old('role', 'customer') == 'customer' ? 'checked' : '' }} required>
+                                        <span class="font-montserrat text-sm text-gray-700">Customer</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 cursor-pointer">
+                                        <input type="radio" name="role" value="admin"
+                                            class="form-radio text-[#a07942] focus:ring-[#a07942]"
+                                            {{ old('role') == 'admin' ? 'checked' : '' }} required>
+                                        <span class="font-montserrat text-sm text-gray-700">Admin</span>
+                                    </label>
+                                </div>
+                            </div>
+
                             <!-- Password Input -->
                             <div class="relative">
                                 <label for="password"
@@ -128,8 +149,8 @@
                                     </span>
                                     <input id="password_confirmation"
                                         class="w-full border border-gray-200 bg-gray-50/50 rounded-lg py-3 pl-10 pr-4 font-montserrat text-sm focus:outline-none focus:ring-2 focus:ring-[#a07942] focus:border-transparent"
-                                        type="password" name="password_confirmation" placeholder="Konfirmasi kata sandi"
-                                        required />
+                                        type="password" name="password_confirmation"
+                                        placeholder="Konfirmasi kata sandi" required />
                                     <button type="button"
                                         class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                                         id="togglePasswordConfirm">

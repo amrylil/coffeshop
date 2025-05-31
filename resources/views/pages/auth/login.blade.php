@@ -77,6 +77,24 @@
                                 </div>
                             </div>
 
+                            <!-- Role Selection -->
+                            <div class="relative">
+                                <label class="font-montserrat text-xs font-medium text-gray-700 ml-1 mb-1 block">Masuk
+                                    Sebagai</label>
+                                <div class="flex space-x-4">
+                                    <label class="flex items-center space-x-2 cursor-pointer">
+                                        <input type="radio" name="role" value="customer"
+                                            class="form-radio text-[#a07942] focus:ring-[#a07942]" checked required>
+                                        <span class="font-montserrat text-sm text-gray-700">Customer</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 cursor-pointer">
+                                        <input type="radio" name="role" value="admin"
+                                            class="form-radio text-[#a07942] focus:ring-[#a07942]" required>
+                                        <span class="font-montserrat text-sm text-gray-700">Admin</span>
+                                    </label>
+                                </div>
+                            </div>
+
                             <div class="relative">
                                 <div class="flex justify-between items-center mb-1">
                                     <label for="password"
