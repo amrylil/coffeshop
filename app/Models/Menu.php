@@ -58,4 +58,9 @@ class Menu extends Model
     {
         return $this->hasMany(Transaksi::class, 'kode_menu_222297', 'kode_menu_222297');
     }
+
+    public function keranjang()
+    {
+        return $this->hasMany(Keranjang::class, 'email_222297', 'email_222297');
+    }
 }

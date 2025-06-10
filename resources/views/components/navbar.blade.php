@@ -26,7 +26,7 @@
             class="rounded text-slate-50 hover:text-white {{ Request::is('/') ? 'bg-[#422424] text-white' : 'text-slate-950 ' }} px-4 py-2 hover:bg-[#422424]"
             style="transition: background-color 0.3s;">Beranda</a>
 
-        <a href="#" x-data="{
+        <a href="{{ route('menu.index') }}" x-data="{
             scrolled: false,
             isHome: window.location.pathname === '/'
         }"
@@ -35,7 +35,7 @@
             class="rounded hover:bg-[#422424] hover:text-white {{ Request::is('/') ? 'text-slate-50' : (Request::is('menu') ? 'text-white bg-[#422424]' : 'text-slate-950') }} px-4 py-2 "
             style="transition: background-color 0.3s;">Menu</a>
 
-        <a href="#" x-data="{
+        <a href="{{ route('reservasi') }}" x-data="{
             scrolled: false,
             isHome: window.location.pathname === '/'
         }"
@@ -44,11 +44,11 @@
             class="rounded hover:bg-[#422424] text-slate-50 hover:text-white {{ Request::is('/') ? 'text-slate-50' : (Request::is('reservasi') ? 'text-white bg-[#422424]' : 'text-slate-950') }}  px-4 py-2 "
             style="transition: background-color 0.3s;">Reservasi</a>
 
-        <a href="#"
+        <a href="{{ route('about-us') }}"
             class="rounded hover:bg-[#422424] text-gray-900 hover:text-white {{ Request::is('about') ? 'bg-[#422424] text-white' : '' }} px-4 py-2 "
             style="transition: background-color 0.3s;">Tentang Kami</a>
 
-        <a href="#"
+        <a href="{{ route('kontak') }}"
             class="rounded hover:bg-[#422424] text-gray-900 hover:text-white {{ Request::is('contact-us') ? 'bg-[#422424] text-white' : '' }} px-4 py-2 "
             style="transition: background-color 0.3s;">Kontak</a>
     </nav>
@@ -60,13 +60,15 @@
             <!-- Cart Button -->
             <div class="cursor-pointer">
                 <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
-                    <div class="indicator">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                        </svg>
-                    </div>
+                    <a href="{{ route('keranjang.index') }}">
+                        <div class="indicator">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                        </div>
+                    </a>
                 </div>
             </div>
 
@@ -136,7 +138,14 @@
 
                     <div class="w-full max-w-md h-[60vh] bg-gray-100 rounded-t-3xl shadow-lg p-6">
 
+                        <a href="{{ route('user.transaksi.index') }}">
+                            <div class="flex items-center justify-between py-3">
+                                <div class="flex font-semibold items-center space-x-3 text-slate-950">
 
+                                    Pesanan Saya
+                                </div>
+                            </div>
+                        </a>
                         <div class="flex items-center justify-between py-3">
                             <div class="flex items-center space-x-3 text-red-600">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-0.5 -0.5 16 16" fill="none"

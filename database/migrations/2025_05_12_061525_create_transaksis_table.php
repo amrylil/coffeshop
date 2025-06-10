@@ -11,8 +11,8 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('transaksi_222297', function (Blueprint $table) {
-            $table->string('kode_transaksi_222297', 20)->primary();
-            $table->string('email_222297', 20)->nullable();
+            $table->string('kode_transaksi_222297', 100)->primary();
+            $table->string('email_222297', 100)->nullable();
             $table->string('kode_menu_222297', 20)->nullable();
             $table->integer('jumlah_222297')->nullable();
             $table->decimal('harga_total_222297', 10, 2)->nullable();

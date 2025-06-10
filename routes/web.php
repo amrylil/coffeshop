@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserMenuController;
 use Illuminate\Support\Facades\Route;
@@ -40,6 +42,26 @@ Route::prefix('menu')->name('menu.')->group(function () {
     Route::get('/get-items', [App\Http\Controllers\UserMenuController::class, 'getMenuItems'])->name('get-items');
 });
 
+Route::middleware('auth')->group(function () {
+    Route::get('/keranjang', [App\Http\Controllers\KeranjangController::class, 'index'])->name('keranjang.index');
+    Route::post('/keranjang/add', [App\Http\Controllers\KeranjangController::class, 'addToCart'])->name('keranjang.add');
+    Route::put('/keranjang/update/{kodeItem}', [App\Http\Controllers\KeranjangController::class, 'updateQuantity'])->name('keranjang.update');
+    Route::delete('/keranjang/remove/{kodeItem}', [App\Http\Controllers\KeranjangController::class, 'removeItem'])->name('keranjang.remove');
+    Route::delete('/keranjang/clear', [App\Http\Controllers\KeranjangController::class, 'clearCart'])->name('keranjang.clear');
+    Route::post('/keranjang/increment/{kodeItem}', [App\Http\Controllers\KeranjangController::class, 'incrementQuantity'])->name('keranjang.increment');
+    Route::post('/keranjang/decrement/{kodeItem}', [App\Http\Controllers\KeranjangController::class, 'decrementQuantity'])->name('keranjang.decrement');
+    Route::get('/keranjang/count', [App\Http\Controllers\KeranjangController::class, 'getCartCount'])->name('keranjang.count');
+    Route::get('/keranjang/total', [App\Http\Controllers\KeranjangController::class, 'getCartTotal'])->name('keranjang.total');
+
+    Route::prefix('user/transaksi')->name('user.transaksi.')->group(function () {
+        Route::get('/', [TransaksiController::class, 'userIndex'])->name('index');
+        Route::get('/create', [TransaksiController::class, 'userCreate'])->name('create');
+        Route::post('/', [TransaksiController::class, 'userCheckoutStore'])->name('store');
+        Route::get('/{id}', [TransaksiController::class, 'userShow'])->name('show');
+        Route::patch('/{id}/cancel', [TransaksiController::class, 'userCancel'])->name('cancel');
+    });
+});
+
 Route::prefix('admin')->name('admin.')->group(function () {
     // Dashboard
     Route::get('/', function () {
@@ -53,4 +75,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::resource('users', App\Http\Controllers\UserController::class);
     Route::patch('users/{id}/change-role', [UserController::class, 'changeRole'])->name('users.change-role');
+
+    Route::prefix('admin/transaksi')->name('admin.transaksi.')->group(function () {
+        Route::get('/', [TransaksiController::class, 'adminIndex'])->name('index');
+        Route::get('/stats', [TransaksiController::class, 'adminStats'])->name('stats');
+        Route::get('/export', [TransaksiController::class, 'adminExport'])->name('export');
+        Route::get('/{id}', [TransaksiController::class, 'adminShow'])->name('show');
+        Route::patch('/{id}/confirm', [TransaksiController::class, 'adminConfirm'])->name('confirm');
+        Route::patch('/{id}/reject', [TransaksiController::class, 'adminReject'])->name('reject');
+        Route::patch('/{id}/complete', [TransaksiController::class, 'adminComplete'])->name('complete');
+    });
 });
