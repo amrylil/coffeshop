@@ -54,6 +54,22 @@
                         <span class="ml-3">Kategori</span>
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('admin.users.index') }}"
+                        class="flex items-center p-2.5 rounded-lg transition-all duration-200 group"
+                        :class="activeLink === '/admin/users' ? 'bg-[#6F4E37] text-white' :
+                            'text-amber-800 hover:bg-amber-100'"
+                        @click="activeLink = '/admin/users'">
+                        <svg class="w-5 h-5 transition-colors duration-200"
+                            :class="activeLink === '/admin/users' ? 'stroke-white' : 'stroke-amber-900'"
+                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <span class="ml-3">Users</span>
+                    </a>
+                </li>
             </ul>
         </nav>
 
@@ -82,7 +98,8 @@
     type="button"
     class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-amber-900 rounded-lg sm:hidden hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-300 dark:text-amber-200 dark:hover:bg-amber-900 dark:focus:ring-amber-700 fixed top-0 left-0 z-50">
     <span class="sr-only">Toggle sidebar</span>
-    <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+    <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg">
         <path clip-rule="evenodd" fill-rule="evenodd"
             d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z">
         </path>

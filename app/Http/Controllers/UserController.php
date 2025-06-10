@@ -43,7 +43,7 @@ class UserController extends Controller
       'email_222297'         => 'required|email|unique:users_222297',
       'name_222297'          => 'required|string|max:255',
       'password_222297'      => 'required|string|min:8',
-      'gender_222297'        => 'required|in:L,P',
+      'gender_222297'        => 'required|in:male,female',
       'role_222297'          => 'required|string',
       'address_222297'       => 'nullable|string',
       'phone_222297'         => 'nullable|string',
@@ -72,7 +72,7 @@ class UserController extends Controller
     User::create($userData);
 
     return redirect()
-      ->route('users.index')
+      ->route('admin.users.index')
       ->with('success', 'User created successfully');
   }
 
@@ -114,7 +114,7 @@ class UserController extends Controller
     $validator = Validator::make($request->all(), [
       'email_222297'         => 'required|email|unique:users_222297,email_222297,' . $id . ',email_222297',
       'name_222297'          => 'required|string|max:255',
-      'gender_222297'        => 'required|in:L,P',
+      'gender_222297'        => 'required|in:male,female',
       'role_222297'          => 'required|string',
       'address_222297'       => 'nullable|string',
       'phone_222297'         => 'nullable|string',
@@ -147,7 +147,7 @@ class UserController extends Controller
     $user->update($userData);
 
     return redirect()
-      ->route('users.index')
+      ->route('admin.users.index')
       ->with('success', 'User updated successfully');
   }
 
@@ -163,7 +163,7 @@ class UserController extends Controller
     $user->delete();
 
     return redirect()
-      ->route('users.index')
+      ->route('admin.users.index')
       ->with('success', 'User deleted successfully');
   }
 

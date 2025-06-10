@@ -6,7 +6,7 @@
             <!-- Header Section -->
             <div class="mb-6 flex justify-between items-center">
                 <h1 class="text-3xl font-bold text-[#6F4E37]">User Management</h1>
-                <a href="{{ route('users.create') }}"
+                <a href="{{ route('admin.users.create') }}"
                     class="px-4 py-2 bg-[#6F4E37] text-white rounded-md hover:bg-[#5D4037] transition">
                     Add New User
                 </a>
@@ -79,15 +79,16 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-center">
                                         <div class="flex items-center justify-center space-x-2">
-                                            <a href="{{ route('users.show', $user->id) }}"
+                                            <a href="{{ route('admin.users.show', $user->email_222297) }}"
                                                 class="text-blue-600 hover:text-blue-800">
                                                 <span class="px-2 py-1 bg-blue-100 rounded-md">View</span>
                                             </a>
-                                            <a href="{{ route('users.edit', $user->id) }}"
+                                            <a href="{{ route('admin.users.edit', $user->email_222297) }}"
                                                 class="text-[#6F4E37] hover:text-[#5D4037]">
                                                 <span class="px-2 py-1 bg-[#F5E6DD] rounded-md">Edit</span>
                                             </a>
-                                            <form action="{{ route('users.destroy', $user->id) }}" method="POST"
+                                            <form action="{{ route('admin.users.destroy', $user->email_222297) }}"
+                                                method="POST"
                                                 onsubmit="return confirm('Are you sure you want to delete this user?');">
                                                 @csrf
                                                 @method('DELETE')

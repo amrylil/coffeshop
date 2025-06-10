@@ -117,15 +117,11 @@ class AuthController extends Controller
       'name'          => 'required|string|max:255',
       'email'         => 'required|string|email|max:255|unique:users_222297,email_222297',
       'password'      => 'required|string|min:8|confirmed',
-      'role'          => 'required|in:customer,admin',
       'gender'        => 'nullable|string',
       'phone'         => 'nullable|string',
       'address'       => 'nullable|string',
       'birth_date'    => 'nullable|date',
       'profile_photo' => 'nullable|image|max:2048',  // Menambahkan validasi untuk file gambar
-    ], [
-      'role.required' => 'Role wajib dipilih.',
-      'role.in'       => 'Role tidak valid.',
     ]);
 
     if ($validator->fails()) {
@@ -154,7 +150,7 @@ class AuthController extends Controller
       'phone_222297'         => $request->phone ?? null,
       'birth_date_222297'    => $request->birth_date ?? null,
       'profile_photo_222297' => $profilePhoto,
-      'role_222297'          => $request->role,
+      'role_222297'          => 'customer',
     ]);
 
     return redirect('/login');
