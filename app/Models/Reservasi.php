@@ -19,6 +19,7 @@ class Reservasi extends Model
     const UPDATED_AT = 'updated_at_222297';
 
     protected $fillable = [
+        'email_222297',
         'kode_reservasi_222297',
         'nama_pelanggan_222297',
         'no_telepon_222297',
@@ -45,6 +46,11 @@ class Reservasi extends Model
                 $model->kode_reservasi_222297 = IDGeneratorHelper::generateReservasiID();
             }
         });
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(Meja::class, 'email_222297', 'email_222297');
     }
 
     public function meja()

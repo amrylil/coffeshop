@@ -7,7 +7,7 @@
         <div class="py-12">
             <!-- Elegant Header -->
             <div class="text-center mb-16">
-                <h2 class="text-5xl font-serif italic mb-6  text-[#e6dbd1]">Reservasi</h2>
+                <h2 class="text-5xl font-serif italic mb-6 text-slate-50">Reservasi</h2>
                 <div class="flex justify-center items-center">
                     <div class="h-px w-16 bg-[#e6dbd1]"></div>
                     <span class="mx-4">
@@ -28,6 +28,32 @@
                 </p>
             </div>
 
+            {{-- Menampilkan notifikasi sukses atau error --}}
+            @if (session('success'))
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4"
+                    role="alert">
+                    <strong class="font-bold">Sukses!</strong>
+                    <span class="block sm:inline">{{ session('success') }}</span>
+                </div>
+            @endif
+            @if (session('error'))
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                    <strong class="font-bold">Gagal!</strong>
+                    <span class="block sm:inline">{{ session('error') }}</span>
+                </div>
+            @endif
+            @if ($errors->any())
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                    <strong class="font-bold">Terjadi Kesalahan!</strong>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+
             <div class="flex flex-col lg:flex-row gap-8">
                 <!-- Denah Meja Section -->
                 <div class="w-full lg:w-1/2">
@@ -36,27 +62,32 @@
                         <div class="bg-[#f5f1ec] p-4 rounded-lg border border-dashed border-[#d7cdc3]">
                             <img src="{{ asset('images/image.png') }}" alt="Denah Meja" class="w-full rounded-lg shadow-sm">
                         </div>
-
                     </div>
                 </div>
 
                 <!-- Sidebar Reservation -->
-                <div class="w-full lg:w-1/2" x-data="{ selectedTable: '' }">
+                <div class="w-full lg:w-1/2" x-data="{ selectedTable: '{{ old('nomor_meja_222297') }}' }">
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-[#d7cdc3]">
                         <h3 class="text-2xl font-serif text-[#3a2a1d] mb-6">Pilih Meja</h3>
 
-                        <!-- Grid Meja -->
+                        <!-- Grid Meja Dinamis dari Model -->
                         <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
-                            <template
-                                x-for="table in [
-                                { name: 'T-01', status: 'Tersedia', color: 'green' },
-                                { name: 'T-02', status: 'Dipesan', color: 'yellow' },
-                                { name: 'T-03', status: 'Dipesan', color: 'yellow' },
-                                { name: 'T-04', status: 'Tersedia', color: 'green' },
-                                { name: 'T-05', status: 'Tersedia', color: 'green' },
-                                { name: 'T-06', status: 'Tersedia', color: 'green' }
-                            ]"
-                                :key="table.name">
+                            @php
+                                $tables = $mejas->map(function ($meja) {
+                                    $color = 'red'; // Default untuk 'Perbaikan'
+                                    if ($meja->status_222297 === 'kosong') {
+                                        $color = 'green';
+                                    } elseif ($meja->status_222297 === 'dipesan') {
+                                        $color = 'yellow';
+                                    }
+                                    return [
+                                        'name' => $meja->nomor_meja_222297,
+                                        'status' => $meja->status_222297,
+                                        'color' => $color,
+                                    ];
+                                });
+                            @endphp
+                            <template x-for="table in {{ $tables->toJson() }}" :key="table.name">
                                 <div class="relative p-4 rounded-lg text-center cursor-pointer transition transform duration-200 border"
                                     :class="{
                                         'bg-green-50 border-green-200 hover:shadow-md hover:scale-105': table
@@ -117,11 +148,11 @@
                         <!-- Form Reservasi -->
                         <div x-show="selectedTable" x-transition class="mt-6 border-t border-[#d7cdc3] pt-6">
                             <h3 class="text-xl font-serif text-[#3a2a1d] mb-4">Detail Reservasi</h3>
-                            <form action="#" method="POST" class="space-y-5">
+                            <form action="{{ route('reservasi.store') }}" method="POST" class="space-y-5">
                                 @csrf
                                 <div>
-                                    <label for="table" class="block text-sm font-medium text-gray-700 mb-1">Meja yang
-                                        Dipilih</label>
+                                    <label for="nomor_meja_222297"
+                                        class="block text-sm font-medium text-gray-700 mb-1">Meja yang Dipilih</label>
                                     <div class="flex">
                                         <span
                                             class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-[#d7cdc3] bg-gray-50 text-gray-500">
@@ -134,15 +165,15 @@
                                                 <path d="M16 4v4"></path>
                                             </svg>
                                         </span>
-                                        <input type="text" name="table" x-model="selectedTable"
+                                        <input type="text" name="nomor_meja_222297" x-model="selectedTable"
                                             class="flex-1 rounded-r-md border border-[#d7cdc3] px-4 py-3 focus:ring-[#6f4e37] focus:border-[#6f4e37]"
                                             readonly>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nama
-                                        Pemesan</label>
+                                    <label for="nama_pelanggan_222297"
+                                        class="block text-sm font-medium text-gray-700 mb-1">Nama Pemesan</label>
                                     <div class="flex">
                                         <span
                                             class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-[#d7cdc3] bg-gray-50 text-gray-500">
@@ -153,14 +184,15 @@
                                                 <circle cx="12" cy="7" r="4"></circle>
                                             </svg>
                                         </span>
-                                        <input type="text" name="name" required
+                                        <input type="text" name="nama_pelanggan_222297"
+                                            value="{{ old('nama_pelanggan_222297') }}" required
                                             class="flex-1 rounded-r-md border border-[#d7cdc3] px-4 py-3 focus:ring-[#6f4e37] focus:border-[#6f4e37]">
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Nomor
-                                        Telepon</label>
+                                    <label for="no_telepon_222297"
+                                        class="block text-sm font-medium text-gray-700 mb-1">Nomor Telepon</label>
                                     <div class="flex">
                                         <span
                                             class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-[#d7cdc3] bg-gray-50 text-gray-500">
@@ -172,14 +204,15 @@
                                                 </path>
                                             </svg>
                                         </span>
-                                        <input type="tel" name="phone" required
+                                        <input type="tel" name="no_telepon_222297"
+                                            value="{{ old('no_telepon_222297') }}" required
                                             class="flex-1 rounded-r-md border border-[#d7cdc3] px-4 py-3 focus:ring-[#6f4e37] focus:border-[#6f4e37]">
                                     </div>
                                 </div>
 
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label for="date"
+                                        <label for="tanggal_reservasi_222297"
                                             class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
                                         <div class="flex">
                                             <span
@@ -197,13 +230,14 @@
                                                     </line>
                                                 </svg>
                                             </span>
-                                            <input type="date" name="date" required
+                                            <input type="date" name="tanggal_reservasi_222297"
+                                                value="{{ old('tanggal_reservasi_222297') }}" required
                                                 class="flex-1 rounded-r-md border border-[#d7cdc3] px-4 py-3 focus:ring-[#6f4e37] focus:border-[#6f4e37]">
                                         </div>
                                     </div>
 
                                     <div>
-                                        <label for="time"
+                                        <label for="jam_reservasi_222297"
                                             class="block text-sm font-medium text-gray-700 mb-1">Waktu</label>
                                         <div class="flex">
                                             <span
@@ -215,46 +249,19 @@
                                                     <polyline points="12 6 12 12 16 14"></polyline>
                                                 </svg>
                                             </span>
-                                            <input type="time" name="time" required
+                                            <input type="time" name="jam_reservasi_222297"
+                                                value="{{ old('jam_reservasi_222297') }}" required
                                                 class="flex-1 rounded-r-md border border-[#d7cdc3] px-4 py-3 focus:ring-[#6f4e37] focus:border-[#6f4e37]">
                                         </div>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label for="guests" class="block text-sm font-medium text-gray-700 mb-1">Jumlah
-                                        Tamu</label>
-                                    <div class="flex">
-                                        <span
-                                            class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-[#d7cdc3] bg-gray-50 text-gray-500">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                                <circle cx="9" cy="7" r="4"></circle>
-                                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                                            </svg>
-                                        </span>
-                                        <select name="guests" required
-                                            class="flex-1 rounded-r-md border border-[#d7cdc3] px-4 py-3 focus:ring-[#6f4e37] focus:border-[#6f4e37]">
-                                            <option value="">Pilih jumlah tamu</option>
-                                            <option value="1">1 orang</option>
-                                            <option value="2">2 orang</option>
-                                            <option value="3">3 orang</option>
-                                            <option value="4">4 orang</option>
-                                            <option value="5">5 orang</option>
-                                            <option value="6">6 orang</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label for="notes" class="block text-sm font-medium text-gray-700 mb-1">Catatan
-                                        Tambahan</label>
-                                    <textarea name="notes" rows="3"
+                                    <label for="catatan_222297"
+                                        class="block text-sm font-medium text-gray-700 mb-1">Catatan Tambahan</label>
+                                    <textarea name="catatan_222297" rows="3"
                                         class="w-full rounded-md border border-[#d7cdc3] px-4 py-3 focus:ring-[#6f4e37] focus:border-[#6f4e37]"
-                                        placeholder="Masukkan permintaan khusus atau catatan tambahan di sini..."></textarea>
+                                        placeholder="Masukkan permintaan khusus atau catatan tambahan di sini...">{{ old('catatan_222297') }}</textarea>
                                 </div>
 
                                 <div class="pt-2">
@@ -270,71 +277,6 @@
                                     </button>
                                 </div>
                             </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Reservation Information -->
-            <div class="mt-12 bg-white p-8 rounded-xl shadow-sm border border-[#d7cdc3]">
-                <h3 class="text-2xl font-serif text-[#3a2a1d] mb-6">Informasi Reservasi</h3>
-
-                <div class="grid md:grid-cols-3 gap-6">
-                    <div class="flex">
-                        <div class="w-12 h-12 rounded-full bg-[#f8f5f2] flex items-center justify-center mr-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="#6f4e37" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path d="M12 2v1"></path>
-                                <path d="M12 21v1"></path>
-                                <path d="M4.22 4.22l.77.77"></path>
-                                <path d="M19.02 19.02l.77.77"></path>
-                                <path d="M2 12h1"></path>
-                                <path d="M21 12h1"></path>
-                                <path d="M4.22 19.78l.77-.77"></path>
-                                <path d="M19.02 4.93l.77-.77"></path>
-                                <circle cx="12" cy="12" r="9"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="font-medium text-[#3a2a1d]">Jam Operasional</h4>
-                            <p class="text-gray-600 text-sm mt-1">Senin - Jumat: 08:00 - 22:00</p>
-                            <p class="text-gray-600 text-sm">Sabtu - Minggu: 09:00 - 23:00</p>
-                        </div>
-                    </div>
-
-                    <div class="flex">
-                        <div class="w-12 h-12 rounded-full bg-[#f8f5f2] flex items-center justify-center mr-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="#6f4e37" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                <line x1="16" y1="2" x2="16" y2="6"></line>
-                                <line x1="8" y1="2" x2="8" y2="6"></line>
-                                <line x1="3" y1="10" x2="21" y2="10"></line>
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="font-medium text-[#3a2a1d]">Kebijakan Reservasi</h4>
-                            <p class="text-gray-600 text-sm mt-1">Reservasi dapat dilakukan 3 jam sebelumnya</p>
-                            <p class="text-gray-600 text-sm">Maksimal durasi reservasi 3 jam</p>
-                        </div>
-                    </div>
-
-                    <div class="flex">
-                        <div class="w-12 h-12 rounded-full bg-[#f8f5f2] flex items-center justify-center mr-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="#6f4e37" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="font-medium text-[#3a2a1d]">Konfirmasi</h4>
-                            <p class="text-gray-600 text-sm mt-1">Konfirmasi akan dikirim melalui platform ini</p>
-                            <p class="text-gray-600 text-sm">Harap tiba 15 menit sebelum jadwal</p>
                         </div>
                     </div>
                 </div>

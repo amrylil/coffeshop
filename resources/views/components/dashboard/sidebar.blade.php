@@ -18,7 +18,8 @@
 
                 <!-- Menu -->
                 <li>
-                    <a href="/admin/menu" class="flex items-center p-2.5 rounded-lg transition-all duration-200 group"
+                    <a href="{{ route('admin.menu.index') }}"
+                        class="flex items-center p-2.5 rounded-lg transition-all duration-200 group"
                         :class="activeLink === '/admin/menu' ? 'bg-[#6F4E37] text-white' : 'text-amber-800 hover:bg-amber-100'"
                         @click="activeLink = '/admin/menu'">
                         <svg class="w-5 h-5 transition-colors duration-200"
@@ -37,7 +38,7 @@
 
                 <!-- Kategori -->
                 <li>
-                    <a href="/admin/kategori"
+                    <a href="{{ route('admin.kategori.index') }}"
                         class="flex items-center p-2.5 rounded-lg transition-all duration-200 group"
                         :class="activeLink === '/admin/kategori' ? 'bg-[#6F4E37] text-white' :
                             'text-amber-800 hover:bg-amber-100'"
@@ -68,6 +69,58 @@
                             <circle cx="12" cy="7" r="4"></circle>
                         </svg>
                         <span class="ml-3">Users</span>
+                    </a>
+                </li>
+
+                <!-- Meja -->
+                <li>
+                    <a href="{{ route('admin.meja.index') }}"
+                        class="flex items-center p-2.5 rounded-lg transition-all duration-200 group"
+                        :class="activeLink === '/admin/meja' ? 'bg-[#6F4E37] text-white' :
+                            'text-amber-800 hover:bg-amber-100'"
+                        @click="activeLink = '/admin/meja'">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                            stroke="currentColor" class="w-5 h-5 transition-colors duration-200"
+                            :class="activeLink === '/admin/meja' ? 'stroke-white' : 'stroke-amber-900'">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 10h18M3 14h18M5 6h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2z" />
+                        </svg>
+                        <span class="ml-3">Meja</span>
+                    </a>
+                </li>
+
+                <!-- Reservasi -->
+                <li>
+                    <a href="{{ route('admin.reservasi.index') }}"
+                        class="flex items-center p-2.5 rounded-lg transition-all duration-200 group"
+                        :class="activeLink === '/admin/reservasi' ? 'bg-[#6F4E37] text-white' :
+                            'text-amber-800 hover:bg-amber-100'"
+                        @click="activeLink = '/admin/reservasi'">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                            stroke="currentColor" class="w-5 h-5 transition-colors duration-200"
+                            :class="activeLink === '/admin/reservasi' ? 'stroke-white' : 'stroke-amber-900'">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                        <span class="ml-3">Reservasi</span>
+                    </a>
+                </li>
+
+                <!-- Transaksi -->
+                <li>
+                    <a href="{{ route('admin.transaksi.index') }}"
+                        class="flex items-center p-2.5 rounded-lg transition-all duration-200 group"
+                        :class="activeLink === '/admin/transaksi' ? 'bg-[#6F4E37] text-white' :
+                            'text-amber-800 hover:bg-amber-100'"
+                        @click="activeLink = '/admin/transaksi'">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                            stroke="currentColor" class="w-5 h-5 transition-colors duration-200"
+                            :class="activeLink === '/admin/transaksi' ? 'stroke-white' : 'stroke-amber-900'">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 10h1M3 14h1M7 10h10M7 14h10M7 18h10M3 18h1"></path>
+                        </svg>
+                        <span class="ml-3">Transaksi</span>
                     </a>
                 </li>
             </ul>
