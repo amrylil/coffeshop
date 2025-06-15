@@ -21,6 +21,9 @@ return new class extends Migration {
             $table->timestamp('tanggal_transaksi_222297')->nullable();
             $table->timestamp('created_at_222297')->nullable();
             $table->timestamp('updated_at_222297')->nullable();
+            $table
+                ->enum('jenis_pesanan_222297', ['delivery', 'di_lokasi'])
+                ->default('di_lokasi');
 
             $table
                 ->foreign('email_222297')

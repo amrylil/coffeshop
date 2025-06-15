@@ -3,7 +3,6 @@
 @section('content')
     <div class="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100">
         <div class="container mx-auto px-4 py-8 pt-20">
-            <!-- Header -->
             <div class="text-center mb-8">
                 <h1 class="text-4xl font-bold text-amber-900 mb-2">Keranjang Saya</h1>
                 <p class="text-amber-700">Nikmati racikan kopi terbaik kami</p>
@@ -13,7 +12,6 @@
             <div class="max-w-6xl mx-auto">
                 @if ($items->count() > 0)
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        <!-- Cart Items -->
                         <div class="lg:col-span-2">
                             <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
                                 <div class="bg-[#422424] text-white p-6">
@@ -30,7 +28,6 @@
                                     @foreach ($items as $item)
                                         <div
                                             class="flex items-center space-x-4 p-4 bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl border border-amber-200 hover:shadow-md transition-all duration-300">
-                                            <!-- Coffee Icon -->
                                             <div class="flex-shrink-0">
                                                 <div
                                                     class="w-16 h-16 bg-gradient-to-r from-amber-700 to-orange-700 rounded-xl flex items-center justify-center">
@@ -41,7 +38,6 @@
                                                 </div>
                                             </div>
 
-                                            <!-- Item Details -->
                                             <div class="flex-1">
                                                 <h3 class="font-semibold text-amber-900 text-lg">
                                                     {{ $item->menu->nama_222297 ?? 'Menu Item' }}</h3>
@@ -54,7 +50,6 @@
                                                 </div>
                                             </div>
 
-                                            <!-- Quantity Controls -->
                                             <div class="flex items-center space-x-3">
                                                 <button onclick="decrementQuantity('{{ $item->kode_item_222297 }}')"
                                                     class="w-8 h-8 bg-amber-600 hover:bg-amber-700 text-white rounded-full flex items-center justify-center transition-colors duration-200">
@@ -80,7 +75,6 @@
                                                 </button>
                                             </div>
 
-                                            <!-- Item Total -->
                                             <div class="text-right">
                                                 <div class="font-bold text-amber-900 text-lg">
                                                     Rp
@@ -97,7 +91,6 @@
                             </div>
                         </div>
 
-                        <!-- Order Summary -->
                         <div class="lg:col-span-1">
                             <div class="bg-white rounded-2xl shadow-lg overflow-hidden sticky top-8">
                                 <div class="bg-[#422424] text-white p-6">
@@ -158,7 +151,6 @@
                         </div>
                     </div>
                 @else
-                    <!-- Empty Cart -->
                     <div class="max-w-md mx-auto text-center">
                         <div class="bg-white rounded-2xl shadow-lg p-12">
                             <div class="w-24 h-24 bg-[#422424] rounded-full flex items-center justify-center mx-auto mb-6">
@@ -183,11 +175,9 @@
         </div>
     </div>
 
-    <!-- Checkout Modal -->
     <div id="checkoutModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <!-- Modal Header -->
-            <div class="bg-[#422424] text-white p-6 rounded-t-2xl">
+            <div class="bg-[#422424] text-white p-6 rounded-t-2xl sticky top-0 z-10">
                 <div class="flex justify-between items-center">
                     <h2 class="text-2xl font-bold flex items-center">
                         <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 20 20">
@@ -209,7 +199,6 @@
                 @csrf
                 <div class="p-6">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <!-- Order Summary -->
                         <div>
                             <h3 class="text-xl font-bold text-amber-900 mb-4 flex items-center">
                                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -225,7 +214,8 @@
                                         <div
                                             class="flex justify-between items-center py-2 border-b border-amber-100 last:border-0">
                                             <div class="flex-1">
-                                                <h4 class="font-medium text-amber-900">{{ $item->menu->nama_222297 }}</h4>
+                                                <h4 class="font-medium text-amber-900">{{ $item->menu->nama_222297 }}
+                                                </h4>
                                                 <p class="text-sm text-amber-600">{{ $item->quantity_222297 }} x Rp
                                                     {{ number_format($item->menu->harga_222297, 0, ',', '.') }}</p>
                                             </div>
@@ -238,7 +228,6 @@
                                 </div>
                             </div>
 
-                            <!-- Total Summary -->
                             <div class="bg-white border border-amber-200 rounded-xl p-4">
                                 <div class="space-y-3">
                                     <div class="flex justify-between items-center">
@@ -262,58 +251,107 @@
                             </div>
                         </div>
 
-                        <!-- Payment Method -->
                         <div>
-                            <h3 class="text-xl font-bold text-amber-900 mb-4 flex items-center">
-                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm2 6a2 2 0 114 0 2 2 0 01-4 0zm8 0a2 2 0 114 0 2 2 0 01-4 0z" />
-                                </svg>
-                                Metode Pembayaran
-                            </h3>
-
-                            <!-- E-Wallet Options -->
-                            <div class="space-y-3 mb-6">
-                                <label
-                                    class="flex items-center p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-200 cursor-pointer hover:shadow-md transition-all duration-200">
-                                    <input type="radio" name="payment_method" value="dana"
-                                        class="mr-4 text-blue-600" required>
-                                    <div class="flex items-center flex-1">
-                                        <div
-                                            class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mr-4">
-                                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                                <path
-                                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <h4 class="font-semibold text-blue-900">DANA</h4>
-                                            <p class="text-sm text-blue-600">Pembayaran via DANA e-wallet</p>
-                                        </div>
-                                    </div>
-                                </label>
-
-                                <label
-                                    class="flex items-center p-4 bg-gradient-to-r from-orange-50 to-red-100 rounded-xl border border-orange-200 cursor-pointer hover:shadow-md transition-all duration-200">
-                                    <input type="radio" name="payment_method" value="shopee_pay"
-                                        class="mr-4 text-orange-600" required>
-                                    <div class="flex items-center flex-1">
-                                        <div
-                                            class="w-12 h-12 bg-orange-600 rounded-lg flex items-center justify-center mr-4">
-                                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                                <path
-                                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <h4 class="font-semibold text-orange-900">ShopeePay</h4>
-                                            <p class="text-sm text-orange-600">Pembayaran via ShopeePay e-wallet</p>
-                                        </div>
-                                    </div>
-                                </label>
+                            <div class="mb-6">
+                                <h3 class="text-xl font-bold text-amber-900 mb-4 flex items-center">
+                                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path
+                                            d="M8 16.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM14 15a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+                                        <path fill-rule="evenodd"
+                                            d="M12 2a1 1 0 00-1-1h-1a1 1 0 000 2h1a1 1 0 001-1zM3 3a1 1 0 000 2v10a2 2 0 002 2h10a2 2 0 002-2V5a1 1 0 10-2 0v10H5V5a1 1 0 00-2 0V3z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    Metode Pengambilan
+                                </h3>
+                                <div class="space-y-3">
+                                    <label
+                                        class="flex items-center p-4 bg-gradient-to-r from-amber-50 to-orange-100 rounded-xl border border-amber-200 cursor-pointer hover:shadow-md has-[:checked]:ring-2 has-[:checked]:ring-amber-600 transition-all duration-200">
+                                        <input type="radio" name="jenis_pesanan_222297" value="delivery"
+                                            class="mr-4 text-amber-600 focus:ring-amber-500" required>
+                                        <div class="font-semibold text-amber-900">Pesan Antar (Delivery)</div>
+                                    </label>
+                                    <label
+                                        class="flex items-center p-4 bg-gradient-to-r from-amber-50 to-orange-100 rounded-xl border border-amber-200 cursor-pointer hover:shadow-md has-[:checked]:ring-2 has-[:checked]:ring-amber-600 transition-all duration-200">
+                                        <input type="radio" name="jenis_pesanan_222297" value="di_lokasi"
+                                            class="mr-4 text-amber-600 focus:ring-amber-500" required checked>
+                                        <div class="font-semibold text-amber-900">Ambil di Lokasi</div>
+                                    </label>
+                                </div>
                             </div>
 
-                            <!-- Upload Bukti Transfer -->
+                            <div id="deliveryAddressForm" class="hidden mb-6 space-y-4">
+                                <h4 class="text-lg font-semibold text-amber-900">Alamat Pengiriman</h4>
+                                <div>
+                                    <label for="nama_penerima" class="block text-sm font-medium text-amber-900 mb-1">Nama
+                                        Penerima</label>
+                                    <input type="text" id="nama_penerima" name="nama_penerima_222297"
+                                        class="w-full px-4 py-3 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
+                                        placeholder="Masukkan nama lengkap">
+                                </div>
+                                <div>
+                                    <label for="telepon_penerima"
+                                        class="block text-sm font-medium text-amber-900 mb-1">Nomor Telepon</label>
+                                    <input type="tel" id="telepon_penerima" name="telepon_penerima_222297"
+                                        class="w-full px-4 py-3 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
+                                        placeholder="Contoh: 08123456789">
+                                </div>
+                                <div>
+                                    <label for="alamat_pengiriman"
+                                        class="block text-sm font-medium text-amber-900 mb-1">Alamat Lengkap</label>
+                                    <textarea id="alamat_pengiriman" name="alamat_pengiriman_222297" rows="3"
+                                        class="w-full px-4 py-3 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none"
+                                        placeholder="Masukkan jalan, nomor rumah, kelurahan, kecamatan, kota, dan kode pos"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="mb-6">
+                                <h3 class="text-xl font-bold text-amber-900 mb-4 flex items-center">
+                                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path
+                                            d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm2 6a2 2 0 114 0 2 2 0 01-4 0zm8 0a2 2 0 114 0 2 2 0 01-4 0z" />
+                                    </svg>
+                                    Metode Pembayaran
+                                </h3>
+                                <div class="space-y-3">
+                                    <label
+                                        class="flex items-center p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-200 cursor-pointer hover:shadow-md transition-all duration-200">
+                                        <input type="radio" name="payment_method" value="dana"
+                                            class="mr-4 text-blue-600 focus:ring-blue-500" required>
+                                        <div class="flex items-center flex-1">
+                                            <div
+                                                class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mr-4">
+                                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-semibold text-blue-900">DANA</h4>
+                                                <p class="text-sm text-blue-600">Pembayaran via DANA e-wallet</p>
+                                            </div>
+                                        </div>
+                                    </label>
+                                    <label
+                                        class="flex items-center p-4 bg-gradient-to-r from-orange-50 to-red-100 rounded-xl border border-orange-200 cursor-pointer hover:shadow-md transition-all duration-200">
+                                        <input type="radio" name="payment_method" value="shopee_pay"
+                                            class="mr-4 text-orange-600 focus:ring-orange-500" required>
+                                        <div class="flex items-center flex-1">
+                                            <div
+                                                class="w-12 h-12 bg-orange-600 rounded-lg flex items-center justify-center mr-4">
+                                                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-semibold text-orange-900">ShopeePay</h4>
+                                                <p class="text-sm text-orange-600">Pembayaran via ShopeePay e-wallet</p>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
                             <div class="mb-6">
                                 <label class="block text-sm font-medium text-amber-900 mb-2">
                                     Upload Bukti Transfer *
@@ -327,7 +365,6 @@
                                 <p class="text-xs text-amber-600 mt-1">Format: JPG, PNG, JPEG. Maksimal 2MB</p>
                             </div>
 
-                            <!-- Catatan -->
                             <div class="mb-6">
                                 <label class="block text-sm font-medium text-amber-900 mb-2">
                                     Catatan Tambahan (Opsional)
@@ -337,20 +374,17 @@
                                     placeholder="Tambahkan catatan khusus untuk pesanan Anda..."></textarea>
                             </div>
 
-                            <!-- Payment Instructions -->
                             <div id="paymentInstructions"
                                 class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-6" style="display: none;">
                                 <h4 class="font-semibold text-yellow-800 mb-2">Instruksi Pembayaran:</h4>
                                 <div id="instructionContent" class="text-sm text-yellow-700">
-                                    <!-- Dynamic content based on selected payment method -->
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Modal Footer -->
-                <div class="bg-gray-50 px-6 py-4 rounded-b-2xl flex justify-between items-center">
+                <div class="bg-gray-50 px-6 py-4 rounded-b-2xl flex justify-between items-center sticky bottom-0 z-10">
                     <button type="button" onclick="closeCheckoutModal()"
                         class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors duration-200">
                         Batal
@@ -368,147 +402,103 @@
     </div>
 
     <script>
-        // Get CSRF token function
+        // ... (fungsi getCSRFToken, increment, decrement, dll tidak perlu diubah) ...
         function getCSRFToken() {
             const metaTag = document.querySelector('meta[name="csrf-token"]');
             if (metaTag) {
                 return metaTag.getAttribute('content');
             }
-
             const token = document.querySelector('input[name="_token"]');
             if (token) {
                 return token.value;
             }
-
             if (typeof window.Laravel !== 'undefined' && window.Laravel.csrfToken) {
                 return window.Laravel.csrfToken;
             }
-
             console.error('CSRF token not found');
             return null;
         }
 
         function incrementQuantity(kodeItem) {
-            const csrfToken = getCSRFToken();
-            if (!csrfToken) {
-                alert('CSRF token tidak ditemukan. Silakan refresh halaman.');
-                return;
-            }
-
             fetch(`/keranjang/increment/${kodeItem}`, {
                     method: 'POST',
                     headers: {
-                        'X-CSRF-TOKEN': csrfToken,
+                        'X-CSRF-TOKEN': getCSRFToken(),
                         'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                    },
+                        'Accept': 'application/json'
+                    }
                 })
-                .then(response => response.json())
-                .then(data => {
+                .then(response => response.json()).then(data => {
                     if (data.success) {
                         location.reload();
                     } else {
-                        alert(data.message || 'Terjadi kesalahan saat menambah quantity');
+                        alert(data.message);
                     }
                 })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Terjadi kesalahan saat menambah quantity');
-                });
+                .catch(error => console.error('Error:', error));
         }
 
         function decrementQuantity(kodeItem) {
-            const csrfToken = getCSRFToken();
-            if (!csrfToken) {
-                alert('CSRF token tidak ditemukan. Silakan refresh halaman.');
-                return;
-            }
-
             fetch(`/keranjang/decrement/${kodeItem}`, {
                     method: 'POST',
                     headers: {
-                        'X-CSRF-TOKEN': csrfToken,
+                        'X-CSRF-TOKEN': getCSRFToken(),
                         'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                    },
+                        'Accept': 'application/json'
+                    }
                 })
-                .then(response => response.json())
-                .then(data => {
+                .then(response => response.json()).then(data => {
                     if (data.success) {
                         location.reload();
                     } else {
-                        alert(data.message || 'Terjadi kesalahan saat mengurangi quantity');
+                        alert(data.message);
                     }
                 })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Terjadi kesalahan saat mengurangi quantity');
-                });
+                .catch(error => console.error('Error:', error));
         }
 
         function removeItem(kodeItem) {
-            if (confirm('Apakah Anda yakin ingin menghapus item ini dari keranjang?')) {
-                const csrfToken = getCSRFToken();
-                if (!csrfToken) {
-                    alert('CSRF token tidak ditemukan. Silakan refresh halaman.');
-                    return;
-                }
-
+            if (confirm('Yakin hapus?')) {
                 fetch(`/keranjang/remove/${kodeItem}`, {
                         method: 'DELETE',
                         headers: {
-                            'X-CSRF-TOKEN': csrfToken,
+                            'X-CSRF-TOKEN': getCSRFToken(),
                             'Content-Type': 'application/json',
-                            'Accept': 'application/json',
-                        },
+                            'Accept': 'application/json'
+                        }
                     })
-                    .then(response => response.json())
-                    .then(data => {
+                    .then(response => response.json()).then(data => {
                         if (data.success) {
                             location.reload();
                         } else {
-                            alert(data.message || 'Terjadi kesalahan saat menghapus item');
+                            alert(data.message);
                         }
                     })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Terjadi kesalahan saat menghapus item');
-                    });
+                    .catch(error => console.error('Error:', error));
             }
         }
 
         function clearCart() {
-            if (confirm('Apakah Anda yakin ingin mengosongkan keranjang?')) {
-                const csrfToken = getCSRFToken();
-                if (!csrfToken) {
-                    alert('CSRF token tidak ditemukan. Silakan refresh halaman.');
-                    return;
-                }
-
+            if (confirm('Yakin kosongkan keranjang?')) {
                 fetch('/keranjang/clear', {
                         method: 'DELETE',
                         headers: {
-                            'X-CSRF-TOKEN': csrfToken,
+                            'X-CSRF-TOKEN': getCSRFToken(),
                             'Content-Type': 'application/json',
-                            'Accept': 'application/json',
-                        },
+                            'Accept': 'application/json'
+                        }
                     })
-                    .then(response => response.json())
-                    .then(data => {
+                    .then(response => response.json()).then(data => {
                         if (data.success) {
                             location.reload();
                         } else {
-                            alert(data.message || 'Terjadi kesalahan saat mengosongkan keranjang');
+                            alert(data.message);
                         }
                     })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Terjadi kesalahan saat mengosongkan keranjang');
-                    });
+                    .catch(error => console.error('Error:', error));
             }
         }
 
-        // Modal Functions
         function openCheckoutModal() {
             document.getElementById('checkoutModal').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
@@ -519,7 +509,6 @@
             document.body.style.overflow = 'auto';
         }
 
-        // Payment method selection
         document.addEventListener('DOMContentLoaded', function() {
             const paymentRadios = document.querySelectorAll('input[name="payment_method"]');
             const instructionsDiv = document.getElementById('paymentInstructions');
@@ -528,38 +517,39 @@
             paymentRadios.forEach(radio => {
                 radio.addEventListener('change', function() {
                     instructionsDiv.style.display = 'block';
-
                     if (this.value === 'dana') {
-                        instructionContent.innerHTML = `
-                                <ol class="list-decimal list-inside space-y-1">
-                                    <li>Buka aplikasi DANA di ponsel Anda</li>
-                                    <li>Pilih menu "Transfer" atau "Kirim Uang"</li>
-                                    <li>Masukkan nomor DANA: <strong>081234567890</strong></li>
-                                    <li>Masukkan nominal: <strong>Rp {{ number_format($total * 1.1, 0, ',', '.') }}</strong></li>
-                                    <li>Konfirmasi dan selesaikan pembayaran</li>
-                                    <li>Screenshot bukti transfer dan upload di form ini</li>
-                                </ol>
-                            `;
+                        instructionContent.innerHTML =
+                            `<ol class="list-decimal list-inside space-y-1"><li>Buka aplikasi DANA</li><li>Pilih menu "Kirim"</li><li>Masukkan nomor DANA: <strong>081234567890</strong></li><li>Masukkan nominal: <strong>Rp {{ number_format($total * 1.1, 0, ',', '.') }}</strong></li><li>Konfirmasi dan screenshot bukti transfer</li></ol>`;
                     } else if (this.value === 'shopee_pay') {
-                        instructionContent.innerHTML = `
-                                <ol class="list-decimal list-inside space-y-1">
-                                    <li>Buka aplikasi Shopee di ponsel Anda</li>
-                                    <li>Pilih menu "ShopeePay" lalu "Kirim"</li>
-                                    <li>Masukkan nomor HP: <strong>081234567890</strong></li>
-                                    <li>Masukkan nominal: <strong>Rp {{ number_format($total * 1.1, 0, ',', '.') }}</strong></li>
-                                    <li>Konfirmasi dan selesaikan pembayaran</li>
-                                    <li>Screenshot bukti transfer dan upload di form ini</li>
-                                </ol>
-                            `;
+                        instructionContent.innerHTML =
+                            `<ol class="list-decimal list-inside space-y-1"><li>Buka aplikasi Shopee</li><li>Pilih "ShopeePay" lalu "Kirim"</li><li>Masukkan nomor HP: <strong>081234567890</strong></li><li>Masukkan nominal: <strong>Rp {{ number_format($total * 1.1, 0, ',', '.') }}</strong></li><li>Konfirmasi dan screenshot bukti transfer</li></ol>`;
+                    }
+                });
+            });
+
+            const orderTypeRadios = document.querySelectorAll('input[name="jenis_pesanan_222297"]');
+            const deliveryForm = document.getElementById('deliveryAddressForm');
+            const deliveryInputs = deliveryForm.querySelectorAll('input, textarea');
+
+            orderTypeRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'delivery') {
+                        deliveryForm.classList.remove('hidden');
+                        deliveryInputs.forEach(input => input.required = true);
+                    } else {
+                        deliveryForm.classList.add('hidden');
+                        deliveryInputs.forEach(input => {
+                            input.required = false;
+                            input.value =
+                                ''; // Kosongkan field jika kembali ke 'Ambil di Lokasi'
+                        });
                     }
                 });
             });
         });
 
-        // Form submission
         document.getElementById('checkoutForm').addEventListener('submit', function(e) {
             e.preventDefault();
-
             const formData = new FormData(this);
             const csrfToken = getCSRFToken();
 
@@ -568,33 +558,39 @@
                 return;
             }
 
-            // Validate form
+            const orderType = formData.get('jenis_pesanan_222297');
             const paymentMethod = formData.get('payment_method');
             const buktiTf = formData.get('bukti_tf_222297');
 
+            if (!orderType) {
+                alert('Silakan pilih metode pengambilan (Delivery atau Ambil di Lokasi)');
+                return;
+            }
+            if (orderType === 'delivery') {
+                if (!formData.get('nama_penerima_222297') || !formData.get('telepon_penerima_222297') || !formData
+                    .get('alamat_pengiriman_222297')) {
+                    alert('Untuk pesanan delivery, harap isi semua detail alamat pengiriman.');
+                    return;
+                }
+            }
             if (!paymentMethod) {
                 alert('Silakan pilih metode pembayaran');
                 return;
             }
-
             if (!buktiTf || buktiTf.size === 0) {
                 alert('Silakan upload bukti transfer');
                 return;
             }
 
-            // Show loading state
             const submitBtn = this.querySelector('button[type="submit"]');
             const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = `
-                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Memproses...
-                `;
+            submitBtn.innerHTML =
+                `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Memproses...`;
             submitBtn.disabled = true;
 
-            // Submit to checkout endpoint
+            // [PENTING & DIUBAH] Submit ke route checkout store yang benar
+            // Pastikan Anda memiliki route ini di web.php yang menunjuk ke TransaksiController@userCheckoutStore
+            // Contoh di web.php: Route::post('/checkout/store', [TransaksiController::class, 'userCheckoutStore'])->name('user.checkout.store');
             fetch('{{ route('user.transaksi.store') }}', {
                     method: 'POST',
                     headers: {
@@ -610,46 +606,40 @@
                     return response.json();
                 })
                 .then(data => {
-                    if (data.success || data.message) {
+                    if (data.success) {
                         alert(data.message || 'Checkout berhasil! Transaksi Anda sedang diproses.');
                         window.location.href = '{{ route('user.transaksi.index') }}';
                     } else {
-                        throw new Error('Response tidak valid');
+                        throw new Error(data.message || 'Response tidak valid');
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-
                     let errorMessage = 'Terjadi kesalahan saat memproses checkout';
-
                     if (error.errors) {
-                        // Laravel validation errors
                         const errors = Object.values(error.errors).flat();
                         errorMessage = errors.join('\n');
                     } else if (error.message) {
                         errorMessage = error.message;
                     }
-
                     alert(errorMessage);
                 })
                 .finally(() => {
-                    // Restore button state
                     submitBtn.innerHTML = originalText;
                     submitBtn.disabled = false;
                 });
         });
 
-        // Close modal when clicking outside
         document.getElementById('checkoutModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeCheckoutModal();
             }
         });
 
-        // Close modal with Escape key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeCheckoutModal();
             }
         });
     </script>
+@endsection

@@ -22,6 +22,7 @@ class Transaksi extends Model
         'kode_transaksi_222297',
         'email_222297',
         'kode_menu_222297',
+        'jenis_pesanan_222297',
         'jumlah_222297',
         'harga_total_222297',
         'status_222297',

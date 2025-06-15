@@ -247,7 +247,7 @@
                                 Batal
                             </a>
                             <button type="submit"
-                                class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-sm bg-[#6F4E37] text-sm font-medium text-white hover:bg-[#5a3e2e] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6F4E37] transition duration-150 ease-in-out">
+                                class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-sm bg-[#6F4E37] text-sm font-medium text-slate-950 hover:bg-[#5a3e2e] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6F4E37] transition duration-150 ease-in-out">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M5 13l4 4L19 7" />

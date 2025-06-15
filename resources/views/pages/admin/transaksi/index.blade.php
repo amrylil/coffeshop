@@ -91,6 +91,26 @@
                 </div>
             </div>
 
+            <div class="mb-6">
+                <div class="bg-white rounded-lg shadow-sm p-4">
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-sm font-medium text-gray-700 mr-4">Filter Jenis Pesanan:</span>
+                        <a href="{{ route('admin.transaksi.index', array_merge(request()->query(), ['jenis_pesanan' => ''])) }}"
+                            class="px-3 py-1 text-xs font-medium rounded-full {{ !request('jenis_pesanan') ? 'bg-[#6F4E37] text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+                            Semua
+                        </a>
+                        <a href="{{ route('admin.transaksi.index', array_merge(request()->query(), ['jenis_pesanan' => 'delivery'])) }}"
+                            class="px-3 py-1 text-xs font-medium rounded-full {{ request('jenis_pesanan') == 'delivery' ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+                            Delivery
+                        </a>
+                        <a href="{{ route('admin.transaksi.index', array_merge(request()->query(), ['jenis_pesanan' => 'di_lokasi'])) }}"
+                            class="px-3 py-1 text-xs font-medium rounded-full {{ request('jenis_pesanan') == 'dilokasi' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+                            Di Lokasi
+                        </a>
+                    </div>
+                </div>
+            </div>
+
             <!-- Transaction Table -->
             <div class="bg-white shadow-lg rounded-lg overflow-hidden">
                 <div class="overflow-x-auto">
@@ -117,6 +137,10 @@
                                     class="px-6 py-4 text-left text-xs font-bold textsl95 uppercase tracking-wider">
 
                                     Status
+                                </th>
+                                <th scope="col"
+                                    class="px-6 py-4 text-left text-xs font-bold textsl95 uppercase tracking-wider">
+                                    Jenis Pesanan
                                 </th>
                                 <th scope="col"
                                     class="px-6 py-4 text-left text-xs font-bold textsl95 uppercase tracking-wider">
@@ -180,6 +204,25 @@
                                             </svg>
                                             {{ ucfirst($trans->status_222297) }}
                                         </button>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        @php
+                                            $jenisColors = [
+                                                'delivery' => 'bg-green-100 text-green-800',
+                                                'dilokasi' => 'bg-blue-100 text-blue-800',
+                                            ];
+                                            $jenisClass =
+                                                $jenisColors[$trans->jenis_pesanan_222297] ??
+                                                'bg-gray-100 text-gray-800';
+                                        @endphp
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $jenisClass }}">
+                                            @if ($trans->jenis_pesanan_222297 == 'delivery')
+                                                🚚 Delivery
+                                            @else
+                                                🏪 Di Lokasi
+                                            @endif
+                                        </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         {{ \Carbon\Carbon::parse($trans->tanggal_transaksi_222297)->format('d M Y') }}
