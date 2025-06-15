@@ -70,4 +70,34 @@ class MejaController extends RoutingController
 
     return redirect()->route('admin.meja.index')->with('success', 'Meja deleted successfully!');
   }
+
+  public function updateStatus(Request $request, $id)
+  {
+    try {
+      $meja = Meja::findOrFail($id);
+
+      $request->validate([
+        'status_222297' => 'required|string|in:kosong,dipesan,digunakan',
+      ]);
+
+      $oldStatus = $meja->status_222297;
+      $newStatus = $request->status_222297;
+
+      $meja->update([
+        'status_222297' => $newStatus
+      ]);
+
+      $statusLabels = [
+        'kosong'    => 'Kosong',
+        'dipesan'   => 'Dipesan',
+        'digunakan' => 'Digunakan'
+      ];
+
+      $message = "Meja {$meja->nomor_meja_222297} status berubah dari {$statusLabels[$oldStatus]} ke {$statusLabels[$newStatus]}";
+
+      return redirect()->route('admin.meja.index')->with('success', $message);
+    } catch (\Exception $e) {
+      return redirect()->route('admin.meja.index')->with('error', 'Gagal mengupdate status meja. Silakan coba lagi.');
+    }
+  }
 }

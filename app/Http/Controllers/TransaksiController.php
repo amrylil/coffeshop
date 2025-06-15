@@ -446,6 +446,28 @@ class TransaksiController extends Controller
     /**
      * Export transactions to CSV
      */
+    public function report(Request $request)
+    {
+        $query = Transaksi::with(['user', 'menu']);
+
+        // Apply same filters as export
+        if ($request->filled('status')) {
+            $query->where('status_222297', $request->status);
+        }
+
+        if ($request->filled('tanggal_mulai')) {
+            $query->whereDate('tanggal_transaksi_222297', '>=', $request->tanggal_mulai);
+        }
+
+        if ($request->filled('tanggal_akhir')) {
+            $query->whereDate('tanggal_transaksi_222297', '<=', $request->tanggal_akhir);
+        }
+
+        $transaksi = $query->orderBy('created_at_222297', 'desc')->paginate(10);  // Paginate for better display
+
+        return view('pages.admin.transaksi.laporan', compact('transaksi'));
+    }
+
     public function adminExport(Request $request)
     {
         $query = Transaksi::with(['user', 'menu']);
@@ -505,5 +527,32 @@ class TransaksiController extends Controller
         };
 
         return response()->stream($callback, 200, $headers);
+    }
+
+    /**
+     * Update the status of a transaction
+     */
+    public function updateStatus(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'status_222297' => 'required|in:pending,dikonfirmasi,selesai,dikirim,ditolak',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $transaksi = Transaksi::where('kode_transaksi_222297', $id)->firstOrFail();
+
+        $transaksi->update([
+            'status_222297' => $request->status_222297,
+        ]);
+
+        return redirect()
+            ->route('admin.transaksi.show', $id)
+            ->with('success', 'Status transaksi berhasil diperbarui.');
     }
 }

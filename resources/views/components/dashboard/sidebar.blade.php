@@ -123,6 +123,22 @@
                         <span class="ml-3">Transaksi</span>
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('admin.transaksi.report') }}"
+                        class="flex items-center p-2.5 rounded-lg transition-all duration-200 group"
+                        :class="activeLink === '/admin/transaksi/report' ? 'bg-[#6F4E37] text-white' :
+                            'text-amber-800 hover:bg-amber-100'"
+                        @click="activeLink = '/admin/report'">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                            stroke="currentColor" class="w-5 h-5 transition-colors duration-200"
+                            :class="activeLink === '/admin/transaksi/report' ? 'stroke-white' : 'stroke-amber-900'">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 17v-6a2 2 0 012-2h4a2 2 0 012 2v6m-6 0h6"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h-2a2 2 0 00-2 2v6"></path>
+                        </svg>
+                        <span class="ml-3">Laporan</span>
+                    </a>
+                </li>
             </ul>
         </nav>
 

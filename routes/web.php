@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\KeranjangController;
+use App\Http\Controllers\MejaController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\ReservasiController;
 use App\Http\Controllers\TransaksiController;
@@ -88,6 +89,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::resource('meja', App\Http\Controllers\MejaController::class);
 
+    Route::patch('/meja/{id}/status', [MejaController::class, 'updateStatus'])
+        ->name('meja.updateStatus');
+
     Route::resource('users', App\Http\Controllers\UserController::class);
     Route::patch('users/{id}/change-role', [UserController::class, 'changeRole'])->name('users.change-role');
 
@@ -104,7 +108,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::patch('/{id}/confirm', [TransaksiController::class, 'adminConfirm'])->name('confirm');
         Route::patch('/{id}/reject', [TransaksiController::class, 'adminReject'])->name('reject');
         Route::patch('/{id}/complete', [TransaksiController::class, 'adminComplete'])->name('complete');
+        Route::patch('/{id}/update-status', [TransaksiController::class, 'updateStatus'])->name('updateStatus');
     });
+
+    Route::get('report', [TransaksiController::class, 'report'])->name('transaksi.report');
+    Route::get('export', [TransaksiController::class, 'adminExport'])->name('transaksi.export');
 
     Route::prefix('reservasi')->name('reservasi.')->group(function () {
         Route::get('/', [ReservasiController::class, 'adminIndex'])->name('index');
