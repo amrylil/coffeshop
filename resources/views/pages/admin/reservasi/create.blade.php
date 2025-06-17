@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="min-h-screen  py-12 px-4 sm:px-6 lg:px-8 pt-24">
-        <div class="max-w-4xl mx-auto">
+        <div class=" mx-auto">
 
 
             <!-- Form Card -->

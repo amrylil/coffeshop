@@ -2,7 +2,6 @@
 
 @section('content')
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-20">
-        <!-- Page Header -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
             <div>
                 <h1 class="text-3xl font-bold text-gray-900 mb-2">Laporan Transaksi</h1>
@@ -19,7 +18,61 @@
             </div>
         </div>
 
-        <!-- Filter Card -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 rounded-full bg-orange-100">
+                        <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="ml-4 text-lg font-semibold text-gray-800">Pelanggan Paling Aktif</h3>
+                </div>
+                @if ($userTerbanyakTransaksi)
+                    <div>
+                        <p class="text-2xl font-bold text-gray-900">{{ $userTerbanyakTransaksi->name_222297 }}</p>
+                        <p class="text-sm text-gray-500">{{ $userTerbanyakTransaksi->email_222297 }}</p>
+                        <div class="mt-2 text-base text-gray-700">
+                            <span class="font-bold text-orange-600">{{ $userTerbanyakTransaksi->transaksi_count }}</span>
+                            transaksi
+                        </div>
+                    </div>
+                @else
+                    <p class="text-gray-500">Tidak ada data pengguna.</p>
+                @endif
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6 md:col-span-2">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 rounded-full bg-teal-100">
+                        <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="ml-4 text-lg font-semibold text-gray-800">Top 3 Menu Terlaris</h3>
+                </div>
+                @if ($menuTerlaris->isNotEmpty())
+                    <ul class="space-y-3">
+                        @foreach ($menuTerlaris as $menu)
+                            <li class="flex items-center justify-between">
+                                <span class="font-medium text-gray-800">{{ $loop->iteration }}.
+                                    {{ $menu->nama_222297 }}</span>
+                                <span
+                                    class="text-sm font-semibold text-teal-800 bg-teal-100 px-3 py-1 rounded-full">{{ $menu->jumlah_terjual ?? 0 }}
+                                    terjual</span>
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    <p class="text-gray-500">Tidak ada data menu terlaris.</p>
+                @endif
+            </div>
+        </div>
         <div class="bg-white rounded-xl shadow-lg border border-gray-200 mb-8">
             <div class="bg-[#6F4E37] text-white px-6 py-4 rounded-t-xl">
                 <div class="flex items-center">
@@ -34,7 +87,6 @@
             <div class="p-6">
                 <form action="{{ route('admin.transaksi.report') }}" method="GET">
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <!-- Status Filter -->
                         <div>
                             <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Status
                                 Transaksi</label>
@@ -59,7 +111,6 @@
                             </select>
                         </div>
 
-                        <!-- Start Date -->
                         <div>
                             <label for="tanggal_mulai" class="block text-sm font-medium text-gray-700 mb-2">Tanggal
                                 Mulai</label>
@@ -68,7 +119,6 @@
                                 value="{{ request('tanggal_mulai') }}">
                         </div>
 
-                        <!-- End Date -->
                         <div>
                             <label for="tanggal_akhir" class="block text-sm font-medium text-gray-700 mb-2">Tanggal
                                 Akhir</label>
@@ -77,7 +127,6 @@
                                 value="{{ request('tanggal_akhir') }}">
                         </div>
 
-                        <!-- Action Buttons -->
                         <div class="flex flex-col gap-3">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Aksi</label>
                             <button type="submit"
@@ -102,7 +151,6 @@
                     </div>
                 </form>
 
-                <!-- Hidden Export Form -->
                 <form id="exportForm" action="{{ route('admin.transaksi.export') }}" method="GET" class="hidden">
                     <input type="hidden" name="status" value="{{ request('status') }}">
                     <input type="hidden" name="tanggal_mulai" value="{{ request('tanggal_mulai') }}">
@@ -111,7 +159,6 @@
             </div>
         </div>
 
-        <!-- Data Table Card -->
         <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
             <div class="bg-gray-50 px-6 py-4 border-b border-gray-200">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
@@ -295,26 +342,25 @@
                                     </div>
                                 </td>
                             </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+                        @endempty
+                </tbody>
+            </table>
+        </div>
 
-            <!-- Pagination -->
-            @if ($transaksi->hasPages())
-                <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
-                    <div class="flex flex-col sm:flex-row justify-between items-center">
-                        <div class="text-sm text-gray-700 mb-4 sm:mb-0">
-                            Menampilkan <span class="font-medium">{{ $transaksi->firstItem() ?? 0 }}</span> sampai
-                            <span class="font-medium">{{ $transaksi->lastItem() ?? 0 }}</span> dari
-                            <span class="font-medium">{{ $transaksi->total() }}</span> data
-                        </div>
-                        <div>
-                            {{ $transaksi->withQueryString()->links() }}
-                        </div>
+        @if ($transaksi->hasPages())
+            <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
+                <div class="flex flex-col sm:flex-row justify-between items-center">
+                    <div class="text-sm text-gray-700 mb-4 sm:mb-0">
+                        Menampilkan <span class="font-medium">{{ $transaksi->firstItem() ?? 0 }}</span> sampai
+                        <span class="font-medium">{{ $transaksi->lastItem() ?? 0 }}</span> dari
+                        <span class="font-medium">{{ $transaksi->total() }}</span> data
+                    </div>
+                    <div>
+                        {{ $transaksi->withQueryString()->links() }}
                     </div>
                 </div>
-            @endif
-        </div>
+            </div>
+        @endif
     </div>
+</div>
 @endsection

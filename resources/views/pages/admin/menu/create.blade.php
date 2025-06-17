@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="bg-white min-h-screen py-8 px-4 sm:px-6 lg:px-8 pt-20">
-        <div class="max-w-4xl mx-auto">
+        <div class=" mx-auto">
             <!-- Header Section -->
             <div class="mb-6">
                 <h1 class="text-3xl font-bold text-[#6F4E37]">Add New Menu Item</h1>

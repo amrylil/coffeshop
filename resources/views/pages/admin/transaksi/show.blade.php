@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="bg-gray-50 min-h-screen py-8 px-4 sm:px-6 lg:px-8 pt-20">
-        <div class="max-w-4xl mx-auto">
+        <div class=" mx-auto">
             <!-- Header Section -->
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
                 <div class="flex items-center justify-between">
@@ -50,7 +50,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-1">
                                 <label class="text-sm font-medium text-gray-500 uppercase tracking-wide">Menu</label>
-                                <p class="text-lg text-gray-900 font-medium">{{ $transaksi->menu->nama_menu_222297 ?? '-' }}
+                                <p class="text-lg text-gray-900 font-medium">{{ $transaksi->menu->nama_222297 ?? '-' }}
                                 </p>
                             </div>
                             <div class="space-y-1">

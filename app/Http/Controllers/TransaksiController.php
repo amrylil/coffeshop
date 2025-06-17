@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class TransaksiController extends Controller
 {
@@ -135,14 +136,21 @@ class TransaksiController extends Controller
         return view('user.transaksi.checkout', compact('cartItems', 'subtotal', 'pajak', 'total'));
     }
 
-    // [DIUBAH] Metode ini diubah untuk menerima dan memvalidasi 'jenis_pesanan_222297'
     public function userCheckoutStore(Request $request)
     {
-        // 1. Validate the request data
+        // 1. Validasi data request (dengan validasi kondisional)
         $validator = Validator::make($request->all(), [
-            'bukti_tf_222297'      => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'payment_method'       => 'required|in:dana,shopee_pay,cash',  // Validasi metode pembayaran
             'catatan_222297'       => 'nullable|string|max:500',
-            'jenis_pesanan_222297' => 'required|in:delivery,di_lokasi',  // [DIUBAH] Validasi untuk jenis pesanan
+            'jenis_pesanan_222297' => 'required|in:delivery,di_lokasi',
+            // Jadikan bukti transfer wajib HANYA JIKA metode pembayaran bukan 'cash'
+            'bukti_tf_222297'      => [
+                Rule::requiredIf(fn() => $request->input('payment_method') !== 'cash'),
+                'nullable',
+                'image',
+                'mimes:jpeg,png,jpg',
+                'max:2048'
+            ],
         ]);
 
         if ($validator->fails()) {
@@ -165,25 +173,41 @@ class TransaksiController extends Controller
                 ], 400);
             }
 
-            $cartItems     = $keranjang->items()->with('menu')->get();
-            $bukti_tf_path = $request->file('bukti_tf_222297')->store('bukti_transfer', 'public');
+            $cartItems = $keranjang->items()->with('menu')->get();
 
+            // --- PERUBAHAN UTAMA DIMULAI DI SINI ---
+
+            $bukti_tf_path = null;  // Deklarasikan sebagai null terlebih dahulu
+
+            // 2. Proses upload file HANYA JIKA metode pembayaran BUKAN 'cash'
+            if ($request->input('payment_method') !== 'cash') {
+                if ($request->hasFile('bukti_tf_222297')) {
+                    $bukti_tf_path = $request->file('bukti_tf_222297')->store('bukti_transfer', 'public');
+                }
+            }
+
+            // --- PERUBAHAN UTAMA SELESAI ---
+
+            // Loop untuk membuat transaksi per item
             foreach ($cartItems as $item) {
                 $harga_item = $item->menu->harga_222297 * $item->quantity_222297;
 
+                // 3. Buat transaksi dengan path bukti transfer yang sudah diproses
                 Transaksi::create([
                     'email_222297'             => Auth::user()->email_222297,
                     'kode_menu_222297'         => $item->kode_menu_222297,
                     'jumlah_222297'            => $item->quantity_222297,
                     'harga_total_222297'       => $harga_item,
                     'status_222297'            => 'pending',
-                    'jenis_pesanan_222297'     => $request->jenis_pesanan_222297,  // [DIUBAH] Menyimpan jenis pesanan
-                    'bukti_tf_222297'          => $bukti_tf_path,
+                    'jenis_pesanan_222297'     => $request->jenis_pesanan_222297,
+                    'bukti_tf_222297'          => $bukti_tf_path,  // Akan berisi path atau null
                     'catatan_222297'           => $request->catatan_222297,
+                    'payment_method'           => $request->payment_method,  // Simpan juga metode pembayarannya
                     'tanggal_transaksi_222297' => now(),
                 ]);
             }
 
+            // Hapus item dari keranjang setelah checkout berhasil
             $keranjang->items()->delete();
 
             DB::commit();
@@ -194,7 +218,7 @@ class TransaksiController extends Controller
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Checkout Error: ' . $e->getMessage());
+            Log::error('Checkout Error: ' . $e->getMessage() . ' in file ' . $e->getFile() . ' on line ' . $e->getLine());
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan pada server. Silakan coba lagi nanti.'
@@ -314,24 +338,34 @@ class TransaksiController extends Controller
     }
 
     // [DIUBAH] Menambahkan validasi untuk 'jenis_pesanan_222297'
+
     public function adminUpdate(Request $request, $kode_transaksi)
     {
-        $request->validate([
+        // 1. Validasi data yang masuk dari form
+        $validatedData = $request->validate([
             'email_222297'             => 'required|email|exists:users_222297,email_222297',
             'kode_menu_222297'         => 'required|exists:menu_222297,kode_menu_222297',
             'jumlah_222297'            => 'required|integer|min:1',
             'status_222297'            => 'required|string',
-            'jenis_pesanan_222297'     => 'required|in:delivery,di_lokasi',  // [DIUBAH] Validasi baru
             'tanggal_transaksi_222297' => 'required|date',
+            // 'jenis_pesanan_222297' tidak lagi divalidasi di sini karena tidak ada di form edit
         ]);
 
-        $transaksi                          = \App\Models\Transaksi::where('kode_transaksi_222297', $kode_transaksi)->firstOrFail();
-        $menu                               = \App\Models\Menu::where('kode_menu_222297', $request->kode_menu_222297)->first();
-        $dataToUpdate                       = $request->all();
-        $dataToUpdate['harga_total_222297'] = $menu->harga_222297 * $request->jumlah_222297;
-        $transaksi->update($dataToUpdate);
+        // 2. Cari transaksi dan menu yang relevan
+        $transaksi = \App\Models\Transaksi::findOrFail($kode_transaksi);
+        $menu      = \App\Models\Menu::findOrFail($request->kode_menu_222297);
 
-        return redirect()->route('admin.transaksi.index')->with('success', 'Transaksi berhasil diperbarui.');
+        // 3. Hitung ulang harga total berdasarkan input terbaru
+        $validatedData['harga_total_222297'] = $menu->harga_222297 * $request->jumlah_222297;
+
+        // 4. Update transaksi hanya dengan data yang sudah tervalidasi
+        $transaksi->update($validatedData);
+
+        // 5. Redirect dengan pesan sukses
+        // [DIUBAH] Mengarahkan ke halaman detail untuk melihat perubahan
+        return redirect()
+            ->route('admin.transaksi.show', $transaksi->kode_transaksi_222297)
+            ->with('success', 'Transaksi berhasil diperbarui.');
     }
 
     public function adminDestroy($kode_transaksi)
@@ -456,6 +490,7 @@ class TransaksiController extends Controller
      */
     public function report(Request $request)
     {
+        // Kueri awal untuk laporan transaksi dengan filter
         $query = Transaksi::with(['user', 'menu']);
 
         if ($request->filled('status')) {
@@ -468,8 +503,24 @@ class TransaksiController extends Controller
             $query->whereDate('tanggal_transaksi_222297', '<=', $request->tanggal_akhir);
         }
 
+        // Mengambil data transaksi yang telah difilter dengan paginasi
         $transaksi = $query->orderBy('created_at_222297', 'desc')->paginate(10);
-        return view('pages.admin.transaksi.laporan', compact('transaksi'));
+
+        // --- Tambahan untuk Pengguna dengan Transaksi Terbanyak ---
+        $userTerbanyakTransaksi = User::withCount('transaksi')
+            ->orderBy('transaksi_count', 'desc')
+            ->first();
+
+        // --- Tambahan untuk Tiga Menu Terlaris ---
+        $menuTerlaris = Menu::withCount(['transaksi as jumlah_terjual' => function ($query) {
+            $query->select(DB::raw('sum(jumlah_222297)'));
+        }])
+            ->orderBy('jumlah_terjual', 'desc')
+            ->take(3)
+            ->get();
+
+        // Mengirim semua data ke view
+        return view('pages.admin.transaksi.laporan', compact('transaksi', 'userTerbanyakTransaksi', 'menuTerlaris'));
     }
 
     public function adminExport(Request $request)

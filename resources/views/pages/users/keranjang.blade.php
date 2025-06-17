@@ -313,6 +313,28 @@
                                     Metode Pembayaran
                                 </h3>
                                 <div class="space-y-3">
+                                    {{-- Cash Option --}}
+                                    <label
+                                        class="flex items-center p-4 bg-gradient-to-r from-green-50 to-emerald-100 rounded-xl border border-green-200 cursor-pointer hover:shadow-md transition-all duration-200">
+                                        <input type="radio" name="payment_method" value="cash"
+                                            class="mr-4 text-green-600 focus:ring-green-500" required>
+                                        <div class="flex items-center flex-1">
+                                            <div
+                                                class="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center mr-4">
+                                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-semibold text-green-900">Cash / Tunai</h4>
+                                                <p class="text-sm text-green-600">Bayar di tempat saat pengambilan</p>
+                                            </div>
+                                        </div>
+                                    </label>
+
+                                    {{-- DANA Option --}}
                                     <label
                                         class="flex items-center p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-200 cursor-pointer hover:shadow-md transition-all duration-200">
                                         <input type="radio" name="payment_method" value="dana"
@@ -331,6 +353,8 @@
                                             </div>
                                         </div>
                                     </label>
+
+                                    {{-- ShopeePay Option --}}
                                     <label
                                         class="flex items-center p-4 bg-gradient-to-r from-orange-50 to-red-100 rounded-xl border border-orange-200 cursor-pointer hover:shadow-md transition-all duration-200">
                                         <input type="radio" name="payment_method" value="shopee_pay"
@@ -352,8 +376,8 @@
                                 </div>
                             </div>
 
-                            <div class="mb-6">
-                                <label class="block text-sm font-medium text-amber-900 mb-2">
+                            <div id="buktiTfContainer" class="mb-6">
+                                <label id="buktiTfLabel" class="block text-sm font-medium text-amber-900 mb-2">
                                     Upload Bukti Transfer *
                                 </label>
                                 <div class="relative">
@@ -376,7 +400,8 @@
 
                             <div id="paymentInstructions"
                                 class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-6" style="display: none;">
-                                <h4 class="font-semibold text-yellow-800 mb-2">Instruksi Pembayaran:</h4>
+                                <h4 id="instructionTitle" class="font-semibold text-yellow-800 mb-2">Instruksi Pembayaran:
+                                </h4>
                                 <div id="instructionContent" class="text-sm text-yellow-700">
                                 </div>
                             </div>
@@ -513,19 +538,64 @@
             const paymentRadios = document.querySelectorAll('input[name="payment_method"]');
             const instructionsDiv = document.getElementById('paymentInstructions');
             const instructionContent = document.getElementById('instructionContent');
+            const instructionTitle = document.getElementById('instructionTitle');
+            const buktiTfContainer = document.getElementById('buktiTfContainer');
+            const buktiTfInput = document.getElementById('bukti_tf');
+            const buktiTfLabel = document.getElementById('buktiTfLabel');
+
 
             paymentRadios.forEach(radio => {
                 radio.addEventListener('change', function() {
                     instructionsDiv.style.display = 'block';
+
+                    // Reset styles
+                    instructionsDiv.className = 'rounded-xl p-4 mb-6';
+
                     if (this.value === 'dana') {
+                        instructionsDiv.classList.add('bg-blue-50', 'border', 'border-blue-200');
+                        instructionTitle.className = 'font-semibold text-blue-800 mb-2';
+                        instructionContent.className = 'text-sm text-blue-700';
+
+                        instructionTitle.textContent = 'Instruksi Pembayaran DANA:';
                         instructionContent.innerHTML =
                             `<ol class="list-decimal list-inside space-y-1"><li>Buka aplikasi DANA</li><li>Pilih menu "Kirim"</li><li>Masukkan nomor DANA: <strong>081234567890</strong></li><li>Masukkan nominal: <strong>Rp {{ number_format($total * 1.1, 0, ',', '.') }}</strong></li><li>Konfirmasi dan screenshot bukti transfer</li></ol>`;
+
+                        buktiTfContainer.style.display = 'block';
+                        buktiTfInput.required = true;
+                        buktiTfLabel.innerHTML = 'Upload Bukti Transfer *';
+
                     } else if (this.value === 'shopee_pay') {
+                        instructionsDiv.classList.add('bg-orange-50', 'border',
+                        'border-orange-200');
+                        instructionTitle.className = 'font-semibold text-orange-800 mb-2';
+                        instructionContent.className = 'text-sm text-orange-700';
+
+                        instructionTitle.textContent = 'Instruksi Pembayaran ShopeePay:';
                         instructionContent.innerHTML =
                             `<ol class="list-decimal list-inside space-y-1"><li>Buka aplikasi Shopee</li><li>Pilih "ShopeePay" lalu "Kirim"</li><li>Masukkan nomor HP: <strong>081234567890</strong></li><li>Masukkan nominal: <strong>Rp {{ number_format($total * 1.1, 0, ',', '.') }}</strong></li><li>Konfirmasi dan screenshot bukti transfer</li></ol>`;
+
+                        buktiTfContainer.style.display = 'block';
+                        buktiTfInput.required = true;
+                        buktiTfLabel.innerHTML = 'Upload Bukti Transfer *';
+
+                    } else if (this.value === 'cash') {
+                        instructionsDiv.classList.add('bg-green-50', 'border', 'border-green-200');
+                        instructionTitle.className = 'font-semibold text-green-800 mb-2';
+                        instructionContent.className = 'text-sm text-green-700';
+
+                        instructionTitle.textContent = 'Instruksi Pembayaran Tunai:';
+                        instructionContent.innerHTML =
+                            `<p>Silakan siapkan uang pas sebesar <strong>Rp {{ number_format($total * 1.1, 0, ',', '.') }}</strong> dan bayarkan saat pesanan diambil atau diantar.</p>`;
+
+                        buktiTfContainer.style.display = 'none';
+                        buktiTfInput.required = false;
+                        buktiTfLabel.innerHTML = 'Upload Bukti Transfer'; // Remove asterisk
                     }
                 });
             });
+
+            // Trigger change on page load for default checked radio
+            document.querySelector('input[name="payment_method"]:checked')?.dispatchEvent(new Event('change'));
 
             const orderTypeRadios = document.querySelectorAll('input[name="jenis_pesanan_222297"]');
             const deliveryForm = document.getElementById('deliveryAddressForm');
@@ -577,8 +647,10 @@
                 alert('Silakan pilih metode pembayaran');
                 return;
             }
-            if (!buktiTf || buktiTf.size === 0) {
-                alert('Silakan upload bukti transfer');
+
+            // MODIFIED: Only check for proof of transfer if payment method is not cash
+            if (paymentMethod !== 'cash' && (!buktiTf || buktiTf.size === 0)) {
+                alert('Silakan upload bukti transfer untuk metode pembayaran yang dipilih.');
                 return;
             }
 
@@ -588,9 +660,6 @@
                 `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Memproses...`;
             submitBtn.disabled = true;
 
-            // [PENTING & DIUBAH] Submit ke route checkout store yang benar
-            // Pastikan Anda memiliki route ini di web.php yang menunjuk ke TransaksiController@userCheckoutStore
-            // Contoh di web.php: Route::post('/checkout/store', [TransaksiController::class, 'userCheckoutStore'])->name('user.checkout.store');
             fetch('{{ route('user.transaksi.store') }}', {
                     method: 'POST',
                     headers: {

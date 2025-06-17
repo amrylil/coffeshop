@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="bg-gray-50 min-h-screen py-8 px-4 sm:px-6 lg:px-8 pt-20">
-        <div class="max-w-3xl mx-auto">
+        <div class=" mx-auto">
             <!-- Header Section -->
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
                 <div class="flex items-center space-x-3">
@@ -85,9 +85,10 @@
                                 required>
                                 <option value="">Pilih Menu</option>
                                 @foreach ($menus as $menu)
-                                    <option value="{{ $menu->kode_menu_222297 }}"
+                                    <option value="{{ $menu->kode_menu_222297 }}" data-harga="{{ $menu->harga_222297 }}"
                                         {{ old('kode_menu_222297', $transaksi->kode_menu_222297) == $menu->kode_menu_222297 ? 'selected' : '' }}>
-                                        {{ $menu->nama_menu_222297 }} - Rp
+                                        {{-- [DIPERBAIKI] Menggunakan nama_222297 sesuai model Menu --}}
+                                        {{ $menu->nama_222297 }} - Rp
                                         {{ number_format($menu->harga_222297, 0, ',', '.') }}
                                     </option>
                                 @endforeach
@@ -156,6 +157,10 @@
                                     <option value="dikonfirmasi"
                                         {{ old('status_222297', $transaksi->status_222297) == 'dikonfirmasi' ? 'selected' : '' }}>
                                         🔵 Dikonfirmasi
+                                    </option>
+                                    <option value="dikirim"
+                                        {{ old('status_222297', $transaksi->status_222297) == 'dikirim' ? 'selected' : '' }}>
+                                        🔵 Dikirim
                                     </option>
                                     <option value="ditolak"
                                         {{ old('status_222297', $transaksi->status_222297) == 'ditolak' ? 'selected' : '' }}>
@@ -266,31 +271,24 @@
         document.addEventListener('DOMContentLoaded', function() {
             const menuSelect = document.getElementById('kode_menu_222297');
             const quantityInput = document.getElementById('jumlah_222297');
+            const totalDisplay = document.getElementById('harga_total_display'); // Tambahkan ID ini ke elemen harga
 
-            function updateTotalDisplay() {
+            // Fungsi untuk kalkulasi
+            const calculateTotal = () => {
                 const selectedOption = menuSelect.options[menuSelect.selectedIndex];
+                const price = parseFloat(selectedOption.getAttribute('data-harga')) || 0;
                 const quantity = parseInt(quantityInput.value) || 0;
+                const total = price * quantity;
 
-                if (selectedOption.value && quantity > 0) {
-                    // Extract price from option text (assuming format: "Menu Name - Rp 50,000")
-                    const optionText = selectedOption.text;
-                    const priceMatch = optionText.match(/Rp\s*([\d,\.]+)/);
+                totalDisplay.textContent = 'Rp ' + total.toLocaleString('id-ID');
+            };
 
-                    if (priceMatch) {
-                        const price = parseInt(priceMatch[1].replace(/[,\.]/g, ''));
-                        const total = price * quantity;
+            // Tambahkan event listener
+            menuSelect.addEventListener('change', calculateTotal);
+            quantityInput.addEventListener('input', calculateTotal);
 
-                        // Update the display (this is just for preview, actual calculation should be done server-side)
-                        const totalDisplay = document.querySelector('.text-2xl.font-bold.text-\\[\\#6F4E37\\]');
-                        if (totalDisplay) {
-                            totalDisplay.textContent = 'Rp ' + total.toLocaleString('id-ID');
-                        }
-                    }
-                }
-            }
-
-            menuSelect.addEventListener('change', updateTotalDisplay);
-            quantityInput.addEventListener('input', updateTotalDisplay);
+            // Panggil saat halaman dimuat pertama kali
+            calculateTotal();
         });
     </script>
 @endsection
