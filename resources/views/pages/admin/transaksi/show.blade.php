@@ -174,6 +174,9 @@
                                     <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
                                     <span class="text-blue-700 font-medium">Transaksi telah dikonfirmasi dan sedang
                                         diproses</span>
+                                @elseif($transaksi->status_222297 == 'dikirim')
+                                    <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+                                    <span class="text-blue-700 font-medium">Pesanan dalam pengiriman</span>
                                 @elseif($transaksi->status_222297 == 'ditolak')
                                     <div class="w-3 h-3 bg-red-500 rounded-full"></div>
                                     <span class="text-red-700 font-medium">Transaksi ditolak</span>

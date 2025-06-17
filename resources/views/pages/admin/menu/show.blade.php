@@ -26,8 +26,8 @@
                         <div class="col-span-1 flex flex-col items-center">
                             @if ($menu->path_img_222297)
                                 <div class="w-full h-64 bg-gray-100 rounded-lg overflow-hidden">
-                                    <img src="{{ asset($menu->path_img_222297) }}" alt="{{ $menu->nama_222297 }}"
-                                        class="w-full h-full object-cover">
+                                    <img src="{{ asset('images/' . $menu->path_img_222297) }}"
+                                        alt="{{ $menu->nama_222297 }}" class="w-full h-full object-cover">
                                 </div>
                             @else
                                 <div class="w-full h-64 bg-gray-200 flex items-center justify-center rounded-lg">
