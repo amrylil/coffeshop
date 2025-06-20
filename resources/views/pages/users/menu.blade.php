@@ -28,6 +28,8 @@
                 </p>
             </div>
 
+
+
             <!-- Search and Filter Section -->
             <div class="max-w-7xl mx-auto px-4 mb-12">
                 <div class="flex flex-col lg:flex-row justify-between gap-6">
@@ -63,10 +65,7 @@
                         @endforeach
                     </div>
                 </div>
-
-
             </div>
-
 
             <!-- Products Grid -->
             @if ($menus->isEmpty())
@@ -86,7 +85,7 @@
                                                 {{ $menu->kategori->nama_kategori_222297 }}
                                             </span>
                                             @if ($menu->path_img_222297)
-                                                <img src="{{ asset($menu->path_img_222297) }}"
+                                                <img src="{{ asset('images/' . $menu->path_img_222297) }}"
                                                     alt="{{ $menu->nama_222297 }}"
                                                     class="w-full h-full scale-110 object-cover">
                                             @else
@@ -102,8 +101,21 @@
                                                 {{ number_format($menu->harga_222297, 0, ',', '.') }}</span>
                                             <button
                                                 class="bg-[#3e1f1f] hover:bg-[#5a2d2d] text-white text-xs px-3 py-1 rounded transition add-to-cart-btn"
-                                                data-product-id="{{ $menu->kode_menu_222297 }}">
-                                                ADD TO CART
+                                                data-menu-id="{{ $menu->kode_menu_222297 }}"
+                                                data-menu-name="{{ $menu->nama_222297 }}"
+                                                data-menu-price="{{ $menu->harga_222297 }}">
+                                                <span class="btn-text">ADD TO CART</span>
+                                                <span class="btn-loading hidden">
+                                                    <svg class="animate-spin h-4 w-4 text-white"
+                                                        xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        viewBox="0 0 24 24">
+                                                        <circle class="opacity-25" cx="12" cy="12" r="10"
+                                                            stroke="currentColor" stroke-width="4"></circle>
+                                                        <path class="opacity-75" fill="currentColor"
+                                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                                        </path>
+                                                    </svg>
+                                                </span>
                                             </button>
                                         </div>
                                     </div>
@@ -129,6 +141,33 @@
             </svg>
         </button>
     </section>
+
+    <!-- Toast Notification -->
+    <div id="toast"
+        class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 hidden transition-all duration-300">
+        <div class="flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span id="toast-message">Item added to cart!</span>
+        </div>
+    </div>
+
+    <!-- Login Modal (if user is not authenticated) -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+                <h3 class="text-xl font-semibold mb-4 text-[#3e1f1f]">Login Required</h3>
+                <p class="text-gray-600 mb-6">You need to login to add items to your cart.</p>
+                <div class="flex gap-4">
+                    <a href="{{ route('login') }}"
+                        class="bg-[#3e1f1f] text-white px-4 py-2 rounded hover:bg-[#5a2d2d] transition">Login</a>
+                    <button onclick="closeLoginModal()"
+                        class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 transition">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('scripts')
@@ -179,6 +218,29 @@
             transform: scale(0.95);
         }
 
+        .add-to-cart-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Toast Animation */
+        #toast.show {
+            display: block;
+            animation: slideInDown 0.3s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                transform: translate(-50%, -100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translate(-50%, 0);
+                opacity: 1;
+            }
+        }
+
         /* Pagination Styling */
         .pagination {
             display: flex;
@@ -215,6 +277,20 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            const isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
+
+            // CSRF Token for AJAX requests
+            let csrfToken;
+            const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+            if (csrfMeta) {
+                csrfToken = csrfMeta.getAttribute('content');
+            } else {
+                csrfToken = '{{ csrf_token() }}';
+            }
+
+            console.log('Page loaded, isLoggedIn:', isLoggedIn);
+
             // Scroll to Top Button
             const scrollToTopButton = document.getElementById('scrollToTopButton');
 
@@ -233,45 +309,183 @@
                 });
             });
 
+            // Product card animations
             const productCards = document.querySelectorAll('.product-card');
             productCards.forEach((card, index) => {
                 card.style.animationDelay = `${index * 0.1}s`;
             });
 
-            // AJAX for filter and pagination - Uncomment when implementing
-            /*
-            // Handle AJAX loading for filters
-            function loadMenuItems(url) {
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('menuItems').innerHTML = data.html;
-                        document.getElementById('pagination').innerHTML = data.pagination;
-                        
-                        // Reinitialize animations and event listeners
-                        const newProductCards = document.querySelectorAll('.product-card');
-                        newProductCards.forEach((card, index) => {
-                            card.style.animationDelay = `${index * 0.1}s`;
-                        });
-                    })
-                    .catch(error => console.error('Error:', error));
+            // Load cart count on page load
+            if (isLoggedIn) {
+                loadCartCount();
             }
 
-            // Handle pagination clicks
+            // Add to Cart functionality
             document.addEventListener('click', function(e) {
-                const target = e.target;
-                if (target.tagName === 'A' && target.closest('.pagination')) {
+                console.log('Click detected on:', e.target);
+
+                if (e.target.closest('.add-to-cart-btn')) {
                     e.preventDefault();
-                    const url = new URL(target.href);
-                    url.searchParams.append('ajax', 'true');
-                    loadMenuItems(url);
+                    console.log('Add to cart button clicked');
+
+                    if (!isLoggedIn) {
+                        console.log('User not logged in, showing modal');
+                        showLoginModal();
+                        return;
+                    }
+
+                    const button = e.target.closest('.add-to-cart-btn');
+                    const menuId = button.getAttribute('data-menu-id');
+                    const menuName = button.getAttribute('data-menu-name');
+
+                    console.log('Menu ID:', menuId, 'Menu Name:', menuName);
+                    addToCart(menuId, menuName, button);
                 }
             });
-            */
-        });
 
-        function isUserLoggedIn() {
-            return {{ auth()->check() ? 'true' : 'false' }};
-        }
+            // Cart button click
+            document.getElementById('cartButton').addEventListener('click', function() {
+                if (isLoggedIn) {
+                    window.location.href = "{{ route('keranjang.index') }}";
+                } else {
+                    showLoginModal();
+                }
+            });
+
+            // Functions
+            function addToCart(menuId, menuName, button) {
+                console.log('addToCart function called with:', menuId, menuName);
+
+                // Disable button and show loading
+                button.disabled = true;
+                const btnText = button.querySelector('.btn-text');
+                const btnLoading = button.querySelector('.btn-loading');
+
+                if (btnText) btnText.classList.add('hidden');
+                if (btnLoading) btnLoading.classList.remove('hidden');
+
+                const requestData = {
+                    kode_menu_222297: menuId,
+                    quantity_222297: 1
+                };
+
+                console.log('Sending request to:', "{{ route('keranjang.add') }}");
+                console.log('Request data:', requestData);
+                console.log('CSRF Token:', csrfToken);
+
+                fetch("{{ route('keranjang.add') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: JSON.stringify(requestData)
+                    })
+                    .then(response => {
+                        console.log('Response status:', response.status);
+                        console.log('Response headers:', response.headers);
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Response data:', data);
+                        if (data.success) {
+                            showToast(`${menuName} added to cart!`, 'success');
+                            loadCartCount(); // Update cart count
+                        } else {
+                            showToast(data.message || 'Failed to add item to cart', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showToast('An error occurred. Please try again.', 'error');
+                    })
+                    .finally(() => {
+                        // Re-enable button and hide loading
+                        button.disabled = false;
+                        if (btnText) btnText.classList.remove('hidden');
+                        if (btnLoading) btnLoading.classList.add('hidden');
+                    });
+            }
+
+            function loadCartCount() {
+                fetch("{{ route('keranjang.count') }}", {
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            updateCartCount(data.count);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error loading cart count:', error);
+                    });
+            }
+
+            function updateCartCount(count) {
+                const cartCountElement = document.getElementById('cartCount');
+                if (count > 0) {
+                    cartCountElement.textContent = count;
+                    cartCountElement.classList.remove('hidden');
+                } else {
+                    cartCountElement.classList.add('hidden');
+                }
+            }
+
+            function showToast(message, type = 'success') {
+                const toast = document.getElementById('toast');
+                const toastMessage = document.getElementById('toast-message');
+
+                toastMessage.textContent = message;
+
+                // Change color based on type
+                if (type === 'error') {
+                    toast.className = toast.className.replace('bg-green-500', 'bg-red-500');
+                } else {
+                    toast.className = toast.className.replace('bg-red-500', 'bg-green-500');
+                }
+
+                toast.classList.remove('hidden');
+                toast.classList.add('show');
+
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => {
+                        toast.classList.add('hidden');
+                    }, 300);
+                }, 3000);
+            }
+
+            function showLoginModal() {
+                document.getElementById('loginModal').classList.remove('hidden');
+            }
+
+            // Make closeLoginModal available globally
+            window.closeLoginModal = function() {
+                document.getElementById('loginModal').classList.add('hidden');
+            }
+
+            // Alternative simple function for onclick
+            window.handleAddToCart = function(button) {
+                console.log('handleAddToCart called directly');
+
+                if (!isLoggedIn) {
+                    console.log('User not logged in');
+                    showLoginModal();
+                    return;
+                }
+
+                const menuId = button.getAttribute('data-menu-id');
+                const menuName = button.getAttribute('data-menu-name');
+
+                console.log('Direct call - Menu ID:', menuId, 'Menu Name:', menuName);
+                addToCart(menuId, menuName, button);
+            }
+        });
     </script>
 @endsection

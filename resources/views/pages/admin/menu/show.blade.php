@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="bg-white min-h-screen py-8 px-4 sm:px-6 lg:px-8 pt-20">
-        <div class="max-w-4xl mx-auto">
+        <div class=" mx-auto">
             <!-- Header Section -->
             <div class="mb-6 flex justify-between items-center">
                 <h1 class="text-3xl font-bold text-[#6F4E37]">Menu Details</h1>
@@ -26,8 +26,8 @@
                         <div class="col-span-1 flex flex-col items-center">
                             @if ($menu->path_img_222297)
                                 <div class="w-full h-64 bg-gray-100 rounded-lg overflow-hidden">
-                                    <img src="{{ asset($menu->path_img_222297) }}" alt="{{ $menu->nama_222297 }}"
-                                        class="w-full h-full object-cover">
+                                    <img src="{{ asset('images/' . $menu->path_img_222297) }}"
+                                        alt="{{ $menu->nama_222297 }}" class="w-full h-full object-cover">
                                 </div>
                             @else
                                 <div class="w-full h-64 bg-gray-200 flex items-center justify-center rounded-lg">

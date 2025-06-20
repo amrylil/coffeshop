@@ -23,16 +23,16 @@ class KategoriProduk extends Model
         'path_img_222297',
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
+    // protected static function boot()
+    // {
+    //     parent::boot();
 
-        static::creating(function ($model) {
-            if (!$model->kode_kategori_222297) {
-                $model->kode_kategori_222297 = IDGeneratorHelper::generateKategoriID();
-            }
-        });
-    }
+    //     static::creating(function ($model) {
+    //         if (!$model->kode_kategori_222297) {
+    //             $model->kode_kategori_222297 = IDGeneratorHelper::generateKategoriID();
+    //         }
+    //     });
+    // }
 
     public function menu()
     {

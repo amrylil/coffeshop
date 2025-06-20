@@ -57,7 +57,7 @@
                     <!-- Gambar Produk -->
                     <div class="lg:w-1/2 h-96 lg:h-auto">
                         @if ($menu->path_img_222297)
-                            <img src="{{ asset($menu->path_img_222297) }}" alt="{{ $menu->nama_222297 }}"
+                            <img src="{{ asset('images/' . $menu->path_img_222297) }}" alt="{{ $menu->nama_222297 }}"
                                 class="w-full h-full object-cover">
                         @else
                             <img src="{{ asset('images/coffe.png') }}" alt="{{ $menu->nama_222297 }}"
@@ -140,7 +140,7 @@
                             </div>
 
                             <button id="addToCartBtn"
-                                class="flex-1 bg-[#3e1f1f] hover:bg-[#5a2d2d] text-white py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition transform hover:scale-105"
+                                class="flex-1 bg-[#3e1f1f] hover:bg-[#5a2d2d] text-white py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                                 {{ $menu->jumlah_222297 <= 0 ? 'disabled' : '' }}
                                 data-product-id="{{ $menu->kode_menu_222297 }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -148,7 +148,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </svg>
-                                Tambahkan ke Keranjang
+                                <span class="btn-text">Tambahkan ke Keranjang</span>
                             </button>
                         </div>
                     </div>
@@ -200,8 +200,9 @@
                                             Rp {{ number_format($relatedMenu->harga_222297, 0, ',', '.') }}
                                         </span>
                                         <button
-                                            class="bg-[#3e1f1f] hover:bg-[#5a2d2d] text-white text-xs px-3 py-1 rounded transition add-to-cart-btn"
-                                            data-product-id="{{ $relatedMenu->kode_menu_222297 }}">
+                                            class="bg-[#3e1f1f] hover:bg-[#5a2d2d] text-white text-xs px-3 py-1 rounded transition add-to-cart-btn disabled:opacity-50 disabled:cursor-not-allowed"
+                                            data-product-id="{{ $relatedMenu->kode_menu_222297 }}"
+                                            {{ $relatedMenu->jumlah_222297 <= 0 ? 'disabled' : '' }}>
                                             TAMBAH
                                         </button>
                                     </div>
@@ -211,6 +212,15 @@
                     </div>
                 </div>
             @endif
+        </div>
+
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay"
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <div class="bg-white rounded-lg p-6 flex items-center space-x-3">
+                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-[#3e1f1f]"></div>
+                <span class="text-[#3e1f1f]">Menambahkan ke keranjang...</span>
+            </div>
         </div>
 
         <!-- Tombol kembali ke atas -->
@@ -225,6 +235,9 @@
 @endsection
 
 @section('scripts')
+    <!-- Add CSRF token meta tag -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <style>
         /* Gaya Dasar */
         body {
@@ -271,10 +284,24 @@
         input[type=number] {
             -moz-appearance: textfield;
         }
+
+        /* Loading spinner animation */
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
     </style>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Setup CSRF token for AJAX requests
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
             // Tombol Tambah/Kurang Kuantitas
             const quantityInput = document.getElementById('quantity');
             const incrementBtn = document.getElementById('increment');
@@ -305,10 +332,95 @@
                 }
             });
 
-            // Tombol Tambah ke Keranjang
+            // Function to show loading
+            function showLoading() {
+                document.getElementById('loadingOverlay').classList.remove('hidden');
+            }
+
+            // Function to hide loading
+            function hideLoading() {
+                document.getElementById('loadingOverlay').classList.add('hidden');
+            }
+
+            // Function to show toast notification
+            function showToast(message, type = 'success') {
+                const toast = document.createElement('div');
+                const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
+                const icon = type === 'success' ?
+                    `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>` :
+                    `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>`;
+
+                toast.className =
+                    `fixed bottom-4 right-4 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out`;
+                toast.style.zIndex = '9999';
+                toast.innerHTML = `
+                    <div class="flex items-center">
+                        ${icon}
+                        <span>${message}</span>
+                    </div>
+                `;
+                document.body.appendChild(toast);
+
+                // Animate in
+                setTimeout(() => {
+                    toast.classList.remove('translate-x-full');
+                }, 100);
+
+                // Animate out and remove
+                setTimeout(() => {
+                    toast.classList.add('translate-x-full');
+                    setTimeout(() => {
+                        if (document.body.contains(toast)) {
+                            document.body.removeChild(toast);
+                        }
+                    }, 300);
+                }, 3000);
+            }
+
+            // Function to add item to cart
+            async function addToCart(productId, quantity = 1) {
+                try {
+                    showLoading();
+
+                    const response = await fetch('{{ route('keranjang.add') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            kode_menu_222297: productId,
+                            quantity_222297: quantity
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        showToast(data.message || 'Item berhasil ditambahkan ke keranjang!');
+
+                        // Optional: Update cart count in header if you have one
+                        // updateCartCount();
+                    } else {
+                        showToast(data.message || 'Gagal menambahkan item ke keranjang', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showToast('Terjadi kesalahan saat menambahkan item ke keranjang', 'error');
+                } finally {
+                    hideLoading();
+                }
+            }
+
+            // Tombol Tambah ke Keranjang Utama
             const addToCartBtn = document.getElementById('addToCartBtn');
             if (addToCartBtn) {
-                addToCartBtn.addEventListener('click', function() {
+                addToCartBtn.addEventListener('click', async function() {
                     const isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
 
                     if (!isLoggedIn) {
@@ -317,42 +429,48 @@
                     }
 
                     const productId = this.getAttribute('data-product-id');
-                    const quantity = document.getElementById('quantity').value;
+                    const quantity = parseInt(document.getElementById('quantity').value);
 
-                    // Tambahkan efek animasi
-                    this.classList.add('scale-95');
-                    setTimeout(() => {
-                        this.classList.remove('scale-95');
-                    }, 150);
+                    // Disable button during request
+                    this.disabled = true;
+                    const originalText = this.querySelector('.btn-text').textContent;
+                    this.querySelector('.btn-text').textContent = 'Menambahkan...';
 
-                    // Di sini biasanya membuat panggilan AJAX untuk menambahkan ke keranjang
-                    console.log(`Menambahkan produk ${productId} ke keranjang dengan jumlah ${quantity}`);
+                    await addToCart(productId, quantity);
 
-                    // Tampilkan pesan sukses
-                    const toast = document.createElement('div');
-                    toast.className =
-                        'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg';
-                    toast.style.zIndex = '9999';
-                    toast.innerHTML = `
-                        <div class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                            </svg>
-                            <span>Berhasil ditambahkan ke keranjang!</span>
-                        </div>
-                    `;
-                    document.body.appendChild(toast);
-
-                    // Hapus toast setelah 3 detik
-                    setTimeout(() => {
-                        toast.style.opacity = '0';
-                        toast.style.transition = 'opacity 0.5s ease';
-                        setTimeout(() => {
-                            document.body.removeChild(toast);
-                        }, 500);
-                    }, 3000);
+                    // Re-enable button
+                    this.disabled = false;
+                    this.querySelector('.btn-text').textContent = originalText;
                 });
             }
+
+            // Tombol Tambah ke Keranjang untuk Produk Terkait
+            const addToCartBtns = document.querySelectorAll('.add-to-cart-btn');
+            addToCartBtns.forEach(btn => {
+                btn.addEventListener('click', async function(e) {
+                    e.preventDefault();
+
+                    const isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
+
+                    if (!isLoggedIn) {
+                        window.location.href = "{{ route('login') }}";
+                        return;
+                    }
+
+                    const productId = this.getAttribute('data-product-id');
+
+                    // Disable button during request
+                    this.disabled = true;
+                    const originalText = this.textContent;
+                    this.textContent = 'MENAMBAH...';
+
+                    await addToCart(productId, 1);
+
+                    // Re-enable button
+                    this.disabled = false;
+                    this.textContent = originalText;
+                });
+            });
 
             // Tombol Kembali ke Atas
             const scrollToTopButton = document.getElementById('scrollToTopButton');
@@ -369,52 +487,6 @@
                 window.scrollTo({
                     top: 0,
                     behavior: 'smooth'
-                });
-            });
-
-            // Tambahkan ke keranjang untuk produk terkait
-            const addToCartBtns = document.querySelectorAll('.add-to-cart-btn');
-            addToCartBtns.forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
-
-                    if (!isLoggedIn) {
-                        window.location.href = "{{ route('login') }}";
-                        return;
-                    }
-
-                    const productId = this.getAttribute('data-product-id');
-
-                    // Tambahkan efek animasi
-                    this.classList.add('scale-95');
-                    setTimeout(() => {
-                        this.classList.remove('scale-95');
-                    }, 150);
-
-                    // Tampilkan pesan sukses
-                    const toast = document.createElement('div');
-                    toast.className =
-                        'fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg';
-                    toast.style.zIndex = '9999';
-                    toast.innerHTML = `
-                        <div class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                            </svg>
-                            <span>Berhasil ditambahkan ke keranjang!</span>
-                        </div>
-                    `;
-                    document.body.appendChild(toast);
-
-                    // Hapus toast setelah 3 detik
-                    setTimeout(() => {
-                        toast.style.opacity = '0';
-                        toast.style.transition = 'opacity 0.5s ease';
-                        setTimeout(() => {
-                            document.body.removeChild(toast);
-                        }, 500);
-                    }, 3000);
                 });
             });
         });

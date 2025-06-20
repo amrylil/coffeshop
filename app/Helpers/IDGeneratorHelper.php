@@ -107,6 +107,6 @@ class IDGeneratorHelper
    */
   public static function generateReservasiID(): string
   {
-    return 'RSV-' . Str::random(6) . '-' . time();
+    return 'RSV-' . Str::random(3) . '-' . time();
   }
 }

@@ -105,7 +105,7 @@
                                     <tr class="hover:bg-gray-50">
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             @if ($menu->path_img_222297)
-                                                <img src="{{ asset($menu->path_img_222297) }}"
+                                                <img src="{{ asset('images/' . $menu->path_img_222297) }}"
                                                     alt="{{ $menu->nama_222297 }}" class="h-12 w-12 object-cover rounded">
                                             @else
                                                 <div class="h-12 w-12 bg-gray-200 flex items-center justify-center rounded">

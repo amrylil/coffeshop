@@ -34,7 +34,7 @@
                 <div class="bg-slate-50 p-8 rounded-xl shadow-sm border border-[#d7cdc3]">
                     <h3 class="text-2xl font-serif text-[#3a2a1d] mb-6">Kirim Pesan</h3>
 
-                    <form action="#" method="POST" class="space-y-6">
+                    <form action="#" class="space-y-6">
                         @csrf
                         <div>
                             <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
@@ -61,7 +61,7 @@
                         </div>
 
                         <div>
-                            <button type="submit"
+                            <button
                                 class="w-full bg-[#6f4e37] text-white py-3 px-6 rounded-lg font-medium hover:bg-[#5d4130] transition duration-300 flex items-center justify-center">
                                 <span>Kirim Pesan</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"

@@ -11,20 +11,23 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('transaksi_222297', function (Blueprint $table) {
-            $table->string('kode_transaksi_222297', 20)->primary();
-            $table->string('user_id_222297', 20)->nullable();
+            $table->string('kode_transaksi_222297', 100)->primary();
+            $table->string('email_222297', 100)->nullable();
             $table->string('kode_menu_222297', 20)->nullable();
             $table->integer('jumlah_222297')->nullable();
             $table->decimal('harga_total_222297', 10, 2)->nullable();
-            $table->enum('status_222297', ['pending', 'dikemas', 'dikirim', 'selesai'])->nullable();
+            $table->enum('status_222297', ['pending', 'dikonfirmasi', 'selesai', 'dikirim', 'ditolak'])->nullable();
             $table->string('bukti_tf_222297', 255)->nullable();
             $table->timestamp('tanggal_transaksi_222297')->nullable();
             $table->timestamp('created_at_222297')->nullable();
             $table->timestamp('updated_at_222297')->nullable();
+            $table
+                ->enum('jenis_pesanan_222297', ['delivery', 'di_lokasi'])
+                ->default('di_lokasi');
 
             $table
-                ->foreign('user_id_222297')
-                ->references('user_id_222297')
+                ->foreign('email_222297')
+                ->references('email_222297')
                 ->on('users_222297');
             $table
                 ->foreign('kode_menu_222297')

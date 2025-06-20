@@ -1,7 +1,11 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\KeranjangController;
+use App\Http\Controllers\MejaController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\ReservasiController;
+use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserMenuController;
 use Illuminate\Support\Facades\Route;
@@ -18,9 +22,9 @@ Route::middleware('guest')->group(function () {
 
 Route::get('/', [UserMenuController::class, 'latestMenus'])->name('beranda');
 
-Route::get('/reservasi', function () {
-    return view('pages.users.reservasi');
-})->name('reservasi');
+// Route::get('/reservasi', function () {
+//     return view('pages.users.reservasi');
+// })->name('reservasi');
 Route::get('/contact-us', function () {
     return view('pages.users.kontak');
 })->name('kontak');
@@ -40,6 +44,38 @@ Route::prefix('menu')->name('menu.')->group(function () {
     Route::get('/get-items', [App\Http\Controllers\UserMenuController::class, 'getMenuItems'])->name('get-items');
 });
 
+Route::middleware('auth')->group(function () {
+    Route::get('/keranjang', [App\Http\Controllers\KeranjangController::class, 'index'])->name('keranjang.index');
+    Route::post('/keranjang/add', [App\Http\Controllers\KeranjangController::class, 'addToCart'])->name('keranjang.add');
+    Route::put('/keranjang/update/{kodeItem}', [App\Http\Controllers\KeranjangController::class, 'updateQuantity'])->name('keranjang.update');
+    Route::delete('/keranjang/remove/{kodeItem}', [App\Http\Controllers\KeranjangController::class, 'removeItem'])->name('keranjang.remove');
+    Route::delete('/keranjang/clear', [App\Http\Controllers\KeranjangController::class, 'clearCart'])->name('keranjang.clear');
+    Route::post('/keranjang/increment/{kodeItem}', [App\Http\Controllers\KeranjangController::class, 'incrementQuantity'])->name('keranjang.increment');
+    Route::post('/keranjang/decrement/{kodeItem}', [App\Http\Controllers\KeranjangController::class, 'decrementQuantity'])->name('keranjang.decrement');
+    Route::get('/keranjang/count', [App\Http\Controllers\KeranjangController::class, 'getCartCount'])->name('keranjang.count');
+    Route::get('/keranjang/total', [App\Http\Controllers\KeranjangController::class, 'getCartTotal'])->name('keranjang.total');
+
+    Route::prefix('user/transaksi')->name('user.transaksi.')->group(function () {
+        Route::get('/', [TransaksiController::class, 'userIndex'])->name('index');
+        Route::get('/create', [TransaksiController::class, 'userCreate'])->name('create');
+        Route::post('/', [TransaksiController::class, 'userCheckoutStore'])->name('store');
+        // Route::get('/{id}', [TransaksiController::class, 'userShow'])->name('show');
+        Route::patch('/{id}/cancel', [TransaksiController::class, 'userCancel'])->name('cancel');
+        Route::get('/{kode_transaksi}', [TransaksiController::class, 'userDetail'])->name('show');
+    });
+
+    // Route::apiResource('reservasi', ReservasiController::class);
+
+    Route::get('/reservasi', [ReservasiController::class, 'index'])->name('reservasi.index');
+
+    // Rute untuk memproses form reservasi
+    Route::post('/reservasi', [ReservasiController::class, 'store'])->name('reservasi.store');
+
+    Route::get('/reservasi/{kode_reservasi}', [ReservasiController::class, 'detail'])->name('reservasi.detail');
+
+    Route::get('/reservasi-history', [ReservasiController::class, 'history'])->name('reservasi.history');
+});
+
 Route::prefix('admin')->name('admin.')->group(function () {
     // Dashboard
     Route::get('/', function () {
@@ -51,6 +87,40 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Add these routes to your web.php file inside the admin group
     Route::resource('kategori', App\Http\Controllers\KategoriProdukController::class);
 
+    Route::resource('meja', App\Http\Controllers\MejaController::class);
+
+    Route::patch('/meja/{id}/status', [MejaController::class, 'updateStatus'])
+        ->name('meja.updateStatus');
+
     Route::resource('users', App\Http\Controllers\UserController::class);
     Route::patch('users/{id}/change-role', [UserController::class, 'changeRole'])->name('users.change-role');
+
+    Route::prefix('transaksi')->name('transaksi.')->group(function () {
+        Route::get('/', [TransaksiController::class, 'adminIndex'])->name('index');
+        Route::get('/stats', [TransaksiController::class, 'adminStats'])->name('stats');
+        Route::get('/export', [TransaksiController::class, 'adminExport'])->name('export');
+        Route::get('/create', [TransaksiController::class, 'adminCreate'])->name('create');
+        Route::post('/', [TransaksiController::class, 'adminStore'])->name('store');
+        Route::get('/{kode_transaksi}', [TransaksiController::class, 'adminShow'])->name('show');
+        Route::get('/{kode_transaksi}/edit', [TransaksiController::class, 'adminEdit'])->name('edit');
+        Route::put('/{kode_transaksi}', [TransaksiController::class, 'adminUpdate'])->name('update');
+        Route::delete('/{kode_transaksi}', [TransaksiController::class, 'adminDestroy'])->name('destroy');
+        Route::patch('/{id}/confirm', [TransaksiController::class, 'adminConfirm'])->name('confirm');
+        Route::patch('/{id}/reject', [TransaksiController::class, 'adminReject'])->name('reject');
+        Route::patch('/{id}/complete', [TransaksiController::class, 'adminComplete'])->name('complete');
+        Route::patch('/{id}/update-status', [TransaksiController::class, 'updateStatus'])->name('updateStatus');
+    });
+
+    Route::get('report', [TransaksiController::class, 'report'])->name('transaksi.report');
+    Route::get('export', [TransaksiController::class, 'adminExport'])->name('transaksi.export');
+
+    Route::prefix('reservasi')->name('reservasi.')->group(function () {
+        Route::get('/', [ReservasiController::class, 'adminIndex'])->name('index');
+        Route::get('/create', [ReservasiController::class, 'adminCreate'])->name('create');
+        Route::post('/', [ReservasiController::class, 'adminStore'])->name('store');
+        Route::get('/{kode_reservasi}', [ReservasiController::class, 'adminShow'])->name('show');
+        Route::get('/{kode_reservasi}/edit', [ReservasiController::class, 'adminEdit'])->name('edit');
+        Route::put('/{kode_reservasi}', [ReservasiController::class, 'adminUpdate'])->name('update');
+        Route::delete('/{kode_reservasi}', [ReservasiController::class, 'adminDestroy'])->name('destroy');
+    });
 });

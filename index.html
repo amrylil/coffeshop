@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Haversine + OpenStreetMap</title>
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        />
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+        <style>
+            #map {
+                height: 500px;
+                margin-bottom: 1rem;
+            }
+            #controls {
+                margin-bottom: 10px;
+            }
+            button {
+                margin-right: 10px;
+                padding: 6px 12px;
+            }
+        </style>
+    </head>
+    <body>
+        <h3>Lokasi Terdekat Berdasarkan Jarak</h3>
+
+        <div id="controls">
+            <button onclick="getCurrentLocation()">📍 Ambil Lokasi Saya</button>
+            <button onclick="enableManualSelection()">
+                🖱️ Pilih Lokasi Manual
+            </button>
+        </div>
+
+        <div id="map"></div>
+        <ul id="lokasi-list"></ul>
+
+        <script>
+            const map = L.map("map").setView([-5.147665, 119.432732], 13);
+            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                maxZoom: 19,
+                attribution: "© OpenStreetMap",
+            }).addTo(map);
+
+            let userMarker = null;
+            let manualMode = false;
+
+            function haversine(lat1, lon1, lat2, lon2) {
+                const R = 6371;
+                const dLat = ((lat2 - lat1) * Math.PI) / 180;
+                const dLon = ((lon2 - lon1) * Math.PI) / 180;
+                const a =
+                    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                    Math.cos((lat1 * Math.PI) / 180) *
+                        Math.cos((lat2 * Math.PI) / 180) *
+                        Math.sin(dLon / 2) *
+                        Math.sin(dLon / 2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                return R * c;
+            }
+
+            function setUserLocation(lat, lon) {
+                if (userMarker) {
+                    map.removeLayer(userMarker);
+                }
+
+                userMarker = L.marker([lat, lon])
+                    .addTo(map)
+                    .bindPopup("Lokasi Anda")
+                    .openPopup();
+
+                map.setView([lat, lon], 13);
+
+                // Hapus list sebelumnya
+                document.getElementById("lokasi-list").innerHTML = "";
+
+                // Fetch lokasi terdekat
+                fetch(
+                    "https://nominatim.openstreetmap.org/search?q=PMI+makassar&format=json"
+                )
+                    .then((res) => res.json())
+                    .then((data) => {
+                        const resultsWithDistance = data.map((item) => {
+                            const lat2 = parseFloat(item.lat);
+                            const lon2 = parseFloat(item.lon);
+                            const distance = haversine(lat, lon, lat2, lon2);
+                            return { ...item, distance };
+                        });
+
+                        resultsWithDistance.sort(
+                            (a, b) => a.distance - b.distance
+                        );
+
+                        resultsWithDistance.forEach((loc) => {
+                            L.marker([loc.lat, loc.lon])
+                                .addTo(map)
+                                .bindPopup(
+                                    `${
+                                        loc.display_name
+                                    }<br>Jarak: ${loc.distance.toFixed(2)} km`
+                                );
+
+                            const li = document.createElement("li");
+                            li.textContent = `(${loc.distance.toFixed(2)} km) ${
+                                loc.display_name
+                            }`;
+                            document
+                                .getElementById("lokasi-list")
+                                .appendChild(li);
+                        });
+                    });
+            }
+
+            function getCurrentLocation() {
+                manualMode = false;
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        setUserLocation(lat, lon);
+                    },
+                    () => {
+                        alert(
+                            "Gagal mengambil lokasi. Pastikan izin lokasi diaktifkan."
+                        );
+                    }
+                );
+            }
+
+            function enableManualSelection() {
+                manualMode = true;
+                alert("Klik di peta untuk memilih lokasi Anda.");
+
+                map.once("click", (e) => {
+                    const { lat, lng } = e.latlng;
+                    setUserLocation(lat, lng);
+                });
+            }
+
+            // Default: Ambil lokasi saat halaman dibuka
+            getCurrentLocation();
+        </script>
+    </body>
+</html>

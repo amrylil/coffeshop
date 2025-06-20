@@ -40,6 +40,7 @@ class AuthController extends Controller
       [
         'email'    => ['required', 'email'],
         'password' => 'required|min:8|max:10',
+        'role'     => 'required|in:customer,admin',
       ],
       [
         'email.required'    => 'Email wajib diisi.',
@@ -47,6 +48,8 @@ class AuthController extends Controller
         'password.required' => 'Password wajib diisi.',
         'password.min'      => 'Password harus memiliki minimal 8 karakter.',
         'password.max'      => 'Password tidak boleh lebih dari 10 karakter.',
+        'role.required'     => 'Role wajib dipilih.',
+        'role.in'           => 'Role tidak valid.',
       ]
     );
 
@@ -56,14 +59,15 @@ class AuthController extends Controller
     // Attempt login menggunakan kolom yang sudah disesuaikan
     if (Auth::attempt([
       'email_222297' => $credentials['email'],
-      'password'     => $credentials['password']
+      'password'     => $credentials['password'],
+      'role_222297'  => $credentials['role']
     ])) {
       // Regenerasi session ID untuk keamanan
       $request->session()->regenerate();
 
       // Menyimpan data tambahan ke session, termasuk role
       session([
-        'user_id'   => Auth::user()->user_id_222297,
+        // 'user_id'   => Auth::user()->email_222297,
         'user_role' => Auth::user()->role_222297,  // Role user, misalnya 'admin' atau 'user'
         'email'     => Auth::user()->email_222297,  // Role user, misalnya 'admin' atau 'user'
         'name'      => Auth::user()->name_222297,
@@ -71,7 +75,7 @@ class AuthController extends Controller
 
       // Redirect berdasarkan peran pengguna
       if (Auth::user()->role_222297 === 'admin') {
-        return redirect()->intended(route('admin.dashboard'))->with('success', 'Login berhasil!');
+        return redirect()->intended(route('admin.menu.index'))->with('success', 'Login berhasil!');
       } else {
         return redirect()->intended('/')->with('success', 'Login berhasil!');
       }
@@ -146,7 +150,7 @@ class AuthController extends Controller
       'phone_222297'         => $request->phone ?? null,
       'birth_date_222297'    => $request->birth_date ?? null,
       'profile_photo_222297' => $profilePhoto,
-      'role_222297'          => 'customer',  // Default role
+      'role_222297'          => 'customer',
     ]);
 
     return redirect('/login');
@@ -219,7 +223,7 @@ class AuthController extends Controller
       $updateData['profile_photo_222297'] = 'profile_photos/' . $fileName;
     }
 
-    $user->update($updateData);
+    User::where('email_222297', $user->email_222297)->update($updateData);
 
     return redirect()->back()->with('success', 'Profile updated successfully.');
   }
@@ -259,7 +263,7 @@ class AuthController extends Controller
     }
 
     // Update password
-    $user->update([
+    User::where('email_222297', $user->email_222297)->update([
       'password_222297' => Hash::make($request->password),
     ]);
 

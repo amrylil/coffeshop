@@ -17,7 +17,7 @@
     </div>
 
     {{-- menu --}}
-    <nav class="space-x-5 flex">
+    <nav class="space-x-5 flex -translate-x-14">
         <a href="/" x-data="{
             scrolled: false,
             isHome: window.location.pathname === '/'
@@ -26,7 +26,7 @@
             class="rounded text-slate-50 hover:text-white {{ Request::is('/') ? 'bg-[#422424] text-white' : 'text-slate-950 ' }} px-4 py-2 hover:bg-[#422424]"
             style="transition: background-color 0.3s;">Beranda</a>
 
-        <a href="/menu" x-data="{
+        <a href="{{ route('menu.index') }}" x-data="{
             scrolled: false,
             isHome: window.location.pathname === '/'
         }"
@@ -35,20 +35,20 @@
             class="rounded hover:bg-[#422424] hover:text-white {{ Request::is('/') ? 'text-slate-50' : (Request::is('menu') ? 'text-white bg-[#422424]' : 'text-slate-950') }} px-4 py-2 "
             style="transition: background-color 0.3s;">Menu</a>
 
-        <a href="/reservasi" x-data="{
+        <a href="{{ route('reservasi.index') }}" x-data="{
             scrolled: false,
             isHome: window.location.pathname === '/'
         }"
             @scroll.window="scrolled = (window.scrollY > window.innerHeight * 0.1)"
             :class="isHome && scrolled ? 'text-slate-950' : 'text-slate-50'"
-            class="rounded hover:bg-[#422424] text-slate-50 hover:text-white {{ Request::is('/') ? 'text-slate-50' : (Request::is('reservasi') ? 'text-white bg-[#422424]' : 'text-slate-950') }}  px-4 py-2 "
+            class="rounded hover:bg-[#422424] text-slate-50 hover:text-white {{ Request::is('/') ? 'text-slate-50' : (Request::is('reservasi.index') ? 'text-white bg-[#422424]' : 'text-slate-950') }}  px-4 py-2 "
             style="transition: background-color 0.3s;">Reservasi</a>
 
-        <a href="/about"
+        <a href="{{ route('about-us') }}"
             class="rounded hover:bg-[#422424] text-gray-900 hover:text-white {{ Request::is('about') ? 'bg-[#422424] text-white' : '' }} px-4 py-2 "
             style="transition: background-color 0.3s;">Tentang Kami</a>
 
-        <a href="/contact-us"
+        <a href="{{ route('kontak') }}"
             class="rounded hover:bg-[#422424] text-gray-900 hover:text-white {{ Request::is('contact-us') ? 'bg-[#422424] text-white' : '' }} px-4 py-2 "
             style="transition: background-color 0.3s;">Kontak</a>
     </nav>
@@ -58,15 +58,17 @@
         {{-- Jika pengguna sudah login --}}
         <div class="flex gap-2 justify-center items-center">
             <!-- Cart Button -->
-            <div @click="cartOpen = !cartOpen" class="cursor-pointer">
+            <div class="cursor-pointer">
                 <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
-                    <div class="indicator">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                        </svg>
-                    </div>
+                    <a href="{{ route('keranjang.index') }}">
+                        <div class="indicator">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                        </div>
+                    </a>
                 </div>
             </div>
 
@@ -90,39 +92,8 @@
                         </button>
                     </div>
 
-                    <!-- Cart Items -->
-                    <div class="space-y-4">
-                        <!-- Cart item examples here -->
-                        <div class="flex items-center justify-between border-b pb-4">
-                            <div class="flex items-center space-x-3">
-                                <img src="{{ asset('images/produk.png') }}" alt="Product"
-                                    class="w-16 h-16 object-cover rounded">
-                                <div>
-                                    <h3 class="font-medium">Cappuccino</h3>
-                                    <p class="text-sm text-gray-500">Rp 25.000</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center space-x-2">
-                                <button
-                                    class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center">-</button>
-                                <span>1</span>
-                                <button
-                                    class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center">+</button>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- Cart Total -->
-                    <div class="mt-6 border-t pt-4">
-                        <div class="flex justify-between mb-2">
-                            <span>Subtotal</span>
-                            <span>Rp 25.000</span>
-                        </div>
-                        <button
-                            class="w-full bg-[#422424] text-white py-3 rounded-lg mt-4 hover:bg-[#593131] transition-colors">
-                            Checkout
-                        </button>
-                    </div>
+
                 </div>
             </div>
 
@@ -165,67 +136,80 @@
                         <p class="text-gray-500 text-sm">{{ session('email') }}</p>
                     </div>
 
-                    <div class="w-full max-w-md h-[60vh] bg-gray-100 rounded-t-3xl shadow-lg p-6">
-                        <h3 class="text-gray-700 font-semibold mb-2">Preferences</h3>
-                        <a href="#" class="flex items-center justify-between py-3 border-b border-gray-200">
-                            <div class="flex items-center space-x-3">
-                                <svg class="group-hover:stroke-black stroke-black" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" height="20" width="20">
-                                    <path d="M12 20h9" />
-                                    <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4Z" />
+                    <div
+                        class="w-full max-w-md h-[60vh] bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl p-6 border border-white/20">
+                        <a href="{{ route('user.transaksi.index') }}" class="block">
+                            <div
+                                class="flex items-center justify-between py-4 px-4 rounded-2xl menu-item border-b border-gray-100">
+                                <div class="flex font-semibold items-center space-x-3 text-slate-800 menu-text">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                                        <circle cx="9" cy="7" r="4" />
+                                        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                    </svg>
+                                    <span class="ml-1">Pesanan Saya</span>
+                                </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
+                                    <path d="M9 18l6-6-6-6" />
                                 </svg>
-                                <p class="text-gray-700">Profile Saya</p>
                             </div>
                         </a>
 
-                        <a href="#" class="flex items-center justify-between py-3 border-b border-gray-200">
-                            <div class="flex items-center space-x-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                    stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                    height="16" width="16">
-                                    <path d="M6 6h15l-1.5 9H7.5L6 6z" />
-                                    <circle cx="9" cy="20" r="1" />
-                                    <circle cx="18" cy="20" r="1" />
-                                    <path d="M6 6l-2 0" />
+                        <a href="{{ route('reservasi.history') }}" class="block">
+                            <div
+                                class="flex items-center justify-between py-4 px-4 rounded-2xl menu-item border-b border-gray-100">
+                                <div class="flex font-semibold items-center space-x-3 text-slate-800 menu-text">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="4" width="18" height="18" rx="2"
+                                            ry="2" />
+                                        <line x1="16" y1="2" x2="16" y2="6" />
+                                        <line x1="8" y1="2" x2="8" y2="6" />
+                                        <line x1="3" y1="10" x2="21" y2="10" />
+                                    </svg>
+                                    <span class="ml-1">Riwayat Reservasi</span>
+                                </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
+                                    <path d="M9 18l6-6-6-6" />
                                 </svg>
-                                <p class="text-gray-700">Pesanan Saya</p>
                             </div>
                         </a>
-                        <a href="#" class="flex items-center justify-between py-3 border-b border-gray-200">
-                            <div class="flex items-center space-x-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="-0.5 -0.5 16 16" fill="none"
-                                    stroke="#000000" stroke-linecap="round" stroke-linejoin="round"
-                                    id="History--Streamline-Tabler" height="16" width="16">
-                                    <desc>History Streamline Icon: https://streamlinehq.com</desc>
-                                    <path d="m7.5 5 0 2.5 1.25 1.25" stroke-width="1"></path>
-                                    <path d="M1.90625 6.875a5.625 5.625 0 1 1 0.3125 2.5m-0.3125 3.125v-3.125h3.125"
-                                        stroke-width="1"></path>
+
+                        <a href="{{ route('keranjang.index') }}" class="block">
+                            <div
+                                class="flex items-center justify-between py-4 px-4 rounded-2xl menu-item border-b border-gray-100">
+                                <div class="flex font-semibold items-center space-x-3 text-slate-800 menu-text">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="8" cy="21" r="1" />
+                                        <circle cx="19" cy="21" r="1" />
+                                        <path
+                                            d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+                                    </svg>
+                                    <span class="ml-1">Keranjang</span>
+                                </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
+                                    <path d="M9 18l6-6-6-6" />
                                 </svg>
-                                <p class="text-gray-700">Riwayat Transaksi</p>
-                            </div>
-                        </a>
-                        <a href="#" class="flex items-center justify-between py-3 border-b border-gray-200">
-                            <div class="flex items-center space-x-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="-0.5 -0.5 16 16" fill="none"
-                                    stroke="#000000" stroke-linecap="round" stroke-linejoin="round"
-                                    id="Shopping-Cart--Streamline-Tabler" height="16" width="16">
-                                    <desc>Shopping Cart Streamline Icon: https://streamlinehq.com</desc>
-                                    <path d="M2.5 11.875a1.25 1.25 0 1 0 2.5 0 1.25 1.25 0 1 0 -2.5 0"
-                                        stroke-width="1"></path>
-                                    <path d="M9.375 11.875a1.25 1.25 0 1 0 2.5 0 1.25 1.25 0 1 0 -2.5 0"
-                                        stroke-width="1"></path>
-                                    <path d="M10.625 10.625H3.75V1.875H2.5" stroke-width="1"></path>
-                                    <path d="m3.75 3.125 8.75 0.625 -0.625 4.375H3.75" stroke-width="1"></path>
-                                </svg>
-                                <p class="text-gray-700">Keranjang</p>
                             </div>
                         </a>
 
                         <div class="flex items-center justify-between py-3">
                             <div class="flex items-center space-x-3 text-red-600">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-0.5 -0.5 16 16" fill="none"
-                                    stroke="#dc2626" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke="
+#dc2626" stroke-linecap="round" stroke-linejoin="round"
                                     id="Logout-2--Streamline-Tabler" height="16" width="16">
                                     <desc>Logout 2 Streamline Icon: https://streamlinehq.com</desc>
                                     <path

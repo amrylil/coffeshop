@@ -92,14 +92,14 @@
             @foreach ($latestMenus as $menu)
                 <div class="product-card fade-in">
                     <div class="bg-white rounded-xl shadow-md text-left text-[#3e1f1f] relative">
-                        <a href="{{ route('menu.show', $menu->kode_menu_222297) }}">
+                        <a href="#">
                             <div class="p-4 w-full h-72">
                                 <span class="absolute top-2 left-4 bg-[#5e3c3c] text-white px-2 py-1 text-xs rounded">
                                     {{ $menu->kategori->nama_kategori_222297 }}
                                 </span>
                                 @if ($menu->path_img_222297)
-                                    <img src="{{ asset($menu->path_img_222297) }}" alt="{{ $menu->nama_222297 }}"
-                                        class="w-full h-full scale-110 object-cover">
+                                    <img src="{{ asset('images/' . $menu->path_img_222297) }}"
+                                        alt="{{ $menu->nama_222297 }}" class="w-full h-full scale-110 object-cover">
                                 @else
                                     <img src="{{ asset('images/coffe.png') }}" alt="{{ $menu->nama_222297 }}"
                                         class="w-full h-full scale-110 object-cover">
@@ -146,7 +146,7 @@
                     Hindari antrian dan pastikan kenyamananmu. Reservasi meja secara online hanya dengan beberapa klik.
                     Waktu berharga kamu tak akan terbuang sia-sia.
                 </p>
-                <a href="/reservasi"
+                <a href="#"
                     class="inline-block bg-[#3C1E1E] text-white px-6 py-3 rounded-full font-medium hover:bg-[#2a1616] transition">
                     Reservasi Sekarang
                 </a>

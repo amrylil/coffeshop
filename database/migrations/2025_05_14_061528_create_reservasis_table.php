@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->date('tanggal_reservasi_222297')->nullable();
             $table->time('jam_reservasi_222297')->nullable();
             $table->integer('jumlah_orang_222297')->nullable();
+            $table->string('email_222297', 100)->nullable();
             $table->string('nomor_meja_222297', 10)->nullable();
             $table->text('catatan_222297')->nullable();
             $table->timestamp('created_at_222297')->nullable();
@@ -26,6 +27,10 @@ return new class extends Migration {
                 ->foreign('nomor_meja_222297')
                 ->references('nomor_meja_222297')
                 ->on('meja_222297');
+            $table
+                ->foreign('email_222297')
+                ->references('email_222297')
+                ->on('users_222297');
         });
     }
 

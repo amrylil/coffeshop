@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="bg-white min-h-screen py-8 px-4 sm:px-6 lg:px-8 pt-20">
-        <div class="max-w-4xl mx-auto">
+        <div class=" mx-auto">
             <!-- Header Section -->
             <div class="mb-6">
                 <h1 class="text-3xl font-bold text-[#6F4E37]">Add New Menu Item</h1>
@@ -30,6 +30,12 @@
 
 
                         <!-- Menu Name -->
+                        <div class="col-span-1">
+                            <label for="kode_menu_222297" class="block text-sm font-medium text-[#6F4E37]">ID Menu</label>
+                            <input type="text" name="kode_menu_222297" id="kode_menu_222297"
+                                class="mt-1 p-2 focus:ring-[#6F4E37] focus:border-[#6F4E37] block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                value="{{ old('kode_menu_222297') }}" required>
+                        </div>
                         <div class="col-span-1">
                             <label for="nama_222297" class="block text-sm font-medium text-[#6F4E37]">Menu Name</label>
                             <input type="text" name="nama_222297" id="nama_222297"
