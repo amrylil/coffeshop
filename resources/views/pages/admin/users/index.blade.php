@@ -11,6 +11,17 @@
                     Add New User
                 </a>
             </div>
+            @if (session('success'))
+                <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-100" role="alert">
+                    <span class="font-medium">Sukses!</span> {{ session('success') }}
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-100" role="alert">
+                    <span class="font-medium">Gagal!</span> {{ session('error') }}
+                </div>
+            @endif
 
             <!-- Flash Messages -->
             @if (session('success'))
@@ -54,7 +65,7 @@
                                 <tr class="hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         @if ($user->profile_photo_222297)
-                                            <img src="{{ asset('storage/profile_photos/' . $user->profile_photo_222297) }}"
+                                            <img src="{{ asset('storage/' . $user->profile_photo_222297) }}"
                                                 alt="{{ $user->name_222297 }}" class="h-16 w-16 object-cover rounded">
                                         @else
                                             <div class="h-16 w-16 bg-gray-200 flex items-center justify-center rounded">
