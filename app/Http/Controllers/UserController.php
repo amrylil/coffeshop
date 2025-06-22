@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -43,7 +46,7 @@ class UserController extends Controller
       'email_222297'         => 'required|email|unique:users_222297',
       'name_222297'          => 'required|string|max:255',
       'password_222297'      => 'required|string|min:8',
-      'gender_222297'        => 'required|in:male,female',
+      'gender_222297'        => 'nullable|in:male,female',
       'role_222297'          => 'required|string',
       'address_222297'       => 'nullable|string',
       'phone_222297'         => 'nullable|string',
@@ -63,10 +66,8 @@ class UserController extends Controller
 
     // Handle profile photo upload if exists
     if ($request->hasFile('profile_photo_222297')) {
-      $file     = $request->file('profile_photo_222297');
-      $filename = time() . '.' . $file->getClientOriginalExtension();
-      $file->storeAs('public/profile_photos', $filename);
-      $userData['profile_photo_222297'] = $filename;
+      $path                             = $request->file('profile_photo_222297')->store('profile_photos', 'public');
+      $userData['profile_photo_222297'] = $path;
     }
 
     User::create($userData);
@@ -112,9 +113,10 @@ class UserController extends Controller
     $user = User::findOrFail($id);
 
     $validator = Validator::make($request->all(), [
-      'email_222297'         => 'required|email|unique:users_222297,email_222297,' . $id . ',email_222297',
+      // [PERBAIKAN] Menggunakan Rule::unique untuk kemudahan membaca dan keamanan
+      'email_222297'         => ['required', 'email', Rule::unique('users_222297', 'email_222297')->ignore($user)],
       'name_222297'          => 'required|string|max:255',
-      'gender_222297'        => 'required|in:male,female',
+      'gender_222297'        => 'nullable|in:male,female',
       'role_222297'          => 'required|string',
       'address_222297'       => 'nullable|string',
       'phone_222297'         => 'nullable|string',
@@ -129,19 +131,26 @@ class UserController extends Controller
         ->withInput();
     }
 
-    $userData = $request->except(['_token', '_method', 'password_222297']);
+    // Ambil semua data kecuali yang tidak perlu diupdate secara langsung
+    $userData = $request->except(['_token', '_method', 'password_222297', 'profile_photo_222297']);
 
-    // Update password only if provided
+    // Update password hanya jika diisi
     if ($request->filled('password_222297')) {
       $userData['password_222297'] = Hash::make($request->password_222297);
     }
 
-    // Handle profile photo upload if exists
+    // [PERBAIKAN & LOGIKA BARU] Handle upload foto profil
     if ($request->hasFile('profile_photo_222297')) {
-      $file     = $request->file('profile_photo_222297');
-      $filename = time() . '.' . $file->getClientOriginalExtension();
-      $file->storeAs('public/profile_photos', $filename);
-      $userData['profile_photo_222297'] = $filename;
+      // 1. Hapus foto lama jika ada
+      if ($user->profile_photo_222297) {
+        Storage::disk('public')->delete($user->profile_photo_222297);
+      }
+
+      // 2. Simpan foto baru dan dapatkan path-nya
+      $path = $request->file('profile_photo_222297')->store('profile_photos', 'public');
+
+      // 3. Masukkan path foto baru ke data yang akan diupdate
+      $userData['profile_photo_222297'] = $path;
     }
 
     $user->update($userData);
@@ -157,14 +166,33 @@ class UserController extends Controller
    * @param  string  $id
    * @return \Illuminate\Http\Response
    */
-  public function destroy($id)
+  public function destroy($email): RedirectResponse
   {
-    $user = User::findOrFail($id);
+    // Cari user berdasarkan email sebagai primary key
+    $user = User::findOrFail($email);
+
+    // -- VALIDASI SEBELUM MENGHAPUS --
+    // Cek apakah user masih punya item di keranjang ATAU sudah pernah bertransaksi
+    if ($user->keranjang()->exists() || $user->transaksi()->exists()) {
+      // Jika ya, jangan hapus. Redirect kembali dengan pesan error.
+      return redirect()
+        ->back()
+        ->with('error', 'Gagal menghapus! User ini masih memiliki riwayat di keranjang atau transaksi.');
+    }
+
+    // -- JIKA VALIDASI LOLOS, LANJUTKAN HAPUS --
+
+    // (Opsional) Hapus foto profil dari storage jika ada
+    if ($user->profile_photo_222297) {
+      Storage::disk('public')->delete($user->profile_photo_222297);
+    }
+
     $user->delete();
 
+    // Redirect ke halaman index dengan pesan sukses
     return redirect()
       ->route('admin.users.index')
-      ->with('success', 'User deleted successfully');
+      ->with('success', 'User berhasil dihapus.');
   }
 
   /**

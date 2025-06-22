@@ -118,7 +118,7 @@
                             @if ($user->profile_photo_222297)
                                 <div class="mt-2">
                                     <p class="text-xs text-gray-500 mb-1">Current image:</p>
-                                    <img src="{{ asset('storage/profile_photos/' . $user->profile_photo_222297) }}"
+                                    <img src="{{ asset('storage/' . $user->profile_photo_222297) }}"
                                         alt="{{ $user->name_222297 }}"
                                         class="h-24 w-24 object-cover rounded border border-gray-200">
                                 </div>

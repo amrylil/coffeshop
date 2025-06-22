@@ -18,6 +18,18 @@
                 </div>
             </div>
 
+            @if (session('success'))
+                <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-100" role="alert">
+                    <span class="font-medium">Sukses!</span> {{ session('success') }}
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-100" role="alert">
+                    <span class="font-medium">Gagal!</span> {{ session('error') }}
+                </div>
+            @endif
+
             <!-- User Details -->
             <div class="bg-white shadow overflow-hidden rounded-lg">
                 <div class="px-4 py-5 sm:p-6">
@@ -26,7 +38,7 @@
                         <div class="col-span-1 flex flex-col items-center">
                             @if ($user->profile_photo_222297)
                                 <div class="w-full h-64 bg-gray-100 rounded-lg overflow-hidden">
-                                    <img src="{{ asset('storage/profile_photos/' . $user->profile_photo_222297) }}"
+                                    <img src="{{ asset('storage/' . $user->profile_photo_222297) }}"
                                         alt="{{ $user->name_222297 }}" class="w-full h-full object-cover">
                                 </div>
                             @else
