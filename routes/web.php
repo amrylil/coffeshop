@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\MejaController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReservasiController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\UserController;
@@ -63,6 +64,9 @@ Route::middleware('auth')->group(function () {
         Route::patch('/{id}/cancel', [TransaksiController::class, 'userCancel'])->name('cancel');
         Route::get('/{kode_transaksi}', [TransaksiController::class, 'userDetail'])->name('show');
     });
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
     // Route::apiResource('reservasi', ReservasiController::class);
 
