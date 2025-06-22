@@ -100,13 +100,26 @@
             <!-- Profile Drawer Button -->
             <div @click="profileDrawerOpen = !profileDrawerOpen" class="cursor-pointer">
                 <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
-                    <div
-                        class="relative w-10 h-10 overflow-hidden  rounded-full border-2 border-white bg-[#422424] shadow-lg flex items-center justify-center">
-                        <span class="text-white font-bold text-lg">
-                            {{ strtoupper(substr(Auth::user()->name_222297, 0, 1)) }}{{ strpos(Auth::user()->name_222297, ' ') ? strtoupper(substr(Auth::user()->name_222297, strpos(Auth::user()->name_222297, ' ') + 1, 1)) : '' }}
-                        </span>
-                        <div class="absolute inset-0 bg-white opacity-10 rounded-full mix-blend-overlay"></div>
-                    </div>
+
+                    {{-- Cek apakah user memiliki foto profil --}}
+                    @if (Auth::user()->profile_photo_222297)
+                        {{-- JIKA ADA: Tampilkan gambar dari storage --}}
+                        <div class="w-10 rounded-full">
+                            <img alt="{{ Auth::user()->name_222297 }}"
+                                src="{{ asset('storage/' . Auth::user()->profile_photo_222297) }}" />
+                        </div>
+                    @else
+                        {{-- JIKA TIDAK ADA: Tampilkan inisial nama (kode asli Anda) --}}
+                        <div
+                            class="relative w-10 h-10 overflow-hidden rounded-full border-2 border-white bg-[#422424] shadow-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">
+                                {{-- Logika untuk mendapatkan 1 atau 2 huruf inisial --}}
+                                {{ strtoupper(substr(Auth::user()->name_222297, 0, 1)) }}{{ strpos(Auth::user()->name_222297, ' ') ? strtoupper(substr(Auth::user()->name_222297, strpos(Auth::user()->name_222297, ' ') + 1, 1)) : '' }}
+                            </span>
+                            <div class="absolute inset-0 bg-white opacity-10 rounded-full mix-blend-overlay"></div>
+                        </div>
+                    @endif
+
                 </div>
             </div>
 
@@ -125,17 +138,28 @@
                     <!-- Profile Section -->
                     <div class="rounded-lg w-full max-w-md p-6 text-center bg-white shadow-md">
                         <div class="flex justify-center">
-                            <div class="w-32 h-32 rounded-full border-4 border-green-600 flex items-center justify-center"
-                                style="background-color: #422424;">
-                                <span class="text-white text-4xl font-bold">
-                                    {{ strtoupper(substr(session('name'), 0, 1)) }}{{ strpos(session('name'), ' ') ? strtoupper(substr(session('name'), strpos(session('name'), ' ') + 1, 1)) : '' }}
-                                </span>
-                            </div>
+
+                            {{-- Cek apakah user yang login memiliki foto profil --}}
+                            @if (Auth::user() && Auth::user()->profile_photo_222297)
+                                {{-- JIKA ADA: Tampilkan gambar profil --}}
+                                <img class="w-32 h-32 rounded-full border-4 border-green-600 object-cover"
+                                    src="{{ asset('storage/' . Auth::user()->profile_photo_222297) }}"
+                                    alt="{{ Auth::user()->name_222297 }}">
+                            @else
+                                {{-- JIKA TIDAK ADA: Tampilkan inisial nama (kode asli Anda) --}}
+                                <div class="w-32 h-32 rounded-full border-4 border-green-600 flex items-center justify-center"
+                                    style="background-color: #422424;">
+                                    <span class="text-white text-4xl font-bold">
+                                        {{ strtoupper(substr(session('name'), 0, 1)) }}{{ strpos(session('name'), ' ') ? strtoupper(substr(session('name'), strpos(session('name'), ' ') + 1, 1)) : '' }}
+                                    </span>
+                                </div>
+                            @endif
+
                         </div>
+
                         <h2 class="mt-4 text-2xl font-semibold text-gray-800">{{ session('name') }}</h2>
                         <p class="text-gray-500 text-sm">{{ session('email') }}</p>
                     </div>
-
                     <div
                         class="w-full max-w-md h-[60vh] bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl p-6 border border-white/20">
                         <a href="{{ route('user.transaksi.index') }}" class="block">
@@ -151,6 +175,27 @@
                                         <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                                     </svg>
                                     <span class="ml-1">Pesanan Saya</span>
+                                </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
+                                    <path d="M9 18l6-6-6-6" />
+                                </svg>
+                            </div>
+                        </a>
+                        <a href="{{ route('profile.edit') }}" class="block">
+                            <div
+                                class="flex items-center justify-between py-4 px-4 rounded-2xl menu-item border-b border-gray-100">
+                                <div class="flex font-semibold items-center space-x-3 text-slate-800 menu-text">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                                        <circle cx="9" cy="7" r="4" />
+                                        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                    </svg>
+                                    <span class="ml-1">Profile Saya</span>
                                 </div>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
