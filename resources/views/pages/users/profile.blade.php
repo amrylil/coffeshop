@@ -25,6 +25,16 @@
                     @csrf
                     @method('PATCH')
 
+                    @if ($errors->any())
+                        <div class="mb-4 p-4 bg-red-100 text-red-700 border-l-4 border-red-500 rounded-r-lg">
+                            <strong>Whoops! Ada yang salah.</strong>
+                            <ul class="mt-2 list-disc list-inside text-sm">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <!-- Profile Photo Upload -->
                     <div class="mb-6 text-center">
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Change Photo</label>

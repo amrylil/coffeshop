@@ -25,13 +25,14 @@ class ProfileController extends Controller
   {
     // -- Kode di bawah ini tidak akan berjalan jika dd() di atas aktif --
     // -- Hapus atau beri komentar pada dd() di atas untuk melanjutkan ke Log --
-
+    $request->validate([
+      'profile_photo_222297' => 'required|image|max:2048',
+    ]);
     Log::info('Memulai proses update profil untuk user: ' . Auth::id());
 
     $user = Auth::user();
 
     $validator = Validator::make($request->all(), [
-      'email_222297'         => ['required', 'email', Rule::unique('users_222297', 'email_222297')->ignore($user)],
       'name_222297'          => 'required|string|max:255',
       'gender_222297'        => 'nullable|in:male,female',
       'address_222297'       => 'nullable|string',
