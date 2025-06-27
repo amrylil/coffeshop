@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\KategoriProduk;
 use App\Models\Menu;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as RoutingController;
 use Illuminate\Support\Facades\Storage;
@@ -152,15 +153,33 @@ class MenuController extends RoutingController
      */
     public function destroy($id)
     {
-        $menu = Menu::findOrFail($id);
+        try {
+            $menu = Menu::findOrFail($id);
 
-        // Delete menu image
-        if ($menu->path_img_222297) {
-            Storage::delete('public/' . $menu->path_img_222297);
+            // Hapus gambar dari folder public jika ada
+            // Catatan: Logika upload Anda menggunakan public_path(), jadi lebih konsisten menggunakan unlink() untuk menghapus.
+            if ($menu->path_img_222297) {
+                $imagePath = public_path('images/' . $menu->path_img_222297);
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+            }
+
+            $menu->delete();
+
+            return redirect()->route('admin.menu.index')->with('success', 'Menu deleted successfully!');
+        } catch (QueryException $e) {
+            // Cek kode error untuk foreign key constraint violation (kode '23000' untuk integrity constraint)
+            if ($e->getCode() === '23000') {
+                return redirect()
+                    ->route('admin.menu.index')
+                    ->with('error', 'Gagal menghapus menu. Menu ini sudah digunakan dalam transaksi.');
+            }
+
+            // Untuk error database lainnya
+            return redirect()
+                ->route('admin.menu.index')
+                ->with('error', 'Terjadi kesalahan pada database saat menghapus menu.');
         }
-
-        $menu->delete();
-
-        return redirect()->route('admin.menu.index')->with('success', 'Menu deleted successfully!');
     }
 }
