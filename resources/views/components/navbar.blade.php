@@ -104,9 +104,10 @@
                     {{-- Cek apakah user memiliki foto profil --}}
                     @if (Auth::user()->profile_photo_222297)
                         {{-- JIKA ADA: Tampilkan gambar dari storage --}}
-                        <div class="w-10 rounded-full">
+                        <div class="w-10 h-10  rounded-full overflow-hidden border border-green-600">
                             <img alt="{{ Auth::user()->name_222297 }}"
-                                src="{{ asset('storage/' . Auth::user()->profile_photo_222297) }}" />
+                                src="{{ asset('storage/' . Auth::user()->profile_photo_222297) }}"
+                                class="w-full h-full object-cover" />
                         </div>
                     @else
                         {{-- JIKA TIDAK ADA: Tampilkan inisial nama (kode asli Anda) --}}

@@ -12,10 +12,18 @@
                 </a>
             </div>
 
-            <!-- Flash Messages -->
+
+
             @if (session('success'))
                 <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded">
                     <p>{{ session('success') }}</p>
+                </div>
+            @endif
+
+            {{-- TAMBAHKAN BLOK INI UNTUK MENAMPILKAN ERROR --}}
+            @if (session('error'))
+                <div class="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded">
+                    <p>{{ session('error') }}</p>
                 </div>
             @endif
 
