@@ -61,9 +61,9 @@
                             @forelse($menus as $menu)
                                 <tr class="hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        @if ($menu->path_img_222297)
-                                            <img src="{{ asset('images/' . $menu->path_img_222297) }}"
-                                                alt="{{ $menu->nama_222297 }}" class="h-16 w-16 object-cover rounded">
+                                        @if ($menu->path_img)
+                                            <img src="{{ asset('images/' . $menu->path_img) }}" alt="{{ $menu->nama }}"
+                                                class="h-16 w-16 object-cover rounded">
                                         @else
                                             <div class="h-16 w-16 bg-gray-200 flex items-center justify-center rounded">
                                                 <span class="text-gray-400">No Image</span>
@@ -71,31 +71,31 @@
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {{ $menu->kode_menu_222297 }}
+                                        {{ $menu->kode_menu }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-[#6F4E37]">
-                                        {{ $menu->nama_222297 }}
+                                        {{ $menu->nama }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {{ $menu->kategori->nama_222297 ?? 'N/A' }}
+                                        {{ $menu->kategori->nama ?? 'N/A' }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        Rp {{ number_format($menu->harga_222297, 0, ',', '.') }}
+                                        Rp {{ number_format($menu->harga, 0, ',', '.') }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {{ $menu->jumlah_222297 }}
+                                        {{ $menu->jumlah }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-center">
                                         <div class="flex items-center justify-center space-x-2">
-                                            <a href="{{ route('admin.menu.show', $menu->kode_menu_222297) }}"
+                                            <a href="{{ route('admin.menu.show', $menu->kode_menu) }}"
                                                 class="text-blue-600 hover:text-blue-800">
                                                 <span class="px-2 py-1 bg-blue-100 rounded-md">View</span>
                                             </a>
-                                            <a href="{{ route('admin.menu.edit', $menu->kode_menu_222297) }}"
+                                            <a href="{{ route('admin.menu.edit', $menu->kode_menu) }}"
                                                 class="text-[#6F4E37] hover:text-[#5D4037]">
                                                 <span class="px-2 py-1 bg-[#F5E6DD] rounded-md">Edit</span>
                                             </a>
-                                            <form action="{{ route('admin.menu.destroy', $menu->kode_menu_222297) }}"
+                                            <form action="{{ route('admin.menu.destroy', $menu->kode_menu) }}"
                                                 method="POST"
                                                 onsubmit="return confirm('Are you sure you want to delete this menu?');">
                                                 @csrf

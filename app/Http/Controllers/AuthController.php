@@ -58,23 +58,23 @@ class AuthController extends Controller
 
     // Attempt login menggunakan kolom yang sudah disesuaikan
     if (Auth::attempt([
-      'email_222297' => $credentials['email'],
-      'password'     => $credentials['password'],
-      'role_222297'  => $credentials['role']
+      'email'    => $credentials['email'],
+      'password' => $credentials['password'],
+      'role'     => $credentials['role']
     ])) {
       // Regenerasi session ID untuk keamanan
       $request->session()->regenerate();
 
       // Menyimpan data tambahan ke session, termasuk role
       session([
-        // 'user_id'   => Auth::user()->email_222297,
-        'user_role' => Auth::user()->role_222297,  // Role user, misalnya 'admin' atau 'user'
-        'email'     => Auth::user()->email_222297,  // Role user, misalnya 'admin' atau 'user'
-        'name'      => Auth::user()->name_222297,
+        // 'user_id'   => Auth::user()->email,
+        'user_role' => Auth::user()->role,  // Role user, misalnya 'admin' atau 'user'
+        'email'     => Auth::user()->email,  // Role user, misalnya 'admin' atau 'user'
+        'name'      => Auth::user()->name,
       ]);
 
       // Redirect berdasarkan peran pengguna
-      if (Auth::user()->role_222297 === 'admin') {
+      if (Auth::user()->role === 'admin') {
         return redirect()->intended(route('admin.menu.index'))->with('success', 'Login berhasil!');
       } else {
         return redirect()->intended('/')->with('success', 'Login berhasil!');
@@ -115,7 +115,7 @@ class AuthController extends Controller
   {
     $validator = Validator::make($request->all(), [
       'name'          => 'required|string|max:255',
-      'email'         => 'required|string|email|max:255|unique:users_222297,email_222297',
+      'email'         => 'required|string|email|max:255|unique:users,email',
       'password'      => 'required|string|min:8|confirmed',
       'gender'        => 'nullable|string',
       'phone'         => 'nullable|string',
@@ -142,15 +142,15 @@ class AuthController extends Controller
 
     // Create user
     $user = User::create([
-      'name_222297'          => $request->name,
-      'email_222297'         => $request->email,
-      'password_222297'      => Hash::make($request->password),
-      'gender_222297'        => $request->gender ?? null,
-      'address_222297'       => $request->address ?? null,
-      'phone_222297'         => $request->phone ?? null,
-      'birth_date_222297'    => $request->birth_date ?? null,
-      'profile_photo_222297' => $profilePhoto,
-      'role_222297'          => 'customer',
+      'name'          => $request->name,
+      'email'         => $request->email,
+      'password'      => Hash::make($request->password),
+      'gender'        => $request->gender ?? null,
+      'address'       => $request->address ?? null,
+      'phone'         => $request->phone ?? null,
+      'birth_date'    => $request->birth_date ?? null,
+      'profile_photo' => $profilePhoto,
+      'role'          => 'customer',
     ]);
 
     return redirect('/login');
@@ -209,10 +209,10 @@ class AuthController extends Controller
 
     // Update profile data
     $updateData = [
-      'name_222297'       => $request->name,
-      'address_222297'    => $request->address,
-      'phone_222297'      => $request->phone,
-      'birth_date_222297' => $request->birth_date,
+      'name'       => $request->name,
+      'address'    => $request->address,
+      'phone'      => $request->phone,
+      'birth_date' => $request->birth_date,
     ];
 
     // Handle profile photo upload
@@ -220,10 +220,10 @@ class AuthController extends Controller
       $file     = $request->file('profile_photo');
       $fileName = time() . '_' . $file->getClientOriginalName();
       $file->storeAs('public/profile_photos', $fileName);
-      $updateData['profile_photo_222297'] = 'profile_photos/' . $fileName;
+      $updateData['profile_photo'] = 'profile_photos/' . $fileName;
     }
 
-    User::where('email_222297', $user->email_222297)->update($updateData);
+    User::where('email', $user->email)->update($updateData);
 
     return redirect()->back()->with('success', 'Profile updated successfully.');
   }
@@ -258,13 +258,13 @@ class AuthController extends Controller
     $user = Auth::user();
 
     // Check current password
-    if (!Hash::check($request->current_password, $user->password_222297)) {
+    if (!Hash::check($request->current_password, $user->password)) {
       return redirect()->back()->withErrors(['current_password' => 'The current password is incorrect.']);
     }
 
     // Update password
-    User::where('email_222297', $user->email_222297)->update([
-      'password_222297' => Hash::make($request->password),
+    User::where('email', $user->email)->update([
+      'password' => Hash::make($request->password),
     ]);
 
     return redirect()->back()->with('success', 'Password changed successfully.');

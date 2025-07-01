@@ -10,23 +10,23 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('item_keranjang_222297', function (Blueprint $table) {
-            $table->string('kode_item_222297', 100)->primary();
-            $table->string('kode_keranjang_222297', 100)->nullable();
-            $table->string('kode_menu_222297', 100)->nullable();
-            $table->integer('quantity_222297')->nullable();
-            $table->decimal('price_222297', 10, 2)->nullable();
-            $table->timestamp('created_at_222297')->nullable();
-            $table->timestamp('updated_at_222297')->nullable();
+        Schema::create('item_keranjang', function (Blueprint $table) {
+            $table->string('kode_item', 100)->primary();
+            $table->string('kode_keranjang', 100)->nullable();
+            $table->string('kode_menu', 100)->nullable();
+            $table->integer('quantity')->nullable();
+            $table->decimal('price', 10, 2)->nullable();
+            $table->timestamp('created_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
 
             $table
-                ->foreign('kode_keranjang_222297')
-                ->references('kode_keranjang_222297')
-                ->on('keranjang_222297');
+                ->foreign('kode_keranjang')
+                ->references('kode_keranjang')
+                ->on('keranjang');
             $table
-                ->foreign('kode_menu_222297')
-                ->references('kode_menu_222297')
-                ->on('menu_222297');
+                ->foreign('kode_menu')
+                ->references('kode_menu')
+                ->on('menu');
         });
     }
 
@@ -35,6 +35,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('item_keranjang_222297');
+        Schema::dropIfExists('item_keranjang');
     }
 };

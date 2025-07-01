@@ -8,7 +8,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <h1 class="text-2xl font-bold text-[#6F4E37] mb-2">Detail Reservasi</h1>
-                        <p class="text-gray-600">Kode Reservasi: {{ $reservasi->kode_reservasi_222297 }}</p>
+                        <p class="text-gray-600">Kode Reservasi: {{ $reservasi->kode_reservasi }}</p>
                     </div>
                     <div class="text-right">
                         <span
@@ -29,11 +29,11 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-1">
                             <label class="text-sm font-medium text-gray-500 uppercase tracking-wide">Nama Pelanggan</label>
-                            <p class="text-lg text-gray-900 font-medium">{{ $reservasi->nama_pelanggan_222297 }}</p>
+                            <p class="text-lg text-gray-900 font-medium">{{ $reservasi->nama_pelanggan }}</p>
                         </div>
                         <div class="space-y-1">
                             <label class="text-sm font-medium text-gray-500 uppercase tracking-wide">No Telepon</label>
-                            <p class="text-lg text-gray-900">{{ $reservasi->no_telepon_222297 }}</p>
+                            <p class="text-lg text-gray-900">{{ $reservasi->no_telepon }}</p>
                         </div>
                     </div>
                 </div>
@@ -47,15 +47,15 @@
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div class="space-y-1">
                                 <label class="text-sm font-medium text-gray-500 uppercase tracking-wide">Tanggal</label>
-                                <p class="text-lg text-gray-900 font-medium">{{ $reservasi->tanggal_reservasi_222297 }}</p>
+                                <p class="text-lg text-gray-900 font-medium">{{ $reservasi->tanggal_reservasi }}</p>
                             </div>
                             <div class="space-y-1">
                                 <label class="text-sm font-medium text-gray-500 uppercase tracking-wide">Jam</label>
-                                <p class="text-lg text-gray-900 font-medium">{{ $reservasi->jam_reservasi_222297 }}</p>
+                                <p class="text-lg text-gray-900 font-medium">{{ $reservasi->jam_reservasi }}</p>
                             </div>
                             <div class="space-y-1">
                                 <label class="text-sm font-medium text-gray-500 uppercase tracking-wide">Nomor Meja</label>
-                                <p class="text-lg text-gray-900 font-medium">Meja {{ $reservasi->nomor_meja_222297 }}</p>
+                                <p class="text-lg text-gray-900 font-medium">Meja {{ $reservasi->nomor_meja }}</p>
                             </div>
                         </div>
                     </div>
@@ -69,7 +69,7 @@
                     <div class="p-6">
                         <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
                             <p class="text-gray-700 leading-relaxed">
-                                {{ $reservasi->catatan_222297 ?? 'Tidak ada catatan khusus' }}
+                                {{ $reservasi->catatan ?? 'Tidak ada catatan khusus' }}
                             </p>
                         </div>
                     </div>
@@ -87,7 +87,7 @@
                         </svg>
                         Kembali
                     </a>
-                    <a href="{{ route('admin.reservasi.edit', $reservasi->kode_reservasi_222297) }}"
+                    <a href="{{ route('admin.reservasi.edit', $reservasi->kode_reservasi) }}"
                         class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm bg-[#6F4E37] text-sm font-medium text-white hover:bg-[#5a3e2e] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6F4E37]">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -95,7 +95,7 @@
                         </svg>
                         Edit
                     </a>
-                    <form action="{{ route('admin.reservasi.destroy', $reservasi->kode_reservasi_222297) }}" method="POST"
+                    <form action="{{ route('admin.reservasi.destroy', $reservasi->kode_reservasi) }}" method="POST"
                         onsubmit="return confirm('Yakin ingin menghapus reservasi ini?')" class="inline-block">
                         @csrf
                         @method('DELETE')

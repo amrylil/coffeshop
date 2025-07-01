@@ -38,7 +38,7 @@
                             <div>
                                 <p class="text-sm font-medium text-gray-600">Kosong</p>
                                 <p class="text-2xl font-bold text-gray-900">
-                                    {{ $mejas->where('status_222297', 'kosong')->count() }}</p>
+                                    {{ $mejas->where('status', 'kosong')->count() }}</p>
                             </div>
                         </div>
                     </div>
@@ -51,7 +51,7 @@
                             <div>
                                 <p class="text-sm font-medium text-gray-600">Dipesan</p>
                                 <p class="text-2xl font-bold text-gray-900">
-                                    {{ $mejas->where('status_222297', 'dipesan')->count() }}</p>
+                                    {{ $mejas->where('status', 'dipesan')->count() }}</p>
                             </div>
                         </div>
                     </div>
@@ -64,7 +64,7 @@
                             <div>
                                 <p class="text-sm font-medium text-gray-600">Digunakan</p>
                                 <p class="text-2xl font-bold text-gray-900">
-                                    {{ $mejas->where('status_222297', 'digunakan')->count() }}</p>
+                                    {{ $mejas->where('status', 'digunakan')->count() }}</p>
                             </div>
                         </div>
                     </div>
@@ -100,7 +100,7 @@
                         <div class="p-6 bg-gradient-to-r from-[#6F4E37] to-[#8B5A3C] text-white">
                             <div class="flex justify-between items-center">
                                 <div>
-                                    <h3 class="text-xl font-bold">Meja {{ $meja->nomor_meja_222297 }}</h3>
+                                    <h3 class="text-xl font-bold">Meja {{ $meja->nomor_meja }}</h3>
                                     <p class="text-slate-900 text-sm">Table Number</p>
                                 </div>
                                 <div class="text-right">
@@ -118,7 +118,7 @@
                                         <i class="fas fa-users text-gray-600 mr-3"></i>
                                         <span class="text-gray-600">Capacity</span>
                                     </div>
-                                    <span class="text-xl font-bold text-gray-900">{{ $meja->kapasitas_222297 }}</span>
+                                    <span class="text-xl font-bold text-gray-900">{{ $meja->kapasitas }}</span>
                                 </div>
 
                                 <!-- Status -->
@@ -127,22 +127,22 @@
                                         <i class="fas fa-info-circle text-gray-600 mr-3"></i>
                                         <span class="text-gray-600">Status</span>
                                     </div>
-                                    <form action="{{ route('admin.meja.updateStatus', $meja->nomor_meja_222297) }}"
-                                        method="POST" class="inline">
+                                    <form action="{{ route('admin.meja.updateStatus', $meja->nomor_meja) }}" method="POST"
+                                        class="inline">
                                         @csrf
                                         @method('PATCH')
-                                        <select name="status_222297" onchange="this.form.submit()"
+                                        <select name="status" onchange="this.form.submit()"
                                             class="px-3 py-1 rounded-full text-sm font-medium border-0 focus:ring-2 focus:ring-[#6F4E37] 
-                                                       @if ($meja->status_222297 === 'kosong') bg-green-100 text-green-800
-                                                       @elseif($meja->status_222297 === 'dipesan') bg-yellow-100 text-yellow-800
-                                                       @elseif($meja->status_222297 === 'digunakan') bg-red-100 text-red-800
+                                                       @if ($meja->status === 'kosong') bg-green-100 text-green-800
+                                                       @elseif($meja->status === 'dipesan') bg-yellow-100 text-yellow-800
+                                                       @elseif($meja->status === 'digunakan') bg-red-100 text-red-800
                                                        @else bg-gray-100 text-gray-800 @endif">
-                                            <option value="kosong"
-                                                {{ $meja->status_222297 === 'kosong' ? 'selected' : '' }}>Kosong</option>
-                                            <option value="dipesan"
-                                                {{ $meja->status_222297 === 'dipesan' ? 'selected' : '' }}>Dipesan</option>
+                                            <option value="kosong" {{ $meja->status === 'kosong' ? 'selected' : '' }}>
+                                                Kosong</option>
+                                            <option value="dipesan" {{ $meja->status === 'dipesan' ? 'selected' : '' }}>
+                                                Dipesan</option>
                                             <option value="digunakan"
-                                                {{ $meja->status_222297 === 'digunakan' ? 'selected' : '' }}>Digunakan
+                                                {{ $meja->status === 'digunakan' ? 'selected' : '' }}>Digunakan
                                             </option>
                                         </select>
                                     </form>
@@ -154,16 +154,16 @@
                         <div class="px-6 py-4 bg-gray-50 border-t border-gray-100">
                             <div class="flex justify-between items-center">
                                 <div class="flex space-x-2">
-                                    <a href="{{ route('admin.meja.show', $meja->nomor_meja_222297) }}"
+                                    <a href="{{ route('admin.meja.show', $meja->nomor_meja) }}"
                                         class="px-3 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 text-sm font-medium">
                                         <i class="fas fa-eye mr-1"></i>View
                                     </a>
-                                    <a href="{{ route('admin.meja.edit', $meja->nomor_meja_222297) }}"
+                                    <a href="{{ route('admin.meja.edit', $meja->nomor_meja) }}"
                                         class="px-3 py-2 bg-[#F5E6DD] text-[#6F4E37] rounded-lg hover:bg-[#E8D5C6] text-sm font-medium">
                                         <i class="fas fa-edit mr-1"></i>Edit
                                     </a>
                                 </div>
-                                <form action="{{ route('admin.meja.destroy', $meja->nomor_meja_222297) }}" method="POST"
+                                <form action="{{ route('admin.meja.destroy', $meja->nomor_meja) }}" method="POST"
                                     class="inline">
                                     @csrf
                                     @method('DELETE')

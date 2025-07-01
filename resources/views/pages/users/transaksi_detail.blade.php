@@ -30,16 +30,16 @@
                                 </div>
                                 <div>
                                     <p class="text-amber-100 text-sm font-medium">Kode Transaksi</p>
-                                    <p class="text-2xl font-black font-mono">{{ $transaksi->kode_transaksi_222297 }}</p>
+                                    <p class="text-2xl font-black font-mono">{{ $transaksi->kode_transaksi }}</p>
                                     <p class="text-amber-200 text-sm mt-1">
-                                        {{ \Carbon\Carbon::parse($transaksi->tanggal_transaksi_222297)->isoFormat('dddd, D MMMM YYYY - HH:mm') }}
+                                        {{ \Carbon\Carbon::parse($transaksi->tanggal_transaksi)->isoFormat('dddd, D MMMM YYYY - HH:mm') }}
                                     </p>
                                 </div>
                             </div>
 
                             <div class="text-right">
                                 @php
-                                    $status = $transaksi->status_222297;
+                                    $status = $transaksi->status;
                                     $statusClass = 'bg-gradient-to-r from-yellow-400 to-orange-400'; // Default untuk 'pending'
                                     if ($status === 'selesai') {
                                         $statusClass = 'bg-gradient-to-r from-green-400 to-emerald-500';
@@ -75,33 +75,33 @@
 
                         <div class="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-6 border border-amber-200">
                             <div class="flex flex-col lg:flex-row lg:items-center gap-6">
-                                @if ($transaksi->menu->gambar_menu_222297)
+                                @if ($transaksi->menu->gambar_menu)
                                     <div class="flex-shrink-0">
-                                        <img src="{{ asset('storage/' . $transaksi->menu->gambar_menu_222297) }}"
-                                            alt="{{ $transaksi->menu->nama_222297 }}"
+                                        <img src="{{ asset('storage/' . $transaksi->menu->gambar_menu) }}"
+                                            alt="{{ $transaksi->menu->nama }}"
                                             class="w-32 h-32 rounded-2xl object-cover shadow-lg border-4 border-white">
                                     </div>
                                 @endif
 
                                 <div class="flex-grow">
-                                    <h4 class="font-black text-2xl text-gray-900 mb-2">{{ $transaksi->menu->nama_222297 }}
+                                    <h4 class="font-black text-2xl text-gray-900 mb-2">{{ $transaksi->menu->nama }}
                                     </h4>
 
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                         <div class="bg-white rounded-xl p-4 border border-amber-200">
                                             <p class="text-amber-700 text-sm font-semibold">Jumlah Pesanan</p>
-                                            <p class="text-2xl font-bold text-gray-900">{{ $transaksi->jumlah_222297 }} Item
+                                            <p class="text-2xl font-bold text-gray-900">{{ $transaksi->jumlah }} Item
                                             </p>
                                         </div>
                                         <div class="bg-white rounded-xl p-4 border border-amber-200">
                                             <p class="text-amber-700 text-sm font-semibold">Harga per Item</p>
                                             <p class="text-2xl font-bold text-gray-900">Rp
-                                                {{ number_format($transaksi->menu->harga_222297, 0, ',', '.') }}</p>
+                                                {{ number_format($transaksi->menu->harga, 0, ',', '.') }}</p>
                                         </div>
                                     </div>
 
                                     <!-- Order Type Badge -->
-                                    @if ($transaksi->jenis_pesanan_222297 == 'delivery')
+                                    @if ($transaksi->jenis_pesanan == 'delivery')
                                         <div
                                             class="inline-flex items-center px-5 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-full text-sm font-bold shadow-lg mb-4">
                                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor"
@@ -129,7 +129,7 @@
                                     <div class="bg-gradient-to-r from-amber-600 to-orange-600 rounded-2xl p-6 shadow-lg">
                                         <p class="text-amber-100 text-sm font-semibold">Total Pembayaran</p>
                                         <p class="text-3xl font-black text-white">Rp
-                                            {{ number_format($transaksi->harga_total_222297, 0, ',', '.') }}</p>
+                                            {{ number_format($transaksi->harga_total, 0, ',', '.') }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -160,18 +160,18 @@
                                     class="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-2xl p-6 border border-blue-200">
                                     <dt class="text-blue-700 text-sm font-bold mb-2">Alamat Pengiriman</dt>
                                     <dd class="text-gray-900 font-semibold text-lg">
-                                        {{ $transaksi->delivery->alamat_222297 }}</dd>
+                                        {{ $transaksi->delivery->alamat }}</dd>
                                 </div>
                                 <div class="grid grid-cols-1 gap-4">
                                     <div class="bg-white rounded-xl p-4 border border-blue-200">
                                         <dt class="text-blue-700 text-sm font-bold">Kurir</dt>
                                         <dd class="text-gray-900 font-semibold text-lg">
-                                            {{ $transaksi->delivery->kurir_222297 }}</dd>
+                                            {{ $transaksi->delivery->kurir }}</dd>
                                     </div>
                                     <div class="bg-white rounded-xl p-4 border border-blue-200">
                                         <dt class="text-blue-700 text-sm font-bold">Status Pengiriman</dt>
                                         <dd class="text-gray-900 font-semibold text-lg">
-                                            {{ $transaksi->delivery->status_222297 }}</dd>
+                                            {{ $transaksi->delivery->status }}</dd>
                                     </div>
                                 </div>
                             </div>
@@ -180,7 +180,7 @@
                 @endif
 
                 <!-- Payment Proof -->
-                @if ($transaksi->bukti_tf_222297)
+                @if ($transaksi->bukti_tf)
                     <div
                         class="bg-gradient-to-r from-white via-white to-green-50 rounded-3xl shadow-xl border border-green-100 overflow-hidden mb-6">
                         <div class="bg-gradient-to-r from-green-600 to-emerald-500 h-3"></div>
@@ -196,10 +196,9 @@
 
                             <div class="text-center">
                                 <div class="inline-block bg-white rounded-2xl p-4 shadow-lg border border-green-200">
-                                    <a href="{{ asset('storage/' . $transaksi->bukti_tf_222297) }}" target="_blank"
+                                    <a href="{{ asset('storage/' . $transaksi->bukti_tf) }}" target="_blank"
                                         class="block">
-                                        <img src="{{ asset('storage/' . $transaksi->bukti_tf_222297) }}"
-                                            alt="Bukti Transfer"
+                                        <img src="{{ asset('storage/' . $transaksi->bukti_tf) }}" alt="Bukti Transfer"
                                             class="rounded-xl max-w-sm mx-auto shadow-md hover:shadow-lg">
                                     </a>
                                     <p class="text-green-700 text-sm font-semibold mt-3">Klik untuk memperbesar</p>

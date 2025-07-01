@@ -10,29 +10,29 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('transaksi_222297', function (Blueprint $table) {
-            $table->string('kode_transaksi_222297', 100)->primary();
-            $table->string('email_222297', 100)->nullable();
-            $table->string('kode_menu_222297', 20)->nullable();
-            $table->integer('jumlah_222297')->nullable();
-            $table->decimal('harga_total_222297', 10, 2)->nullable();
-            $table->enum('status_222297', ['pending', 'dikonfirmasi', 'selesai', 'dikirim', 'ditolak'])->nullable();
-            $table->string('bukti_tf_222297', 255)->nullable();
-            $table->timestamp('tanggal_transaksi_222297')->nullable();
-            $table->timestamp('created_at_222297')->nullable();
-            $table->timestamp('updated_at_222297')->nullable();
+        Schema::create('transaksi', function (Blueprint $table) {
+            $table->string('kode_transaksi', 100)->primary();
+            $table->string('email', 100)->nullable();
+            $table->string('kode_menu', 20)->nullable();
+            $table->integer('jumlah')->nullable();
+            $table->decimal('harga_total', 10, 2)->nullable();
+            $table->enum('status', ['pending', 'dikonfirmasi', 'selesai', 'dikirim', 'ditolak'])->nullable();
+            $table->string('bukti_tf', 255)->nullable();
+            $table->timestamp('tanggal_transaksi')->nullable();
+            $table->timestamp('created_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
             $table
-                ->enum('jenis_pesanan_222297', ['delivery', 'di_lokasi'])
+                ->enum('jenis_pesanan', ['delivery', 'di_lokasi'])
                 ->default('di_lokasi');
 
             $table
-                ->foreign('email_222297')
-                ->references('email_222297')
-                ->on('users_222297');
+                ->foreign('email')
+                ->references('email')
+                ->on('users');
             $table
-                ->foreign('kode_menu_222297')
-                ->references('kode_menu_222297')
-                ->on('menu_222297');
+                ->foreign('kode_menu')
+                ->references('kode_menu')
+                ->on('menu');
         });
     }
 
@@ -41,6 +41,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('transaksi_222297');
+        Schema::dropIfExists('transaksi');
     }
 };

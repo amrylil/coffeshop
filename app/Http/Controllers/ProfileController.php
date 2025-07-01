@@ -26,20 +26,20 @@ class ProfileController extends Controller
     // -- Kode di bawah ini tidak akan berjalan jika dd() di atas aktif --
     // -- Hapus atau beri komentar pada dd() di atas untuk melanjutkan ke Log --
     $request->validate([
-      'profile_photo_222297' => 'required|image|max:2048',
+      'profile_photo' => 'required|image|max:2048',
     ]);
     Log::info('Memulai proses update profil untuk user: ' . Auth::id());
 
     $user = Auth::user();
 
     $validator = Validator::make($request->all(), [
-      'name_222297'          => 'required|string|max:255',
-      'gender_222297'        => 'nullable|in:male,female',
-      'address_222297'       => 'nullable|string',
-      'phone_222297'         => 'nullable|string',
-      'birth_date_222297'    => 'nullable|date',
-      'profile_photo_222297' => 'nullable|image|max:2048',
-      'password_222297'      => ['nullable', 'confirmed', Password::min(8)],
+      'name'          => 'required|string|max:255',
+      'gender'        => 'nullable|in:male,female',
+      'address'       => 'nullable|string',
+      'phone'         => 'nullable|string',
+      'birth_date'    => 'nullable|date',
+      'profile_photo' => 'nullable|image|max:2048',
+      'password'      => ['nullable', 'confirmed', Password::min(8)],
     ]);
 
     if ($validator->fails()) {
@@ -52,26 +52,26 @@ class ProfileController extends Controller
 
     Log::info('Validasi Berhasil.');
 
-    $userData = $request->except(['_token', '_method', 'password_222297', 'profile_photo_222297']);
+    $userData = $request->except(['_token', '_method', 'password', 'profile_photo']);
     Log::info('Data awal yang akan diupdate (sebelum foto & password):', $userData);
 
-    if ($request->filled('password_222297')) {
-      $userData['password_222297'] = Hash::make($request->password_222297);
+    if ($request->filled('password')) {
+      $userData['password'] = Hash::make($request->password);
       Log::info('Password baru telah di-hash.');
     }
 
-    if ($request->hasFile('profile_photo_222297')) {
+    if ($request->hasFile('profile_photo')) {
       Log::info('Terdeteksi file foto baru. Memulai proses upload.');
 
-      if ($user->profile_photo_222297) {
-        Log::info('Menghapus foto lama: ' . $user->profile_photo_222297);
-        Storage::disk('public')->delete($user->profile_photo_222297);
+      if ($user->profile_photo) {
+        Log::info('Menghapus foto lama: ' . $user->profile_photo);
+        Storage::disk('public')->delete($user->profile_photo);
       }
 
-      $path = $request->file('profile_photo_222297')->store('profile_photos', 'public');
+      $path = $request->file('profile_photo')->store('profile_photos', 'public');
       Log::info('Foto baru berhasil disimpan di path: ' . $path);
 
-      $userData['profile_photo_222297'] = $path;
+      $userData['profile_photo'] = $path;
     } else {
       Log::warning('Tidak ada file foto baru yang diupload pada request ini.');
     }

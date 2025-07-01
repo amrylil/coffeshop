@@ -10,21 +10,21 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('delivery_222297', function (Blueprint $table) {
-            $table->string('kode_pengantaran_222297', 20)->primary();
-            $table->string('kode_transaksi_222297', 20)->nullable();
-            $table->string('nama_penerima_222297', 255)->nullable();
-            $table->text('alamat_pengantaran_222297')->nullable();
-            $table->string('nomor_hp_222297', 20)->nullable();
-            $table->string('jasa_kurir_222297', 100)->nullable();
-            $table->decimal('ongkir_222297', 10, 2)->nullable();
-            $table->enum('status_pengiriman_222297', ['belum dikirim', 'dalam perjalanan', 'sampai'])->nullable();
-            $table->timestamp('tanggal_kirim_222297')->nullable();
+        Schema::create('delivery', function (Blueprint $table) {
+            $table->string('kode_pengantaran', 20)->primary();
+            $table->string('kode_transaksi', 20)->nullable();
+            $table->string('nama_penerima', 255)->nullable();
+            $table->text('alamat_pengantaran')->nullable();
+            $table->string('nomor_hp', 20)->nullable();
+            $table->string('jasa_kurir', 100)->nullable();
+            $table->decimal('ongkir', 10, 2)->nullable();
+            $table->enum('status_pengiriman', ['belum dikirim', 'dalam perjalanan', 'sampai'])->nullable();
+            $table->timestamp('tanggal_kirim')->nullable();
 
             $table
-                ->foreign('kode_transaksi_222297')
-                ->references('kode_transaksi_222297')
-                ->on('transaksi_222297');
+                ->foreign('kode_transaksi')
+                ->references('kode_transaksi')
+                ->on('transaksi');
         });
     }
 
@@ -33,6 +33,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('delivery_222297');
+        Schema::dropIfExists('delivery');
     }
 };

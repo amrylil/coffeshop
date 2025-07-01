@@ -7,8 +7,7 @@
             <div class="mb-6 flex justify-between items-center">
                 <h1 class="text-3xl font-bold text-[#6F4E37]">User Details</h1>
                 <div class="flex space-x-3">
-                    <a href="{{ route('admin.users.edit', $user->email_222297) }}"
-                        class="px-4 py-2 bg-black text-white transition">
+                    <a href="{{ route('admin.users.edit', $user->email) }}" class="px-4 py-2 bg-black text-white transition">
                         Edit User
                     </a>
                     <a href="{{ route('admin.users.index') }}"
@@ -36,10 +35,10 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <!-- User Image -->
                         <div class="col-span-1 flex flex-col items-center">
-                            @if ($user->profile_photo_222297)
+                            @if ($user->profile_photo)
                                 <div class="w-full h-64 bg-gray-100 rounded-lg overflow-hidden">
-                                    <img src="{{ asset('storage/' . $user->profile_photo_222297) }}"
-                                        alt="{{ $user->name_222297 }}" class="w-full h-full object-cover">
+                                    <img src="{{ asset('storage/' . $user->profile_photo) }}" alt="{{ $user->name }}"
+                                        class="w-full h-full object-cover">
                                 </div>
                             @else
                                 <div class="w-full h-64 bg-gray-200 flex items-center justify-center rounded-lg">
@@ -52,12 +51,12 @@
                         <div class="col-span-2">
                             <div class="grid grid-cols-1 gap-4">
                                 <div class="border-b border-gray-200 pb-3">
-                                    <h3 class="text-2xl font-semibold text-[#6F4E37]">{{ $user->name_222297 }}</h3>
+                                    <h3 class="text-2xl font-semibold text-[#6F4E37]">{{ $user->name }}</h3>
                                     <div class="flex items-center mt-2">
                                         <span class="px-2 py-1 bg-[#F5E6DD] text-[#6F4E37] text-xs rounded-full">
-                                            {{ $user->role_222297 }}
+                                            {{ $user->role }}
                                         </span>
-                                        <span class="ml-2 text-gray-500 text-sm">Email: {{ $user->email_222297 }}</span>
+                                        <span class="ml-2 text-gray-500 text-sm">Email: {{ $user->email }}</span>
                                     </div>
                                 </div>
 
@@ -65,23 +64,23 @@
                                     <div>
                                         <span class="text-sm text-gray-500">Gender</span>
                                         <p class="text-xl font-semibold text-[#6F4E37]">
-                                            {{ $user->gender_222297 }}</p>
+                                            {{ $user->gender }}</p>
                                     </div>
                                     <div>
                                         <span class="text-sm text-gray-500">Phone</span>
                                         <p class="text-xl font-semibold text-[#6F4E37]">
-                                            {{ $user->phone_222297 }}
+                                            {{ $user->phone }}
                                         </p>
                                     </div>
                                 </div>
 
                                 <div class="py-3">
                                     <h4 class="text-sm font-medium text-gray-500 mb-2">Address</h4>
-                                    <p class="text-gray-700">{{ $user->address_222297 }}</p>
+                                    <p class="text-gray-700">{{ $user->address }}</p>
                                 </div>
                                 <div class="py-3">
                                     <h4 class="text-sm font-medium text-gray-500 mb-2">Birth Date</h4>
-                                    <p class="text-gray-700">{{ $user->birth_date_222297 }}</p>
+                                    <p class="text-gray-700">{{ $user->birth_date }}</p>
                                 </div>
 
 
@@ -92,7 +91,7 @@
 
                 <!-- Delete Button -->
                 <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                    <form action="{{ route('admin.users.destroy', $user->email_222297) }}" method="POST" class="inline"
+                    <form action="{{ route('admin.users.destroy', $user->email) }}" method="POST" class="inline"
                         onsubmit="return confirm('Are you sure you want to delete this user?');">
                         @csrf
                         @method('DELETE')

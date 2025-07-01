@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $menu->nama_222297)
+@section('title', $menu->nama)
 
 @section('content')
     <section class="min-h-screen py-12">
@@ -33,8 +33,8 @@
                                     d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                                     clip-rule="evenodd" />
                             </svg>
-                            <a href="{{ route('menu.category', $menu->kode_kategori_222297) }}"
-                                class="ml-1 text-slate-50 hover:text-[#e6dbd1] md:ml-2">{{ $menu->kategori->nama_222297 }}</a>
+                            <a href="{{ route('menu.category', $menu->kode_kategori) }}"
+                                class="ml-1 text-slate-50 hover:text-[#e6dbd1] md:ml-2">{{ $menu->kategori->nama }}</a>
                         </div>
                     </li>
                     <li aria-current="page">
@@ -45,7 +45,7 @@
                                     d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                                     clip-rule="evenodd" />
                             </svg>
-                            <span class="ml-1 text-[#e6dbd1] font-medium md:ml-2">{{ $menu->nama_222297 }}</span>
+                            <span class="ml-1 text-[#e6dbd1] font-medium md:ml-2">{{ $menu->nama }}</span>
                         </div>
                     </li>
                 </ol>
@@ -56,11 +56,11 @@
                 <div class="flex flex-col lg:flex-row">
                     <!-- Gambar Produk -->
                     <div class="lg:w-1/2 h-96 lg:h-auto">
-                        @if ($menu->path_img_222297)
-                            <img src="{{ asset('images/' . $menu->path_img_222297) }}" alt="{{ $menu->nama_222297 }}"
+                        @if ($menu->path_img)
+                            <img src="{{ asset('images/' . $menu->path_img) }}" alt="{{ $menu->nama }}"
                                 class="w-full h-full object-cover">
                         @else
-                            <img src="{{ asset('images/coffe.png') }}" alt="{{ $menu->nama_222297 }}"
+                            <img src="{{ asset('images/coffe.png') }}" alt="{{ $menu->nama }}"
                                 class="w-full h-full object-cover">
                         @endif
                     </div>
@@ -68,17 +68,17 @@
                     <!-- Informasi Produk -->
                     <div class="lg:w-1/2 p-8 bg-[#eee3d2] text-[#3e1f1f]">
                         <span class="inline-block bg-[#5e3c3c] text-white px-3 py-1 text-xs rounded mb-4">
-                            {{ $menu->kategori->nama_222297 }}
+                            {{ $menu->kategori->nama }}
                         </span>
 
-                        <h1 class="text-3xl font-serif font-bold mb-4">{{ $menu->nama_222297 }}</h1>
+                        <h1 class="text-3xl font-serif font-bold mb-4">{{ $menu->nama }}</h1>
 
                         <div class="text-lg font-bold text-[#3e1f1f] mb-4">
-                            Rp {{ number_format($menu->harga_222297, 0, ',', '.') }}
+                            Rp {{ number_format($menu->harga, 0, ',', '.') }}
                         </div>
 
                         <div class="prose mb-8 text-gray-700">
-                            <p>{{ $menu->deskripsi_222297 ?? 'Minuman lezat yang dibuat dengan penuh keahlian oleh barista kami. Sempurna untuk dinikmati kapan saja, minuman ini menggabungkan bahan-bahan berkualitas untuk pengalaman rasa yang tak terlupakan.' }}
+                            <p>{{ $menu->deskripsi ?? 'Minuman lezat yang dibuat dengan penuh keahlian oleh barista kami. Sempurna untuk dinikmati kapan saja, minuman ini menggabungkan bahan-bahan berkualitas untuk pengalaman rasa yang tak terlupakan.' }}
                             </p>
                         </div>
 
@@ -90,10 +90,10 @@
                                         d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                                         clip-rule="evenodd" />
                                 </svg>
-                                <span>Tersedia: {{ $menu->jumlah_222297 }} porsi</span>
+                                <span>Tersedia: {{ $menu->jumlah }} porsi</span>
                             </div>
 
-                            @if ($menu->jumlah_222297 > 0)
+                            @if ($menu->jumlah > 0)
                                 <div class="flex items-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600 mr-2"
                                         viewBox="0 0 20 20" fill="currentColor">
@@ -126,9 +126,9 @@
                                     </svg>
                                 </button>
                                 <input type="number" id="quantity" value="1" min="1"
-                                    max="{{ $menu->jumlah_222297 }}"
+                                    max="{{ $menu->jumlah }}"
                                     class="w-12 text-center border-0 focus:ring-0 text-[#3e1f1f] bg-transparent"
-                                    {{ $menu->jumlah_222297 <= 0 ? 'disabled' : '' }}>
+                                    {{ $menu->jumlah <= 0 ? 'disabled' : '' }}>
                                 <button id="increment" class="px-4 py-2 text-[#3e1f1f] hover:bg-[#d4c7b6] rounded-r-lg">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
                                         fill="currentColor">
@@ -141,8 +141,7 @@
 
                             <button id="addToCartBtn"
                                 class="flex-1 bg-[#3e1f1f] hover:bg-[#5a2d2d] text-white py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
-                                {{ $menu->jumlah_222297 <= 0 ? 'disabled' : '' }}
-                                data-product-id="{{ $menu->kode_menu_222297 }}">
+                                {{ $menu->jumlah <= 0 ? 'disabled' : '' }} data-product-id="{{ $menu->kode_menu }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -158,9 +157,9 @@
             <!-- Deskripsi Produk -->
             <div class="mt-12 bg-white rounded-2xl shadow-xl overflow-hidden p-8">
                 <div class="prose max-w-none">
-                    <h3 class="font-serif text-2xl mb-4 text-[#3e1f1f]">Tentang {{ $menu->nama_222297 }}</h3>
+                    <h3 class="font-serif text-2xl mb-4 text-[#3e1f1f]">Tentang {{ $menu->nama }}</h3>
                     <p class="text-gray-700">
-                        {{ $menu->deskripsi_222297 ?? 'Biji kopi kami dipilih dengan hati-hati dari daerah penghasil kopi terbaik di seluruh dunia. Setiap biji dipanggang dengan ahli untuk mengeluarkan aroma dan rasa uniknya. Barista terampil kami kemudian menyeduh setiap cangkir dengan presisi dan perhatian, memastikan setiap tegukan memberikan pengalaman yang luar biasa. Baik Anda penikmat kopi atau hanya mencari minuman menyegarkan, hidangan kami menjanjikan kepuasan.' }}
+                        {{ $menu->deskripsi ?? 'Biji kopi kami dipilih dengan hati-hati dari daerah penghasil kopi terbaik di seluruh dunia. Setiap biji dipanggang dengan ahli untuk mengeluarkan aroma dan rasa uniknya. Barista terampil kami kemudian menyeduh setiap cangkir dengan presisi dan perhatian, memastikan setiap tegukan memberikan pengalaman yang luar biasa. Baik Anda penikmat kopi atau hanya mencari minuman menyegarkan, hidangan kami menjanjikan kepuasan.' }}
                     </p>
 
                     <p class="text-gray-700 mt-4">
@@ -180,29 +179,28 @@
                         @foreach ($relatedMenus as $relatedMenu)
                             <div
                                 class="bg-white rounded-xl shadow-md overflow-hidden transition transform hover:scale-105">
-                                <a href="{{ route('menu.show', $relatedMenu->kode_menu_222297) }}">
+                                <a href="{{ route('menu.show', $relatedMenu->kode_menu) }}">
                                     <div class="h-48 w-full overflow-hidden">
-                                        @if ($relatedMenu->path_img_222297)
-                                            <img src="{{ asset($relatedMenu->path_img_222297) }}"
-                                                alt="{{ $relatedMenu->nama_222297 }}"
+                                        @if ($relatedMenu->path_img)
+                                            <img src="{{ asset($relatedMenu->path_img) }}"
+                                                alt="{{ $relatedMenu->nama }}"
                                                 class="w-full h-full object-cover transform hover:scale-110 transition duration-500">
                                         @else
-                                            <img src="{{ asset('images/coffe.png') }}"
-                                                alt="{{ $relatedMenu->nama_222297 }}"
+                                            <img src="{{ asset('images/coffe.png') }}" alt="{{ $relatedMenu->nama }}"
                                                 class="w-full h-full object-cover transform hover:scale-110 transition duration-500">
                                         @endif
                                     </div>
                                 </a>
                                 <div class="p-4">
-                                    <h3 class="font-medium text-[#3e1f1f] mb-2">{{ $relatedMenu->nama_222297 }}</h3>
+                                    <h3 class="font-medium text-[#3e1f1f] mb-2">{{ $relatedMenu->nama }}</h3>
                                     <div class="flex justify-between items-center">
                                         <span class="text-[#3e1f1f] font-bold">
-                                            Rp {{ number_format($relatedMenu->harga_222297, 0, ',', '.') }}
+                                            Rp {{ number_format($relatedMenu->harga, 0, ',', '.') }}
                                         </span>
                                         <button
                                             class="bg-[#3e1f1f] hover:bg-[#5a2d2d] text-white text-xs px-3 py-1 rounded transition add-to-cart-btn disabled:opacity-50 disabled:cursor-not-allowed"
-                                            data-product-id="{{ $relatedMenu->kode_menu_222297 }}"
-                                            {{ $relatedMenu->jumlah_222297 <= 0 ? 'disabled' : '' }}>
+                                            data-product-id="{{ $relatedMenu->kode_menu }}"
+                                            {{ $relatedMenu->jumlah <= 0 ? 'disabled' : '' }}>
                                             TAMBAH
                                         </button>
                                     </div>
@@ -306,7 +304,7 @@
             const quantityInput = document.getElementById('quantity');
             const incrementBtn = document.getElementById('increment');
             const decrementBtn = document.getElementById('decrement');
-            const maxQuantity = {{ $menu->jumlah_222297 }};
+            const maxQuantity = {{ $menu->jumlah }};
 
             incrementBtn.addEventListener('click', () => {
                 let currentValue = parseInt(quantityInput.value);
@@ -394,8 +392,8 @@
                             'Accept': 'application/json'
                         },
                         body: JSON.stringify({
-                            kode_menu_222297: productId,
-                            quantity_222297: quantity
+                            kode_menu: productId,
+                            quantity: quantity
                         })
                     });
 

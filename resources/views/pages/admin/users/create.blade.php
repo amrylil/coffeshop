@@ -28,83 +28,83 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Name -->
                         <div class="col-span-1">
-                            <label for="name_222297" class="block text-sm font-medium text-[#6F4E37]">Name</label>
-                            <input type="text" name="name_222297" id="name_222297"
+                            <label for="name" class="block text-sm font-medium text-[#6F4E37]">Name</label>
+                            <input type="text" name="name" id="name"
                                 class="mt-1 p-2 focus:ring-[#6F4E37] focus:border-[#6F4E37] block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                value="{{ old('name_222297') }}" required>
+                                value="{{ old('name') }}" required>
                         </div>
 
                         <!-- Email -->
                         <div class="col-span-1">
-                            <label for="email_222297" class="block text-sm font-medium text-[#6F4E37]">Email</label>
-                            <input type="email" name="email_222297" id="email_222297"
+                            <label for="email" class="block text-sm font-medium text-[#6F4E37]">Email</label>
+                            <input type="email" name="email" id="email"
                                 class="mt-1 p-2 focus:ring-[#6F4E37] focus:border-[#6F4E37] block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                value="{{ old('email_222297') }}" required>
+                                value="{{ old('email') }}" required>
                         </div>
 
                         <!-- Password -->
                         <div class="col-span-1">
-                            <label for="password_222297" class="block text-sm font-medium text-[#6F4E37]">Password</label>
-                            <input type="password" name="password_222297" id="password_222297"
+                            <label for="password" class="block text-sm font-medium text-[#6F4E37]">Password</label>
+                            <input type="password" name="password" id="password"
                                 class="mt-1 p-2 focus:ring-[#6F4E37] focus:border-[#6F4E37] block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                                 required>
                         </div>
 
                         <!-- Role -->
                         <div class="col-span-1">
-                            <label for="role_222297" class="block text-sm font-medium text-[#6F4E37]">Role</label>
-                            <select name="role_222297" id="role_222297"
+                            <label for="role" class="block text-sm font-medium text-[#6F4E37]">Role</label>
+                            <select name="role" id="role"
                                 class="mt-1 p-2 focus:ring-[#6F4E37] focus:border-[#6F4E37] block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                                 required>
                                 <option value="">Select Role</option>
-                                <option value="admin" {{ old('role_222297') == 'admin' ? 'selected' : '' }}>Admin</option>
-                                <option value="customer" {{ old('role_222297') == 'customer' ? 'selected' : '' }}>Customer
+                                <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                                <option value="customer" {{ old('role') == 'customer' ? 'selected' : '' }}>Customer
                                 </option>
                             </select>
                         </div>
 
                         <!-- Gender -->
                         <div class="col-span-1">
-                            <label for="gender_222297" class="block text-sm font-medium text-[#6F4E37]">Gender</label>
-                            <select name="gender_222297" id="gender_222297"
+                            <label for="gender" class="block text-sm font-medium text-[#6F4E37]">Gender</label>
+                            <select name="gender" id="gender"
                                 class="mt-1 p-2 focus:ring-[#6F4E37] focus:border-[#6F4E37] block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                                 required>
                                 <option value="">Select Gender</option>
-                                <option value="male" {{ old('gender_222297') == 'male' ? 'selected' : '' }}>Male</option>
-                                <option value="female" {{ old('gender_222297') == 'female' ? 'selected' : '' }}>Female
+                                <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Male</option>
+                                <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Female
                                 </option>
                             </select>
                         </div>
 
                         <!-- Phone -->
                         <div class="col-span-1">
-                            <label for="phone_222297" class="block text-sm font-medium text-[#6F4E37]">Phone</label>
-                            <input type="text" name="phone_222297" id="phone_222297"
+                            <label for="phone" class="block text-sm font-medium text-[#6F4E37]">Phone</label>
+                            <input type="text" name="phone" id="phone"
                                 class="mt-1 p-2 focus:ring-[#6F4E37] focus:border-[#6F4E37] block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                value="{{ old('phone_222297') }}">
+                                value="{{ old('phone') }}">
                         </div>
 
                         <!-- Address -->
                         <div class="col-span-2">
-                            <label for="address_222297" class="block text-sm font-medium text-[#6F4E37]">Address</label>
-                            <textarea name="address_222297" id="address_222297" rows="3"
-                                class="mt-1 p-2 focus:ring-[#6F4E37] focus:border-[#6F4E37] block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">{{ old('address_222297') }}</textarea>
+                            <label for="address" class="block text-sm font-medium text-[#6F4E37]">Address</label>
+                            <textarea name="address" id="address" rows="3"
+                                class="mt-1 p-2 focus:ring-[#6F4E37] focus:border-[#6F4E37] block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">{{ old('address') }}</textarea>
                         </div>
 
                         <!-- Birth Date -->
                         <div class="col-span-1">
-                            <label for="birth_date_222297" class="block text-sm font-medium text-[#6F4E37]">Birth
+                            <label for="birth_date" class="block text-sm font-medium text-[#6F4E37]">Birth
                                 Date</label>
-                            <input type="date" name="birth_date_222297" id="birth_date_222297"
+                            <input type="date" name="birth_date" id="birth_date"
                                 class="mt-1 p-2 focus:ring-[#6F4E37] focus:border-[#6F4E37] block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                value="{{ old('birth_date_222297') }}">
+                                value="{{ old('birth_date') }}">
                         </div>
 
                         <!-- Profile Photo -->
                         <div class="col-span-1">
-                            <label for="profile_photo_222297" class="block text-sm font-medium text-[#6F4E37]">Profile
+                            <label for="profile_photo" class="block text-sm font-medium text-[#6F4E37]">Profile
                                 Photo</label>
-                            <input type="file" name="profile_photo_222297" id="profile_photo_222297"
+                            <input type="file" name="profile_photo" id="profile_photo"
                                 class="mt-1 p-2 focus:ring-[#6F4E37] focus:border-[#6F4E37] block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                             <p class="mt-1 text-xs text-gray-500">Supported formats: JPEG, PNG, JPG, GIF (max. 2MB)</p>
                         </div>

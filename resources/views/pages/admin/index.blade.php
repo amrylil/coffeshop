@@ -67,7 +67,7 @@
                                     Item Stok Habis
                                 </div>
                                 <div class="text-2xl font-bold text-gray-800">
-                                    {{ \App\Models\Menu::where('jumlah_222297', 0)->count() }}
+                                    {{ \App\Models\Menu::where('jumlah', 0)->count() }}
                                 </div>
                             </div>
                             <div class="text-gray-300">
@@ -144,25 +144,25 @@
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    @forelse(\App\Models\Menu::with('kategori')->orderBy('created_at_222297', 'desc')->take(5)->get() as $menu)
+                                    @forelse(\App\Models\Menu::with('kategori')->orderBy('created_at', 'desc')->take(5)->get() as $menu)
                                         <tr class="hover:bg-gray-50">
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {{ $menu->kode_menu_222297 }}
+                                                {{ $menu->kode_menu }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-[#6F4E37]">
-                                                {{ $menu->nama_222297 }}
+                                                {{ $menu->nama }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {{ $menu->kategori ? $menu->kategori->nama_222297 : 'Tidak Diketahui' }}
+                                                {{ $menu->kategori ? $menu->kategori->nama : 'Tidak Diketahui' }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                Rp {{ number_format($menu->harga_222297, 0, ',', '.') }}
+                                                Rp {{ number_format($menu->harga, 0, ',', '.') }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                @if ($menu->jumlah_222297 > 0)
+                                                @if ($menu->jumlah > 0)
                                                     <span
                                                         class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                                                        {{ $menu->jumlah_222297 }}
+                                                        {{ $menu->jumlah }}
                                                     </span>
                                                 @else
                                                     <span
@@ -193,13 +193,13 @@
                         </div>
                         <div class="p-4">
                             <div class="space-y-2">
-                                @forelse(\App\Models\Menu::where('jumlah_222297', '<=', 5)->where('jumlah_222297', '>', 0)->orderBy('jumlah_222297', 'asc')->take(5)->get() as $menu)
-                                    <a href="{{ route('admin.menu.edit', $menu->kode_menu_222297) }}"
+                                @forelse(\App\Models\Menu::where('jumlah', '<=', 5)->where('jumlah', '>', 0)->orderBy('jumlah', 'asc')->take(5)->get() as $menu)
+                                    <a href="{{ route('admin.menu.edit', $menu->kode_menu) }}"
                                         class="block p-3 rounded-md border border-gray-200 hover:bg-[#F5E6DD] transition flex justify-between items-center">
-                                        <span class="text-sm text-gray-800">{{ $menu->nama_222297 }}</span>
+                                        <span class="text-sm text-gray-800">{{ $menu->nama }}</span>
                                         <span
                                             class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                            {{ $menu->jumlah_222297 }}
+                                            {{ $menu->jumlah }}
                                         </span>
                                     </a>
                                 @empty

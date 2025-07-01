@@ -33,17 +33,17 @@ class KategoriProdukController extends RoutingController
   public function store(Request $request)
   {
     $request->validate([
-      'kode_kategori_222297' => 'required|string|max:50|unique:kategori_produk_222297,kode_kategori_222297',  // Added validation for manual category ID
-      'nama_222297'          => 'required|string|max:255',
-      'deskripsi_222297'     => 'nullable|string',
-      'path_img_222297'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+      'kode_kategori' => 'required|string|max:50|unique:kategori_produk,kode_kategori',  // Added validation for manual category ID
+      'nama'          => 'required|string|max:255',
+      'deskripsi'     => 'nullable|string',
+      'path_img'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
     ]);
 
-    $data = $request->only(['kode_kategori_222297', 'nama_222297', 'deskripsi_222297']);
+    $data = $request->only(['kode_kategori', 'nama', 'deskripsi']);
 
-    if ($request->hasFile('path_img_222297')) {
-      $path                    = $request->file('path_img_222297')->store('kategori', 'public');
-      $data['path_img_222297'] = $path;
+    if ($request->hasFile('path_img')) {
+      $path             = $request->file('path_img')->store('kategori', 'public');
+      $data['path_img'] = $path;
     }
 
     KategoriProduk::create($data);
@@ -77,22 +77,22 @@ class KategoriProdukController extends RoutingController
   public function update(Request $request, string $id)
   {
     $request->validate([
-      'nama_222297'      => 'required|string|max:255',
-      'deskripsi_222297' => 'nullable|string',
-      'path_img_222297'  => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+      'nama'      => 'required|string|max:255',
+      'deskripsi' => 'nullable|string',
+      'path_img'  => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
     ]);
 
     $category = KategoriProduk::findOrFail($id);
-    $data     = $request->only(['nama_222297', 'deskripsi_222297']);
+    $data     = $request->only(['nama', 'deskripsi']);
 
-    if ($request->hasFile('path_img_222297')) {
+    if ($request->hasFile('path_img')) {
       // Delete old image if exists
-      if ($category->path_img_222297) {
-        Storage::disk('public')->delete($category->path_img_222297);
+      if ($category->path_img) {
+        Storage::disk('public')->delete($category->path_img);
       }
 
-      $path                    = $request->file('path_img_222297')->store('kategori', 'public');
-      $data['path_img_222297'] = $path;
+      $path             = $request->file('path_img')->store('kategori', 'public');
+      $data['path_img'] = $path;
     }
 
     $category->update($data);
@@ -117,8 +117,8 @@ class KategoriProdukController extends RoutingController
     }
 
     // Delete image if exists
-    if ($category->path_img_222297) {
-      Storage::disk('public')->delete($category->path_img_222297);
+    if ($category->path_img) {
+      Storage::disk('public')->delete($category->path_img);
     }
 
     $category->delete();

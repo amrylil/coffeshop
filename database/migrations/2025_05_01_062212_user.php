@@ -10,18 +10,18 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('users_222297', function (Blueprint $table) {
-            $table->string('email_222297', 255)->primary();
-            $table->string('name_222297', 255)->nullable();
-            $table->string('password_222297', 255)->nullable();
-            $table->enum('gender_222297', ['male', 'female'])->nullable();
-            $table->string('role_222297', 255)->nullable();
-            $table->string('address_222297', 255)->nullable();
-            $table->string('phone_222297', 255)->nullable();
-            $table->date('birth_date_222297')->nullable();
-            $table->string('profile_photo_222297', 255)->nullable();
-            $table->timestamp('created_at_222297')->nullable();
-            $table->timestamp('updated_at_222297')->nullable();
+        Schema::create('users', function (Blueprint $table) {
+            $table->string('email', 255)->primary();
+            $table->string('name', 255)->nullable();
+            $table->string('password', 255)->nullable();
+            $table->enum('gender', ['male', 'female'])->nullable();
+            $table->string('role', 255)->nullable();
+            $table->string('address', 255)->nullable();
+            $table->string('phone', 255)->nullable();
+            $table->date('birth_date')->nullable();
+            $table->string('profile_photo', 255)->nullable();
+            $table->timestamp('created_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
         });
     }
 
@@ -30,6 +30,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('users_222297');
+        Schema::dropIfExists('users');
     }
 };

@@ -70,13 +70,13 @@
                                         <div class="flex justify-between items-start">
                                             <div class="flex-grow">
                                                 <h3 class="font-bold text-amber-900 text-xl mb-2">
-                                                    {{ $item->menu->nama_222297 ?? 'Menu Tidak Ditemukan' }}
+                                                    {{ $item->menu->nama ?? 'Menu Tidak Ditemukan' }}
                                                 </h3>
                                                 <p class="text-gray-600 text-sm mb-3">
-                                                    {{ \Carbon\Carbon::parse($item->tanggal_transaksi_222297)->isoFormat('dddd, D MMMM YYYY - HH:mm') }}
+                                                    {{ \Carbon\Carbon::parse($item->tanggal_transaksi)->isoFormat('dddd, D MMMM YYYY - HH:mm') }}
                                                 </p>
 
-                                                @if ($item->jenis_pesanan_222297 == 'delivery')
+                                                @if ($item->jenis_pesanan == 'delivery')
                                                     <div
                                                         class="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-bold">
                                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
@@ -109,7 +109,7 @@
                                             <div class="text-right flex-shrink-0 ml-6">
                                                 <div
                                                     class="px-4 py-2 rounded-xl font-bold text-sm mb-3
-                                                    @switch($item->status_222297)
+                                                    @switch($item->status)
                                                         @case('pending') bg-yellow-100 text-yellow-800 @break
                                                         @case('dikonfirmasi') bg-blue-100 text-blue-800 @break
                                                         @case('dikirim') bg-indigo-100 text-indigo-800 @break
@@ -118,12 +118,12 @@
                                                         @case('ditolak') bg-red-100 text-red-800 @break
                                                         @default bg-gray-100 text-gray-800
                                                     @endswitch">
-                                                    {{ ucfirst($item->status_222297) }}
+                                                    {{ ucfirst($item->status) }}
                                                 </div>
                                                 <div class="text-amber-800 font-bold text-xl mb-3">
-                                                    Rp {{ number_format($item->harga_total_222297, 0, ',', '.') }}
+                                                    Rp {{ number_format($item->harga_total, 0, ',', '.') }}
                                                 </div>
-                                                <a href="{{ route('user.transaksi.show', $item->kode_transaksi_222297) }}"
+                                                <a href="{{ route('user.transaksi.show', $item->kode_transaksi) }}"
                                                     class="inline-flex items-center px-4 py-2 bg-amber-600 text-white font-semibold text-sm rounded-lg hover:bg-amber-700">
                                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">

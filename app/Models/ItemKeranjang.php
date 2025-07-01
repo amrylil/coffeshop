@@ -10,26 +10,26 @@ class ItemKeranjang extends Model
 {
     use HasFactory;
 
-    protected $table      = 'item_keranjang_222297';
-    protected $primaryKey = 'kode_item_222297';
+    protected $table      = 'item_keranjang';
+    protected $primaryKey = 'kode_item';
     public $incrementing  = false;
     protected $keyType    = 'string';
 
-    const CREATED_AT = 'created_at_222297';
-    const UPDATED_AT = 'updated_at_222297';
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'updated_at';
 
     protected $fillable = [
-        'kode_item_222297',
-        'kode_keranjang_222297',
-        'kode_menu_222297',
-        'quantity_222297',
-        'price_222297',
+        'kode_item',
+        'kode_keranjang',
+        'kode_menu',
+        'quantity',
+        'price',
     ];
 
     protected $casts = [
-        'price_222297'      => 'decimal:2',
-        'created_at_222297' => 'datetime',
-        'updated_at_222297' => 'datetime',
+        'price'      => 'decimal:2',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     protected static function boot()
@@ -37,19 +37,19 @@ class ItemKeranjang extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            if (!$model->kode_item_222297) {
-                $model->kode_item_222297 = IDGeneratorHelper::generateItemKeranjangID();
+            if (!$model->kode_item) {
+                $model->kode_item = IDGeneratorHelper::generateItemKeranjangID();
             }
         });
     }
 
     public function keranjang()
     {
-        return $this->belongsTo(Keranjang::class, 'kode_keranjang_222297', 'kode_keranjang_222297');
+        return $this->belongsTo(Keranjang::class, 'kode_keranjang', 'kode_keranjang');
     }
 
     public function menu()
     {
-        return $this->belongsTo(Menu::class, 'kode_menu_222297', 'kode_menu_222297');
+        return $this->belongsTo(Menu::class, 'kode_menu', 'kode_menu');
     }
 }

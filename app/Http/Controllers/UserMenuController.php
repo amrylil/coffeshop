@@ -21,11 +21,11 @@ class UserMenuController extends RoutingController
     $categories = KategoriProduk::all();
 
     // Start with a base query
-    $query = Menu::with('kategori')->where('jumlah_222297', '>', 0);
+    $query = Menu::with('kategori')->where('jumlah', '>', 0);
 
     // Apply category filter if provided
     if ($request->has('category') && $request->category != 'all') {
-      $query->where('kode_kategori_222297', $request->category);
+      $query->where('kode_kategori', $request->category);
     }
 
     // Apply search if provided
@@ -33,13 +33,13 @@ class UserMenuController extends RoutingController
       $searchTerm = $request->search;
       $query->where(function ($q) use ($searchTerm) {
         $q
-          ->where('nama_222297', 'like', "%{$searchTerm}%")
-          ->orWhere('deskripsi_222297', 'like', "%{$searchTerm}%");
+          ->where('nama', 'like', "%{$searchTerm}%")
+          ->orWhere('deskripsi', 'like', "%{$searchTerm}%");
       });
     }
 
     // Apply sorting
-    $sortField     = $request->sort_by ?? 'nama_222297';
+    $sortField     = $request->sort_by ?? 'nama';
     $sortDirection = $request->sort_direction ?? 'asc';
     $query->orderBy($sortField, $sortDirection);
 
@@ -53,8 +53,8 @@ class UserMenuController extends RoutingController
   {
     // Ambil 4 produk terbaru dengan stok > 0
     $latestMenus = Menu::with('kategori')
-      ->where('jumlah_222297', '>', 0)
-      ->orderBy('created_at_222297', 'desc')
+      ->where('jumlah', '>', 0)
+      ->orderBy('created_at', 'desc')
       ->take(4)
       ->get();
 
@@ -70,8 +70,8 @@ class UserMenuController extends RoutingController
   public function category($categoryId)
   {
     $category   = KategoriProduk::findOrFail($categoryId);
-    $menus      = Menu::where('kode_kategori_222297', $categoryId)
-      ->where('jumlah_222297', '>', 0)
+    $menus      = Menu::where('kode_kategori', $categoryId)
+      ->where('jumlah', '>', 0)
       ->paginate(12);
     $categories = KategoriProduk::all();
 
@@ -89,9 +89,9 @@ class UserMenuController extends RoutingController
     $menu = Menu::with('kategori')->findOrFail($id);
 
     // Get related menu items (same category)
-    $relatedMenus = Menu::where('kode_kategori_222297', $menu->kode_kategori_222297)
-      ->where('kode_menu_222297', '!=', $menu->kode_menu_222297)
-      ->where('jumlah_222297', '>', 0)
+    $relatedMenus = Menu::where('kode_kategori', $menu->kode_kategori)
+      ->where('kode_menu', '!=', $menu->kode_menu)
+      ->where('jumlah', '>', 0)
       ->limit(4)
       ->get();
 
@@ -108,9 +108,9 @@ class UserMenuController extends RoutingController
   {
     $searchTerm = $request->input('query');
 
-    $menus = Menu::where('nama_222297', 'like', "%{$searchTerm}%")
-      ->orWhere('deskripsi_222297', 'like', "%{$searchTerm}%")
-      ->where('jumlah_222297', '>', 0)
+    $menus = Menu::where('nama', 'like', "%{$searchTerm}%")
+      ->orWhere('deskripsi', 'like', "%{$searchTerm}%")
+      ->where('jumlah', '>', 0)
       ->paginate(12);
 
     $categories = KategoriProduk::all();
@@ -129,11 +129,11 @@ class UserMenuController extends RoutingController
     $minPrice = $request->input('min_price', 0);
     $maxPrice = $request->input('max_price');
 
-    $query = Menu::where('jumlah_222297', '>', 0)
-      ->where('harga_222297', '>=', $minPrice);
+    $query = Menu::where('jumlah', '>', 0)
+      ->where('harga', '>=', $minPrice);
 
     if ($maxPrice) {
-      $query->where('harga_222297', '<=', $maxPrice);
+      $query->where('harga', '<=', $maxPrice);
     }
 
     $menus      = $query->paginate(12);
@@ -151,11 +151,11 @@ class UserMenuController extends RoutingController
   public function getMenuItems(Request $request)
   {
     // Start with a base query
-    $query = Menu::with('kategori')->where('jumlah_222297', '>', 0);
+    $query = Menu::with('kategori')->where('jumlah', '>', 0);
 
     // Apply category filter if provided
     if ($request->has('category_id') && $request->category_id != 'all') {
-      $query->where('kode_kategori_222297', $request->category_id);
+      $query->where('kode_kategori', $request->category_id);
     }
 
     // Apply search if provided
@@ -163,22 +163,22 @@ class UserMenuController extends RoutingController
       $searchTerm = $request->search;
       $query->where(function ($q) use ($searchTerm) {
         $q
-          ->where('nama_222297', 'like', "%{$searchTerm}%")
-          ->orWhere('deskripsi_222297', 'like', "%{$searchTerm}%");
+          ->where('nama', 'like', "%{$searchTerm}%")
+          ->orWhere('deskripsi', 'like', "%{$searchTerm}%");
       });
     }
 
     // Apply price filter if provided
     if ($request->has('min_price')) {
-      $query->where('harga_222297', '>=', $request->min_price);
+      $query->where('harga', '>=', $request->min_price);
     }
 
     if ($request->has('max_price')) {
-      $query->where('harga_222297', '<=', $request->max_price);
+      $query->where('harga', '<=', $request->max_price);
     }
 
     // Apply sorting
-    $sortField     = $request->sort_by ?? 'nama_222297';
+    $sortField     = $request->sort_by ?? 'nama';
     $sortDirection = $request->sort_direction ?? 'asc';
     $query->orderBy($sortField, $sortDirection);
 

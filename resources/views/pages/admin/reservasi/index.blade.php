@@ -108,11 +108,11 @@
                                         <div class="flex items-center">
                                             <div
                                                 class="w-10 h-10 bg-gradient-to-br from-[#6F4E37] to-[#8B5A3C] rounded-full flex items-center justify-center text-white font-semibold mr-3">
-                                                {{ strtoupper(substr($reservasi->nama_pelanggan_222297, 0, 1)) }}
+                                                {{ strtoupper(substr($reservasi->nama_pelanggan, 0, 1)) }}
                                             </div>
                                             <div>
                                                 <div class="text-sm font-medium text-gray-900">
-                                                    {{ $reservasi->nama_pelanggan_222297 }}</div>
+                                                    {{ $reservasi->nama_pelanggan }}</div>
                                             </div>
                                         </div>
                                     </td>
@@ -120,14 +120,14 @@
                                         <div class="flex items-center">
                                             <div
                                                 class="bg-amber-100 text-amber-800 px-3 py-1 rounded-lg text-sm font-medium">
-                                                {{ \Carbon\Carbon::parse($reservasi->tanggal_reservasi_222297)->format('d M Y') }}
+                                                {{ \Carbon\Carbon::parse($reservasi->tanggal_reservasi)->format('d M Y') }}
                                             </div>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div class="bg-blue-100 text-blue-800 px-3 py-1 rounded-lg text-sm font-medium">
-                                                {{ \Carbon\Carbon::parse($reservasi->jam_reservasi_222297)->format('H:i') }}
+                                                {{ \Carbon\Carbon::parse($reservasi->jam_reservasi)->format('H:i') }}
                                             </div>
                                         </div>
                                     </td>
@@ -135,13 +135,13 @@
                                         <div class="flex items-center">
                                             <div
                                                 class="bg-green-100 text-green-800 px-3 py-1 rounded-lg text-sm font-medium">
-                                                Meja {{ $reservasi->nomor_meja_222297 }}
+                                                Meja {{ $reservasi->nomor_meja }}
                                             </div>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center">
                                         <div class="flex items-center justify-center space-x-2">
-                                            <a href="{{ route('admin.reservasi.show', $reservasi->kode_reservasi_222297) }}"
+                                            <a href="{{ route('admin.reservasi.show', $reservasi->kode_reservasi) }}"
                                                 class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm transition duration-200 flex items-center shadow-sm">
                                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24">
@@ -153,7 +153,7 @@
                                                 </svg>
                                                 Show
                                             </a>
-                                            <a href="{{ route('admin.reservasi.edit', $reservasi->kode_reservasi_222297) }}"
+                                            <a href="{{ route('admin.reservasi.edit', $reservasi->kode_reservasi) }}"
                                                 class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-lg text-sm transition duration-200 flex items-center shadow-sm">
                                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24">
@@ -164,7 +164,7 @@
                                                 Edit
                                             </a>
                                             <form
-                                                action="{{ route('admin.reservasi.destroy', $reservasi->kode_reservasi_222297) }}"
+                                                action="{{ route('admin.reservasi.destroy', $reservasi->kode_reservasi) }}"
                                                 method="POST" class="inline"
                                                 onsubmit="return confirm('Yakin ingin menghapus reservasi ini?');">
                                                 @csrf

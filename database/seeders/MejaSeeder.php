@@ -14,34 +14,34 @@ class MejaSeeder extends Seeder
     {
         $tables = [
             [
-                'nomor_meja_222297' => 'T01',
-                'kapasitas_222297'  => 2,
-                'status_222297'     => 'kosong',
+                'nomor_meja' => 'T01',
+                'kapasitas'  => 2,
+                'status'     => 'kosong',
             ],
             [
-                'nomor_meja_222297' => 'T02',
-                'kapasitas_222297'  => 2,
-                'status_222297'     => 'kosong',
+                'nomor_meja' => 'T02',
+                'kapasitas'  => 2,
+                'status'     => 'kosong',
             ],
             [
-                'nomor_meja_222297' => 'T03',
-                'kapasitas_222297'  => 4,
-                'status_222297'     => 'kosong',
+                'nomor_meja' => 'T03',
+                'kapasitas'  => 4,
+                'status'     => 'kosong',
             ],
             [
-                'nomor_meja_222297' => 'T04',
-                'kapasitas_222297'  => 4,
-                'status_222297'     => 'kosong',
+                'nomor_meja' => 'T04',
+                'kapasitas'  => 4,
+                'status'     => 'kosong',
             ],
             [
-                'nomor_meja_222297' => 'T05',
-                'kapasitas_222297'  => 6,
-                'status_222297'     => 'kosong',
+                'nomor_meja' => 'T05',
+                'kapasitas'  => 6,
+                'status'     => 'kosong',
             ],
             [
-                'nomor_meja_222297' => 'T06',
-                'kapasitas_222297'  => 8,
-                'status_222297'     => 'kosong',
+                'nomor_meja' => 'T06',
+                'kapasitas'  => 8,
+                'status'     => 'kosong',
             ],
         ];
 

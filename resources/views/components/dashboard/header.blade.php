@@ -8,13 +8,13 @@
         <div class="flex items-center space-x-4">
             <div class="dropdown dropdown-end relative" x-data="{ open: false }">
                 <div class="flex gap-3 items-center">
-                    <div class="text-amber-800 font-medium">{{ Auth::user()->name_222297 }}</div>
+                    <div class="text-amber-800 font-medium">{{ Auth::user()->name }}</div>
                     <div @click="open = !open" tabindex="0" role="button"
                         class="relative flex items-center justify-center w-10 h-10 rounded-full bg-gray-600 text-white cursor-pointer hover:shadow-md transition-all duration-200">
                         <div
                             class="relative w-10 h-10 overflow-hidden  rounded-full border-2 border-white bg-[#422424] shadow-lg flex items-center justify-center">
                             <span class="text-white font-bold text-lg">
-                                {{ strtoupper(substr(Auth::user()->name_222297, 0, 1)) }}{{ strpos(Auth::user()->name_222297, ' ') ? strtoupper(substr(Auth::user()->name_222297, strpos(Auth::user()->name_222297, ' ') + 1, 1)) : '' }}
+                                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}{{ strpos(Auth::user()->name, ' ') ? strtoupper(substr(Auth::user()->name, strpos(Auth::user()->name, ' ') + 1, 1)) : '' }}
                             </span>
                             <div class="absolute inset-0 bg-white opacity-10 rounded-full mix-blend-overlay"></div>
                         </div>

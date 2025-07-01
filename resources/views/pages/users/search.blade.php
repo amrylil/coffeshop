@@ -58,30 +58,29 @@
                         @foreach ($menus as $menu)
                             <div class="product-card fade-in">
                                 <div class="bg-white rounded-xl shadow-md text-left text-[#3e1f1f] relative">
-                                    <a href="{{ route('menu.show', $menu->kode_menu_222297) }}">
+                                    <a href="{{ route('menu.show', $menu->kode_menu) }}">
                                         <div class="p-4 w-full h-72">
                                             <span
                                                 class="absolute top-2 left-4 bg-[#5e3c3c] text-white px-2 py-1 text-xs rounded">
-                                                {{ $menu->kategori->nama_kategori_222297 }}
+                                                {{ $menu->kategori->nama_kategori }}
                                             </span>
-                                            @if ($menu->path_img_222297)
-                                                <img src="{{ asset('images/' . $menu->path_img_222297) }}"
-                                                    alt="{{ $menu->nama_222297 }}"
-                                                    class="w-full h-full scale-110 object-cover">
+                                            @if ($menu->path_img)
+                                                <img src="{{ asset('images/' . $menu->path_img) }}"
+                                                    alt="{{ $menu->nama }}" class="w-full h-full scale-110 object-cover">
                                             @else
-                                                <img src="{{ asset('images/coffe.png') }}" alt="{{ $menu->nama_222297 }}"
+                                                <img src="{{ asset('images/coffe.png') }}" alt="{{ $menu->nama }}"
                                                     class="w-full h-full scale-110 object-cover">
                                             @endif
                                         </div>
                                     </a>
                                     <div class="bg-[#eee3d2] p-4">
-                                        <h3 class="font-semibold text-sm mb-2">{{ $menu->nama_222297 }}</h3>
+                                        <h3 class="font-semibold text-sm mb-2">{{ $menu->nama }}</h3>
                                         <div class="flex justify-between items-center">
                                             <span class="font-bold text-base">Rp
-                                                {{ number_format($menu->harga_222297, 0, ',', '.') }}</span>
+                                                {{ number_format($menu->harga, 0, ',', '.') }}</span>
                                             <button
                                                 class="bg-[#3e1f1f] hover:bg-[#5a2d2d] text-white text-xs px-3 py-1 rounded transition add-to-cart-btn"
-                                                data-product-id="{{ $menu->kode_menu_222297 }}">
+                                                data-product-id="{{ $menu->kode_menu }}">
                                                 ADD TO CART
                                             </button>
                                         </div>

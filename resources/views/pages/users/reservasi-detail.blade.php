@@ -26,15 +26,15 @@
                 <div class="bg-[#6f4e37] p-6">
                     <h3 class="text-2xl font-serif text-white">Detail Reservasi Anda</h3>
                     <p class="text-sm text-[#e6dbd1]">Kode Reservasi: <span
-                            class="font-mono">{{ $reservasi->kode_reservasi_222297 }}</span></p>
+                            class="font-mono">{{ $reservasi->kode_reservasi }}</span></p>
                 </div>
 
                 <div class="p-8 space-y-6">
                     @php
                         $waktuReservasi = \Carbon\Carbon::parse(
-                            $reservasi->tanggal_reservasi_222297->toDateString() .
+                            $reservasi->tanggal_reservasi->toDateString() .
                                 ' ' .
-                                $reservasi->jam_reservasi_222297->toTimeString(),
+                                $reservasi->jam_reservasi->toTimeString(),
                         );
                         $sekarang = \Carbon\Carbon::now();
                         $batasWaktu = $waktuReservasi->copy()->addMinutes(15);
@@ -47,21 +47,21 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-800">
                         <div>
                             <span class="font-semibold text-gray-500 block">Nama Pemesan</span>
-                            <p class="text-lg">{{ $reservasi->nama_pelanggan_222297 }}</p>
+                            <p class="text-lg">{{ $reservasi->nama_pelanggan }}</p>
                         </div>
                         <div>
                             <span class="font-semibold text-gray-500 block">Nomor Telepon</span>
-                            <p class="text-lg">{{ $reservasi->no_telepon_222297 }}</p>
+                            <p class="text-lg">{{ $reservasi->no_telepon }}</p>
                         </div>
                         <div>
                             <span class="font-semibold text-gray-500 block">Nomor Meja</span>
-                            <p class="text-lg font-mono">{{ $reservasi->meja->nomor_meja_222297 }} (Kapasitas:
-                                {{ $reservasi->meja->kapasitas_222297 }} orang)</p>
+                            <p class="text-lg font-mono">{{ $reservasi->meja->nomor_meja }} (Kapasitas:
+                                {{ $reservasi->meja->kapasitas }} orang)</p>
                         </div>
                         <div>
                             <span class="font-semibold text-gray-500 block">Waktu Reservasi</span>
-                            <p class="text-lg">{{ $reservasi->tanggal_reservasi_222297->isoFormat('dddd, D MMMM YYYY') }} -
-                                {{ $reservasi->jam_reservasi_222297->format('H:i') }}</p>
+                            <p class="text-lg">{{ $reservasi->tanggal_reservasi->isoFormat('dddd, D MMMM YYYY') }} -
+                                {{ $reservasi->jam_reservasi->format('H:i') }}</p>
                         </div>
                         <div>
                             <span class="font-semibold text-gray-500 block">Status</span>
@@ -69,10 +69,10 @@
                                 {{ $statusReservasi }}
                             </p>
                         </div>
-                        @if ($reservasi->catatan_222297)
+                        @if ($reservasi->catatan)
                             <div class="md:col-span-2">
                                 <span class="font-semibold text-gray-500 block">Catatan Tambahan</span>
-                                <p class="text-lg italic bg-gray-50 p-3 rounded-md">"{{ $reservasi->catatan_222297 }}"</p>
+                                <p class="text-lg italic bg-gray-50 p-3 rounded-md">"{{ $reservasi->catatan }}"</p>
                             </div>
                         @endif
                     </div>

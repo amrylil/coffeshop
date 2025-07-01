@@ -16,16 +16,16 @@ class UserSeeder extends Seeder
     {
         // Admin user
         User::create([
-            'email_222297'      => 'admin@kedaikopi.com',
-            'name_222297'       => 'Admin Kedai Kopi',
-            'password_222297'   => Hash::make('admin123'),
-            'gender_222297'     => 'male',
-            'role_222297'       => 'admin',
-            'address_222297'    => 'Jl. Admin No. 1',
-            'phone_222297'      => '08123456789',
-            'birth_date_222297' => '1990-01-01',
-            'created_at_222297' => now(),
-            'updated_at_222297' => now(),
+            'email'      => 'admin@kedaikopi.com',
+            'name'       => 'Admin Kedai Kopi',
+            'password'   => Hash::make('admin123'),
+            'gender'     => 'male',
+            'role'       => 'admin',
+            'address'    => 'Jl. Admin No. 1',
+            'phone'      => '08123456789',
+            'birth_date' => '1990-01-01',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
     }
 }

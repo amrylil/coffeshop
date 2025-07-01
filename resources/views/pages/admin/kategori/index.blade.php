@@ -56,9 +56,9 @@
                             @forelse($categories as $category)
                                 <tr class="hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        @if ($category->path_img_222297)
-                                            <img src="{{ asset('storage/' . $category->path_img_222297) }}"
-                                                alt="{{ $category->nama_222297 }}" class="h-16 w-16 object-cover rounded">
+                                        @if ($category->path_img)
+                                            <img src="{{ asset('storage/' . $category->path_img) }}"
+                                                alt="{{ $category->nama }}" class="h-16 w-16 object-cover rounded">
                                         @else
                                             <div class="h-16 w-16 bg-gray-200 flex items-center justify-center rounded">
                                                 <span class="text-gray-400">No Image</span>
@@ -66,29 +66,28 @@
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {{ $category->kode_kategori_222297 }}
+                                        {{ $category->kode_kategori }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-[#6F4E37]">
-                                        {{ $category->nama_222297 }}
+                                        {{ $category->nama }}
                                     </td>
                                     <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">
-                                        {{ $category->deskripsi_222297 ?? 'No description' }}
+                                        {{ $category->deskripsi ?? 'No description' }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         {{ $category->menu->count() }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-center">
                                         <div class="flex items-center justify-center space-x-2">
-                                            <a href="{{ route('admin.kategori.show', $category->kode_kategori_222297) }}"
+                                            <a href="{{ route('admin.kategori.show', $category->kode_kategori) }}"
                                                 class="text-blue-600 hover:text-blue-800">
                                                 <span class="px-2 py-1 bg-blue-100 rounded-md">View</span>
                                             </a>
-                                            <a href="{{ route('admin.kategori.edit', $category->kode_kategori_222297) }}"
+                                            <a href="{{ route('admin.kategori.edit', $category->kode_kategori) }}"
                                                 class="text-[#6F4E37] hover:text-[#5D4037]">
                                                 <span class="px-2 py-1 bg-[#F5E6DD] rounded-md">Edit</span>
                                             </a>
-                                            <form
-                                                action="{{ route('admin.kategori.destroy', $category->kode_kategori_222297) }}"
+                                            <form action="{{ route('admin.kategori.destroy', $category->kode_kategori) }}"
                                                 method="POST"
                                                 onsubmit="return confirm('Are you sure you want to delete this category?');">
                                                 @csrf

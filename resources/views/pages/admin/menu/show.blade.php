@@ -7,7 +7,7 @@
             <div class="mb-6 flex justify-between items-center">
                 <h1 class="text-3xl font-bold text-[#6F4E37]">Menu Details</h1>
                 <div class="flex space-x-3">
-                    <a href="{{ route('admin.menu.edit', $menu->kode_menu_222297) }}"
+                    <a href="{{ route('admin.menu.edit', $menu->kode_menu) }}"
                         class="px-4 py-2 bg-black text-white transition">
                         Edit Menu
                     </a>
@@ -24,10 +24,10 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <!-- Menu Image -->
                         <div class="col-span-1 flex flex-col items-center">
-                            @if ($menu->path_img_222297)
+                            @if ($menu->path_img)
                                 <div class="w-full h-64 bg-gray-100 rounded-lg overflow-hidden">
-                                    <img src="{{ asset('images/' . $menu->path_img_222297) }}"
-                                        alt="{{ $menu->nama_222297 }}" class="w-full h-full object-cover">
+                                    <img src="{{ asset('images/' . $menu->path_img) }}" alt="{{ $menu->nama }}"
+                                        class="w-full h-full object-cover">
                                 </div>
                             @else
                                 <div class="w-full h-64 bg-gray-200 flex items-center justify-center rounded-lg">
@@ -40,12 +40,12 @@
                         <div class="col-span-2">
                             <div class="grid grid-cols-1 gap-4">
                                 <div class="border-b border-gray-200 pb-3">
-                                    <h3 class="text-2xl font-semibold text-[#6F4E37]">{{ $menu->nama_222297 }}</h3>
+                                    <h3 class="text-2xl font-semibold text-[#6F4E37]">{{ $menu->nama }}</h3>
                                     <div class="flex items-center mt-2">
                                         <span class="px-2 py-1 bg-[#F5E6DD] text-[#6F4E37] text-xs rounded-full">
-                                            {{ $menu->kategori->nama_222297 ?? 'N/A' }}
+                                            {{ $menu->kategori->nama ?? 'N/A' }}
                                         </span>
-                                        <span class="ml-2 text-gray-500 text-sm">Code: {{ $menu->kode_menu_222297 }}</span>
+                                        <span class="ml-2 text-gray-500 text-sm">Code: {{ $menu->kode_menu }}</span>
                                     </div>
                                 </div>
 
@@ -53,20 +53,20 @@
                                     <div>
                                         <span class="text-sm text-gray-500">Price</span>
                                         <p class="text-xl font-semibold text-[#6F4E37]">Rp
-                                            {{ number_format($menu->harga_222297, 0, ',', '.') }}</p>
+                                            {{ number_format($menu->harga, 0, ',', '.') }}</p>
                                     </div>
                                     <div>
                                         <span class="text-sm text-gray-500">Stock Available</span>
                                         <p
-                                            class="text-xl font-semibold {{ $menu->jumlah_222297 > 10 ? 'text-green-600' : ($menu->jumlah_222297 > 0 ? 'text-yellow-600' : 'text-red-600') }}">
-                                            {{ $menu->jumlah_222297 }} items
+                                            class="text-xl font-semibold {{ $menu->jumlah > 10 ? 'text-green-600' : ($menu->jumlah > 0 ? 'text-yellow-600' : 'text-red-600') }}">
+                                            {{ $menu->jumlah }} items
                                         </p>
                                     </div>
                                 </div>
 
                                 <div class="py-3">
                                     <h4 class="text-sm font-medium text-gray-500 mb-2">Description</h4>
-                                    <p class="text-gray-700">{{ $menu->deskripsi_222297 }}</p>
+                                    <p class="text-gray-700">{{ $menu->deskripsi }}</p>
                                 </div>
 
 
@@ -77,7 +77,7 @@
 
                 <!-- Delete Button -->
                 <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                    <form action="{{ route('admin.menu.destroy', $menu->kode_menu_222297) }}" method="POST" class="inline"
+                    <form action="{{ route('admin.menu.destroy', $menu->kode_menu) }}" method="POST" class="inline"
                         onsubmit="return confirm('Are you sure you want to delete this menu?');">
                         @csrf
                         @method('DELETE')

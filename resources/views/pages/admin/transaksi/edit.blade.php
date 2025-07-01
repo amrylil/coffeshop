@@ -16,7 +16,7 @@
                     </div>
                     <div>
                         <h1 class="text-2xl font-bold text-[#6F4E37]">Edit Transaksi</h1>
-                        <p class="text-gray-600">Kode Transaksi: {{ $transaksi->kode_transaksi_222297 }}</p>
+                        <p class="text-gray-600">Kode Transaksi: {{ $transaksi->kode_transaksi }}</p>
                     </div>
                 </div>
             </div>
@@ -27,7 +27,7 @@
                     <h2 class="text-lg font-semibold text-gray-900">Informasi Transaksi</h2>
                 </div>
 
-                <form action="{{ route('admin.transaksi.update', $transaksi->kode_transaksi_222297) }}" method="POST"
+                <form action="{{ route('admin.transaksi.update', $transaksi->kode_transaksi) }}" method="POST"
                     class="p-6">
                     @csrf
                     @method('PUT')
@@ -35,7 +35,7 @@
                     <div class="grid grid-cols-1 gap-6">
                         <!-- Email User -->
                         <div class="space-y-2">
-                            <label for="email_222297" class="block text-sm font-medium text-gray-700">
+                            <label for="email" class="block text-sm font-medium text-gray-700">
                                 <span class="flex items-center space-x-2">
                                     <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
@@ -45,18 +45,18 @@
                                     <span>Email User</span>
                                 </span>
                             </label>
-                            <select name="email_222297" id="email_222297"
+                            <select name="email" id="email"
                                 class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#6F4E37] focus:ring-[#6F4E37] focus:ring-opacity-50 transition duration-150 ease-in-out"
                                 required>
                                 <option value="">Pilih User</option>
                                 @foreach ($users as $user)
-                                    <option value="{{ $user->email_222297 }}"
-                                        {{ old('email_222297', $transaksi->email_222297) == $user->email_222297 ? 'selected' : '' }}>
-                                        {{ $user->name }} ({{ $user->email_222297 }})
+                                    <option value="{{ $user->email }}"
+                                        {{ old('email', $transaksi->email) == $user->email ? 'selected' : '' }}>
+                                        {{ $user->name }} ({{ $user->email }})
                                     </option>
                                 @endforeach
                             </select>
-                            @error('email_222297')
+                            @error('email')
                                 <p class="text-red-600 text-sm flex items-center space-x-1">
                                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd"
@@ -70,7 +70,7 @@
 
                         <!-- Menu -->
                         <div class="space-y-2">
-                            <label for="kode_menu_222297" class="block text-sm font-medium text-gray-700">
+                            <label for="kode_menu" class="block text-sm font-medium text-gray-700">
                                 <span class="flex items-center space-x-2">
                                     <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
@@ -80,20 +80,20 @@
                                     <span>Menu</span>
                                 </span>
                             </label>
-                            <select name="kode_menu_222297" id="kode_menu_222297"
+                            <select name="kode_menu" id="kode_menu"
                                 class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#6F4E37] focus:ring-[#6F4E37] focus:ring-opacity-50 transition duration-150 ease-in-out"
                                 required>
                                 <option value="">Pilih Menu</option>
                                 @foreach ($menus as $menu)
-                                    <option value="{{ $menu->kode_menu_222297 }}" data-harga="{{ $menu->harga_222297 }}"
-                                        {{ old('kode_menu_222297', $transaksi->kode_menu_222297) == $menu->kode_menu_222297 ? 'selected' : '' }}>
-                                        {{-- [DIPERBAIKI] Menggunakan nama_222297 sesuai model Menu --}}
-                                        {{ $menu->nama_222297 }} - Rp
-                                        {{ number_format($menu->harga_222297, 0, ',', '.') }}
+                                    <option value="{{ $menu->kode_menu }}" data-harga="{{ $menu->harga }}"
+                                        {{ old('kode_menu', $transaksi->kode_menu) == $menu->kode_menu ? 'selected' : '' }}>
+                                        {{-- [DIPERBAIKI] Menggunakan nama sesuai model Menu --}}
+                                        {{ $menu->nama }} - Rp
+                                        {{ number_format($menu->harga, 0, ',', '.') }}
                                     </option>
                                 @endforeach
                             </select>
-                            @error('kode_menu_222297')
+                            @error('kode_menu')
                                 <p class="text-red-600 text-sm flex items-center space-x-1">
                                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd"
@@ -109,7 +109,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Jumlah -->
                             <div class="space-y-2">
-                                <label for="jumlah_222297" class="block text-sm font-medium text-gray-700">
+                                <label for="jumlah" class="block text-sm font-medium text-gray-700">
                                     <span class="flex items-center space-x-2">
                                         <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
@@ -119,11 +119,11 @@
                                         <span>Jumlah</span>
                                     </span>
                                 </label>
-                                <input type="number" name="jumlah_222297" id="jumlah_222297" min="1"
-                                    value="{{ old('jumlah_222297', $transaksi->jumlah_222297) }}"
+                                <input type="number" name="jumlah" id="jumlah" min="1"
+                                    value="{{ old('jumlah', $transaksi->jumlah) }}"
                                     class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#6F4E37] focus:ring-[#6F4E37] focus:ring-opacity-50 transition duration-150 ease-in-out"
                                     required>
-                                @error('jumlah_222297')
+                                @error('jumlah')
                                     <p class="text-red-600 text-sm flex items-center space-x-1">
                                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd"
@@ -137,7 +137,7 @@
 
                             <!-- Status -->
                             <div class="space-y-2">
-                                <label for="status_222297" class="block text-sm font-medium text-gray-700">
+                                <label for="status" class="block text-sm font-medium text-gray-700">
                                     <span class="flex items-center space-x-2">
                                         <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
@@ -147,31 +147,31 @@
                                         <span>Status</span>
                                     </span>
                                 </label>
-                                <select name="status_222297" id="status_222297"
+                                <select name="status" id="status"
                                     class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#6F4E37] focus:ring-[#6F4E37] focus:ring-opacity-50 transition duration-150 ease-in-out"
                                     required>
                                     <option value="pending"
-                                        {{ old('status_222297', $transaksi->status_222297) == 'pending' ? 'selected' : '' }}>
+                                        {{ old('status', $transaksi->status) == 'pending' ? 'selected' : '' }}>
                                         🟡 Pending
                                     </option>
                                     <option value="dikonfirmasi"
-                                        {{ old('status_222297', $transaksi->status_222297) == 'dikonfirmasi' ? 'selected' : '' }}>
+                                        {{ old('status', $transaksi->status) == 'dikonfirmasi' ? 'selected' : '' }}>
                                         🔵 Dikonfirmasi
                                     </option>
                                     <option value="dikirim"
-                                        {{ old('status_222297', $transaksi->status_222297) == 'dikirim' ? 'selected' : '' }}>
+                                        {{ old('status', $transaksi->status) == 'dikirim' ? 'selected' : '' }}>
                                         🔵 Dikirim
                                     </option>
                                     <option value="ditolak"
-                                        {{ old('status_222297', $transaksi->status_222297) == 'ditolak' ? 'selected' : '' }}>
+                                        {{ old('status', $transaksi->status) == 'ditolak' ? 'selected' : '' }}>
                                         🔴 Ditolak
                                     </option>
                                     <option value="selesai"
-                                        {{ old('status_222297', $transaksi->status_222297) == 'selesai' ? 'selected' : '' }}>
+                                        {{ old('status', $transaksi->status) == 'selesai' ? 'selected' : '' }}>
                                         🟢 Selesai
                                     </option>
                                 </select>
-                                @error('status_222297')
+                                @error('status')
                                     <p class="text-red-600 text-sm flex items-center space-x-1">
                                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd"
@@ -186,7 +186,7 @@
 
                         <!-- Tanggal Transaksi -->
                         <div class="space-y-2">
-                            <label for="tanggal_transaksi_222297" class="block text-sm font-medium text-gray-700">
+                            <label for="tanggal_transaksi" class="block text-sm font-medium text-gray-700">
                                 <span class="flex items-center space-x-2">
                                     <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
@@ -196,11 +196,11 @@
                                     <span>Tanggal Transaksi</span>
                                 </span>
                             </label>
-                            <input type="date" name="tanggal_transaksi_222297" id="tanggal_transaksi_222297"
-                                value="{{ old('tanggal_transaksi_222297', $transaksi->tanggal_transaksi_222297->format('Y-m-d')) }}"
+                            <input type="date" name="tanggal_transaksi" id="tanggal_transaksi"
+                                value="{{ old('tanggal_transaksi', $transaksi->tanggal_transaksi->format('Y-m-d')) }}"
                                 class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#6F4E37] focus:ring-[#6F4E37] focus:ring-opacity-50 transition duration-150 ease-in-out"
                                 required>
-                            @error('tanggal_transaksi_222297')
+                            @error('tanggal_transaksi')
                                 <p class="text-red-600 text-sm flex items-center space-x-1">
                                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd"
@@ -226,7 +226,7 @@
                                     </span>
                                 </label>
                                 <p class="text-2xl font-bold text-[#6F4E37]">
-                                    Rp {{ number_format($transaksi->harga_total_222297, 0, ',', '.') }}
+                                    Rp {{ number_format($transaksi->harga_total, 0, ',', '.') }}
                                 </p>
                                 <p class="text-sm text-gray-600">
                                     <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -243,7 +243,7 @@
                     <!-- Action Buttons -->
                     <div class="mt-8 pt-6 border-t border-gray-200">
                         <div class="flex flex-col sm:flex-row gap-3 sm:justify-end">
-                            <a href="{{ route('admin.transaksi.show', $transaksi->kode_transaksi_222297) }}"
+                            <a href="{{ route('admin.transaksi.show', $transaksi->kode_transaksi) }}"
                                 class="inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6F4E37] transition duration-150 ease-in-out">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -269,8 +269,8 @@
     <script>
         // Auto calculate total price when menu or quantity changes
         document.addEventListener('DOMContentLoaded', function() {
-            const menuSelect = document.getElementById('kode_menu_222297');
-            const quantityInput = document.getElementById('jumlah_222297');
+            const menuSelect = document.getElementById('kode_menu');
+            const quantityInput = document.getElementById('jumlah');
             const totalDisplay = document.getElementById('harga_total_display'); // Tambahkan ID ini ke elemen harga
 
             // Fungsi untuk kalkulasi

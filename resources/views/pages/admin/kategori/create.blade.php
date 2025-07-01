@@ -9,29 +9,28 @@
             @csrf
 
             <div class="mb-5">
-                <label for="kode_kategori_222297" class="block text-gray-700 font-semibold mb-2">Kode Kategori</label>
-                <input type="text" name="kode_kategori_222297" id="kode_kategori_222297"
+                <label for="kode_kategori" class="block text-gray-700 font-semibold mb-2">Kode Kategori</label>
+                <input type="text" name="kode_kategori" id="kode_kategori"
                     class="border border-gray-300 p-3 rounded-lg w-full" placeholder="Masukkan nama kategori">
             </div>
             <div class="mb-5">
-                <label for="nama_222297" class="block text-gray-700 font-semibold mb-2">Nama Kategori</label>
-                <input type="text" name="nama_222297" id="nama_222297"
-                    class="border border-gray-300 p-3 rounded-lg w-full" placeholder="Masukkan nama kategori">
+                <label for="nama" class="block text-gray-700 font-semibold mb-2">Nama Kategori</label>
+                <input type="text" name="nama" id="nama" class="border border-gray-300 p-3 rounded-lg w-full"
+                    placeholder="Masukkan nama kategori">
             </div>
 
 
             <!-- Deskripsi Kategori -->
             <div class="mb-5">
-                <label for="deskripsi_222297" class="block text-gray-700 font-semibold mb-2">Deskripsi</label>
-                <textarea name="deskripsi_222297" id="deskripsi_222297" class="border border-gray-300 p-3 rounded-lg w-full"
+                <label for="deskripsi" class="block text-gray-700 font-semibold mb-2">Deskripsi</label>
+                <textarea name="deskripsi" id="deskripsi" class="border border-gray-300 p-3 rounded-lg w-full"
                     placeholder="Deskripsi kategori (opsional)"></textarea>
             </div>
 
             <!-- Gambar Kategori -->
             <div class="mb-5">
-                <label for="path_img_222297" class="block text-gray-700 font-semibold mb-2">Gambar Kategori</label>
-                <input type="file" name="path_img_222297" id="path_img_222297"
-                    class="border border-gray-300 p-3 rounded-lg w-full">
+                <label for="path_img" class="block text-gray-700 font-semibold mb-2">Gambar Kategori</label>
+                <input type="file" name="path_img" id="path_img" class="border border-gray-300 p-3 rounded-lg w-full">
             </div>
 
             <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-bold px-4 py-2 rounded-lg">Simpan

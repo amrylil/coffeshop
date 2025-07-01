@@ -160,20 +160,20 @@
 
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm text-gray-900 font-medium">
-                                            {{ $trans->menu->nama_222297 ?? 'N/A' }}
+                                            {{ $trans->menu->nama ?? 'N/A' }}
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm text-gray-900">
                                             <span
                                                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                                {{ $trans->jumlah_222297 }} pcs
+                                                {{ $trans->jumlah }} pcs
                                             </span>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm font-bold text-green-600">
-                                            Rp {{ number_format($trans->harga_total_222297, 0, ',', '.') }}
+                                            Rp {{ number_format($trans->harga_total, 0, ',', '.') }}
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
@@ -190,11 +190,11 @@
                                                 'ditolak' => 'bg-red-100 text-red-800 border-red-200 hover:bg-red-200',
                                             ];
                                             $statusClass =
-                                                $statusColors[$trans->status_222297] ??
+                                                $statusColors[$trans->status] ??
                                                 'bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200';
                                         @endphp
                                         <button
-                                            onclick="openStatusModal('{{ $trans->kode_transaksi_222297 }}', '{{ $trans->status_222297 }}')"
+                                            onclick="openStatusModal('{{ $trans->kode_transaksi }}', '{{ $trans->status }}')"
                                             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border {{ $statusClass }} cursor-pointer transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                             <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
@@ -202,7 +202,7 @@
                                                     d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
                                                 </path>
                                             </svg>
-                                            {{ ucfirst($trans->status_222297) }}
+                                            {{ ucfirst($trans->status) }}
                                         </button>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
@@ -212,12 +212,11 @@
                                                 'dilokasi' => 'bg-blue-100 text-blue-800',
                                             ];
                                             $jenisClass =
-                                                $jenisColors[$trans->jenis_pesanan_222297] ??
-                                                'bg-gray-100 text-gray-800';
+                                                $jenisColors[$trans->jenis_pesanan] ?? 'bg-gray-100 text-gray-800';
                                         @endphp
                                         <span
                                             class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $jenisClass }}">
-                                            @if ($trans->jenis_pesanan_222297 == 'delivery')
+                                            @if ($trans->jenis_pesanan == 'delivery')
                                                 🚚 Delivery
                                             @else
                                                 🏪 Di Lokasi
@@ -225,12 +224,12 @@
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {{ \Carbon\Carbon::parse($trans->tanggal_transaksi_222297)->format('d M Y') }}
+                                        {{ \Carbon\Carbon::parse($trans->tanggal_transaksi)->format('d M Y') }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                                         <div class="flex items-center justify-center space-x-2">
                                             <!-- View Button -->
-                                            <a href="{{ route('admin.transaksi.show', $trans->kode_transaksi_222297) }}"
+                                            <a href="{{ route('admin.transaksi.show', $trans->kode_transaksi) }}"
                                                 class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
                                                 <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24">
@@ -244,7 +243,7 @@
                                             </a>
 
                                             <!-- Edit Button -->
-                                            <a href="{{ route('admin.transaksi.edit', $trans->kode_transaksi_222297) }}"
+                                            <a href="{{ route('admin.transaksi.edit', $trans->kode_transaksi) }}"
                                                 class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors duration-200">
                                                 <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24">
@@ -348,7 +347,7 @@
                         <div class="mb-4">
                             <label for="status" class="block text-sm font-medium text-gray-700 text-left">Status
                                 Baru</label>
-                            <select id="status" name="status_222297" required
+                            <select id="status" name="status" required
                                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                                 <option value="">Pilih Status</option>
                                 <option value="pending" class="text-yellow-600">🟡 Pending</option>

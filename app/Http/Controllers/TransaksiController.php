@@ -27,16 +27,16 @@ class TransaksiController extends Controller
     {
         // Memulai query dasar
         $query = Transaksi::with(['menu'])  // kita tidak perlu 'delivery' di sini berdasarkan struktur terakhir
-            ->where('email_222297', Auth::user()->email_222297);
+            ->where('email', Auth::user()->email);
 
         // [BARU] Terapkan filter jika ada
         if ($request->filled('jenis_pesanan') && in_array($request->jenis_pesanan, ['delivery', 'di_lokasi'])) {
-            $query->where('jenis_pesanan_222297', $request->jenis_pesanan);
+            $query->where('jenis_pesanan', $request->jenis_pesanan);
         }
 
         // Ambil data dengan urutan dan pagination
         $transaksi = $query
-            ->orderBy('created_at_222297', 'desc')
+            ->orderBy('created_at', 'desc')
             ->paginate(10)
             ->withQueryString();  // [BARU] agar filter tetap ada saat pindah halaman pagination
 
@@ -46,8 +46,8 @@ class TransaksiController extends Controller
     public function userDetail($kode_transaksi)
     {
         $transaksi = Transaksi::with('menu')
-            ->where('kode_transaksi_222297', $kode_transaksi)
-            ->where('email_222297', Auth::user()->email_222297)
+            ->where('kode_transaksi', $kode_transaksi)
+            ->where('email', Auth::user()->email)
             ->firstOrFail();
 
         return view('pages.users.transaksi_detail', compact('transaksi'));
@@ -58,7 +58,7 @@ class TransaksiController extends Controller
      */
     public function userCreate()
     {
-        $menus = Menu::where('status_222297', 'aktif')->get();
+        $menus = Menu::where('status', 'aktif')->get();
         return view('user.transaksi.create', compact('menus'));
     }
 
@@ -68,9 +68,9 @@ class TransaksiController extends Controller
     public function userStore(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'kode_menu_222297' => 'required|exists:menu_222297,kode_menu_222297',
-            'jumlah_222297'    => 'required|integer|min:1',
-            'bukti_tf_222297'  => 'required|image|mimes:jpeg,png,jpg|max:2048'
+            'kode_menu' => 'required|exists:menu,kode_menu',
+            'jumlah'    => 'required|integer|min:1',
+            'bukti_tf'  => 'required|image|mimes:jpeg,png,jpg|max:2048'
         ]);
 
         if ($validator->fails()) {
@@ -80,24 +80,24 @@ class TransaksiController extends Controller
                 ->withInput();
         }
 
-        $menu        = Menu::where('kode_menu_222297', $request->kode_menu_222297)->first();
-        $harga_total = $menu->harga_222297 * $request->jumlah_222297;
+        $menu        = Menu::where('kode_menu', $request->kode_menu)->first();
+        $harga_total = $menu->harga * $request->jumlah;
 
         $bukti_tf_path = null;
-        if ($request->hasFile('bukti_tf_222297')) {
+        if ($request->hasFile('bukti_tf')) {
             $bukti_tf_path = $request
-                ->file('bukti_tf_222297')
+                ->file('bukti_tf')
                 ->store('bukti_transfer', 'public');
         }
 
         $transaksi = Transaksi::create([
-            'email_222297'             => Auth::user()->email_222297,
-            'kode_menu_222297'         => $request->kode_menu_222297,
-            'jumlah_222297'            => $request->jumlah_222297,
-            'harga_total_222297'       => $harga_total,
-            'status_222297'            => 'pending',
-            'bukti_tf_222297'          => $bukti_tf_path,
-            'tanggal_transaksi_222297' => now(),
+            'email'             => Auth::user()->email,
+            'kode_menu'         => $request->kode_menu,
+            'jumlah'            => $request->jumlah,
+            'harga_total'       => $harga_total,
+            'status'            => 'pending',
+            'bukti_tf'          => $bukti_tf_path,
+            'tanggal_transaksi' => now(),
         ]);
 
         return redirect()
@@ -110,7 +110,7 @@ class TransaksiController extends Controller
      */
     public function userCheckout()
     {
-        $keranjang = Keranjang::where('email_222297', Auth::user()->email_222297)->first();
+        $keranjang = Keranjang::where('email', Auth::user()->email)->first();
 
         if (!$keranjang) {
             return redirect()
@@ -127,7 +127,7 @@ class TransaksiController extends Controller
         }
 
         $subtotal = $cartItems->sum(function ($item) {
-            return $item->quantity_222297 * $item->menu->harga_222297;
+            return $item->quantity * $item->menu->harga;
         });
 
         $pajak = $subtotal * 0.1;
@@ -140,11 +140,11 @@ class TransaksiController extends Controller
     {
         // 1. Validasi data request (dengan validasi kondisional)
         $validator = Validator::make($request->all(), [
-            'payment_method'       => 'required|in:dana,shopee_pay,cash',  // Validasi metode pembayaran
-            'catatan_222297'       => 'nullable|string|max:500',
-            'jenis_pesanan_222297' => 'required|in:delivery,di_lokasi',
+            'payment_method' => 'required|in:dana,shopee_pay,cash',  // Validasi metode pembayaran
+            'catatan'        => 'nullable|string|max:500',
+            'jenis_pesanan'  => 'required|in:delivery,di_lokasi',
             // Jadikan bukti transfer wajib HANYA JIKA metode pembayaran bukan 'cash'
-            'bukti_tf_222297'      => [
+            'bukti_tf'       => [
                 Rule::requiredIf(fn() => $request->input('payment_method') !== 'cash'),
                 'nullable',
                 'image',
@@ -164,7 +164,7 @@ class TransaksiController extends Controller
         try {
             DB::beginTransaction();
 
-            $keranjang = Keranjang::where('email_222297', Auth::user()->email_222297)->first();
+            $keranjang = Keranjang::where('email', Auth::user()->email)->first();
 
             if (!$keranjang || $keranjang->items->isEmpty()) {
                 return response()->json([
@@ -181,8 +181,8 @@ class TransaksiController extends Controller
 
             // 2. Proses upload file HANYA JIKA metode pembayaran BUKAN 'cash'
             if ($request->input('payment_method') !== 'cash') {
-                if ($request->hasFile('bukti_tf_222297')) {
-                    $bukti_tf_path = $request->file('bukti_tf_222297')->store('bukti_transfer', 'public');
+                if ($request->hasFile('bukti_tf')) {
+                    $bukti_tf_path = $request->file('bukti_tf')->store('bukti_transfer', 'public');
                 }
             }
 
@@ -190,20 +190,20 @@ class TransaksiController extends Controller
 
             // Loop untuk membuat transaksi per item
             foreach ($cartItems as $item) {
-                $harga_item = $item->menu->harga_222297 * $item->quantity_222297;
+                $harga_item = $item->menu->harga * $item->quantity;
 
                 // 3. Buat transaksi dengan path bukti transfer yang sudah diproses
                 Transaksi::create([
-                    'email_222297'             => Auth::user()->email_222297,
-                    'kode_menu_222297'         => $item->kode_menu_222297,
-                    'jumlah_222297'            => $item->quantity_222297,
-                    'harga_total_222297'       => $harga_item,
-                    'status_222297'            => 'pending',
-                    'jenis_pesanan_222297'     => $request->jenis_pesanan_222297,
-                    'bukti_tf_222297'          => $bukti_tf_path,  // Akan berisi path atau null
-                    'catatan_222297'           => $request->catatan_222297,
-                    'payment_method'           => $request->payment_method,  // Simpan juga metode pembayarannya
-                    'tanggal_transaksi_222297' => now(),
+                    'email'             => Auth::user()->email,
+                    'kode_menu'         => $item->kode_menu,
+                    'jumlah'            => $item->quantity,
+                    'harga_total'       => $harga_item,
+                    'status'            => 'pending',
+                    'jenis_pesanan'     => $request->jenis_pesanan,
+                    'bukti_tf'          => $bukti_tf_path,  // Akan berisi path atau null
+                    'catatan'           => $request->catatan,
+                    'payment_method'    => $request->payment_method,  // Simpan juga metode pembayarannya
+                    'tanggal_transaksi' => now(),
                 ]);
             }
 
@@ -232,8 +232,8 @@ class TransaksiController extends Controller
     public function userShow($id)
     {
         $transaksi = Transaksi::with(['menu', 'delivery'])
-            ->where('kode_transaksi_222297', $id)
-            ->where('email_222297', Auth::user()->email_222297)
+            ->where('kode_transaksi', $id)
+            ->where('email', Auth::user()->email)
             ->firstOrFail();
 
         return view('user.transaksi.show', compact('transaksi'));
@@ -244,12 +244,12 @@ class TransaksiController extends Controller
      */
     public function userCancel($id)
     {
-        $transaksi = Transaksi::where('kode_transaksi_222297', $id)
-            ->where('email_222297', Auth::user()->email_222297)
-            ->where('status_222297', 'pending')
+        $transaksi = Transaksi::where('kode_transaksi', $id)
+            ->where('email', Auth::user()->email)
+            ->where('status', 'pending')
             ->firstOrFail();
 
-        $transaksi->update(['status_222297' => 'dibatalkan']);
+        $transaksi->update(['status' => 'dibatalkan']);
 
         return redirect()
             ->route('user.transaksi.index')
@@ -266,32 +266,32 @@ class TransaksiController extends Controller
         $query = Transaksi::with(['user', 'menu', 'delivery']);
 
         if ($request->filled('status')) {
-            $query->where('status_222297', $request->status);
+            $query->where('status', $request->status);
         }
 
         // Tambahkan filter jenis pesanan
         if ($request->filled('jenis_pesanan')) {
-            $query->where('jenis_pesanan_222297', $request->jenis_pesanan);
+            $query->where('jenis_pesanan', $request->jenis_pesanan);
         }
 
         if ($request->filled('tanggal_mulai')) {
-            $query->whereDate('tanggal_transaksi_222297', '>=', $request->tanggal_mulai);
+            $query->whereDate('tanggal_transaksi', '>=', $request->tanggal_mulai);
         }
 
         if ($request->filled('tanggal_akhir')) {
-            $query->whereDate('tanggal_transaksi_222297', '<=', $request->tanggal_akhir);
+            $query->whereDate('tanggal_transaksi', '<=', $request->tanggal_akhir);
         }
 
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q
-                    ->where('kode_transaksi_222297', 'like', "%{$search}%")
-                    ->orWhere('email_222297', 'like', "%{$search}%");
+                    ->where('kode_transaksi', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
             });
         }
 
-        $transaksi = $query->orderBy('created_at_222297', 'desc')->paginate(15);
+        $transaksi = $query->orderBy('created_at', 'desc')->paginate(15);
         return view('pages.admin.transaksi.index', compact('transaksi'));
     }
 
@@ -302,22 +302,22 @@ class TransaksiController extends Controller
         return view('pages.admin.transaksi.create', compact('menus', 'users'));
     }
 
-    // [DIUBAH] Menambahkan validasi untuk 'jenis_pesanan_222297'
+    // [DIUBAH] Menambahkan validasi untuk 'jenis_pesanan'
     public function adminStore(Request $request)
     {
         $request->validate([
-            'email_222297'             => 'required|email|exists:users_222297,email_222297',
-            'kode_menu_222297'         => 'required|exists:menu_222297,kode_menu_222297',
-            'jumlah_222297'            => 'required|integer|min:1',
-            'status_222297'            => 'required|string',
-            'jenis_pesanan_222297'     => 'required|in:delivery,di_lokasi',  // [DIUBAH] Validasi baru
-            'tanggal_transaksi_222297' => 'required|date',
+            'email'             => 'required|email|exists:users,email',
+            'kode_menu'         => 'required|exists:menu,kode_menu',
+            'jumlah'            => 'required|integer|min:1',
+            'status'            => 'required|string',
+            'jenis_pesanan'     => 'required|in:delivery,di_lokasi',  // [DIUBAH] Validasi baru
+            'tanggal_transaksi' => 'required|date',
         ]);
 
-        $menu                               = \App\Models\Menu::where('kode_menu_222297', $request->kode_menu_222297)->first();
-        $harga_total                        = $menu->harga_222297 * $request->jumlah_222297;
-        $dataToCreate                       = $request->all();
-        $dataToCreate['harga_total_222297'] = $harga_total;
+        $menu                        = \App\Models\Menu::where('kode_menu', $request->kode_menu)->first();
+        $harga_total                 = $menu->harga * $request->jumlah;
+        $dataToCreate                = $request->all();
+        $dataToCreate['harga_total'] = $harga_total;
         \App\Models\Transaksi::create($dataToCreate);
 
         return redirect()->route('admin.transaksi.index')->with('success', 'Transaksi berhasil dibuat.');
@@ -325,38 +325,38 @@ class TransaksiController extends Controller
 
     public function adminShow($kode_transaksi)
     {
-        $transaksi = \App\Models\Transaksi::with(['user', 'menu', 'delivery'])->where('kode_transaksi_222297', $kode_transaksi)->firstOrFail();
+        $transaksi = \App\Models\Transaksi::with(['user', 'menu', 'delivery'])->where('kode_transaksi', $kode_transaksi)->firstOrFail();
         return view('pages.admin.transaksi.show', compact('transaksi'));
     }
 
     public function adminEdit($kode_transaksi)
     {
-        $transaksi = \App\Models\Transaksi::where('kode_transaksi_222297', $kode_transaksi)->firstOrFail();
+        $transaksi = \App\Models\Transaksi::where('kode_transaksi', $kode_transaksi)->firstOrFail();
         $menus     = \App\Models\Menu::all();
         $users     = \App\Models\User::all();
         return view('pages.admin.transaksi.edit', compact('transaksi', 'menus', 'users'));
     }
 
-    // [DIUBAH] Menambahkan validasi untuk 'jenis_pesanan_222297'
+    // [DIUBAH] Menambahkan validasi untuk 'jenis_pesanan'
 
     public function adminUpdate(Request $request, $kode_transaksi)
     {
         // 1. Validasi data yang masuk dari form
         $validatedData = $request->validate([
-            'email_222297'             => 'required|email|exists:users_222297,email_222297',
-            'kode_menu_222297'         => 'required|exists:menu_222297,kode_menu_222297',
-            'jumlah_222297'            => 'required|integer|min:1',
-            'status_222297'            => 'required|string',
-            'tanggal_transaksi_222297' => 'required|date',
-            // 'jenis_pesanan_222297' tidak lagi divalidasi di sini karena tidak ada di form edit
+            'email'             => 'required|email|exists:users,email',
+            'kode_menu'         => 'required|exists:menu,kode_menu',
+            'jumlah'            => 'required|integer|min:1',
+            'status'            => 'required|string',
+            'tanggal_transaksi' => 'required|date',
+            // 'jenis_pesanan' tidak lagi divalidasi di sini karena tidak ada di form edit
         ]);
 
         // 2. Cari transaksi dan menu yang relevan
         $transaksi = \App\Models\Transaksi::findOrFail($kode_transaksi);
-        $menu      = \App\Models\Menu::findOrFail($request->kode_menu_222297);
+        $menu      = \App\Models\Menu::findOrFail($request->kode_menu);
 
         // 3. Hitung ulang harga total berdasarkan input terbaru
-        $validatedData['harga_total_222297'] = $menu->harga_222297 * $request->jumlah_222297;
+        $validatedData['harga_total'] = $menu->harga * $request->jumlah;
 
         // 4. Update transaksi hanya dengan data yang sudah tervalidasi
         $transaksi->update($validatedData);
@@ -364,13 +364,13 @@ class TransaksiController extends Controller
         // 5. Redirect dengan pesan sukses
         // [DIUBAH] Mengarahkan ke halaman detail untuk melihat perubahan
         return redirect()
-            ->route('admin.transaksi.show', $transaksi->kode_transaksi_222297)
+            ->route('admin.transaksi.show', $transaksi->kode_transaksi)
             ->with('success', 'Transaksi berhasil diperbarui.');
     }
 
     public function adminDestroy($kode_transaksi)
     {
-        $transaksi = \App\Models\Transaksi::where('kode_transaksi_222297', $kode_transaksi)->firstOrFail();
+        $transaksi = \App\Models\Transaksi::where('kode_transaksi', $kode_transaksi)->firstOrFail();
         $transaksi->delete();
         return redirect()->route('admin.transaksi.index')->with('success', 'Transaksi berhasil dihapus.');
     }
@@ -380,11 +380,11 @@ class TransaksiController extends Controller
      */
     public function adminConfirm($id)
     {
-        $transaksi = Transaksi::where('kode_transaksi_222297', $id)
-            ->where('status_222297', 'pending')
+        $transaksi = Transaksi::where('kode_transaksi', $id)
+            ->where('status', 'pending')
             ->firstOrFail();
 
-        $transaksi->update(['status_222297' => 'dikonfirmasi']);
+        $transaksi->update(['status' => 'dikonfirmasi']);
 
         return redirect()
             ->route('admin.transaksi.show', $id)
@@ -406,13 +406,13 @@ class TransaksiController extends Controller
                 ->withErrors($validator);
         }
 
-        $transaksi = Transaksi::where('kode_transaksi_222297', $id)
-            ->where('status_222297', 'pending')
+        $transaksi = Transaksi::where('kode_transaksi', $id)
+            ->where('status', 'pending')
             ->firstOrFail();
 
         $transaksi->update([
-            'status_222297'           => 'ditolak',
-            'alasan_penolakan_222297' => $request->alasan_penolakan
+            'status'           => 'ditolak',
+            'alasan_penolakan' => $request->alasan_penolakan
         ]);
 
         return redirect()
@@ -427,12 +427,12 @@ class TransaksiController extends Controller
      */
     public function adminMarkAsShipped($id)
     {
-        $transaksi = Transaksi::where('kode_transaksi_222297', $id)
-            ->where('status_222297', 'dikonfirmasi')
-            ->where('jenis_pesanan_222297', 'delivery')  // Pastikan hanya untuk delivery
+        $transaksi = Transaksi::where('kode_transaksi', $id)
+            ->where('status', 'dikonfirmasi')
+            ->where('jenis_pesanan', 'delivery')  // Pastikan hanya untuk delivery
             ->firstOrFail();
 
-        $transaksi->update(['status_222297' => 'dikirim']);
+        $transaksi->update(['status' => 'dikirim']);
 
         return redirect()
             ->route('admin.transaksi.show', $id)
@@ -444,11 +444,11 @@ class TransaksiController extends Controller
      */
     public function adminComplete($id)
     {
-        $transaksi = Transaksi::where('kode_transaksi_222297', $id)
-            ->whereIn('status_222297', ['dikonfirmasi', 'dikirim'])
+        $transaksi = Transaksi::where('kode_transaksi', $id)
+            ->whereIn('status', ['dikonfirmasi', 'dikirim'])
             ->firstOrFail();
 
-        $transaksi->update(['status_222297' => 'selesai']);
+        $transaksi->update(['status' => 'selesai']);
 
         return redirect()
             ->route('admin.transaksi.show', $id)
@@ -465,20 +465,20 @@ class TransaksiController extends Controller
 
         $stats = [
             'total_transaksi'      => Transaksi::count(),
-            'transaksi_hari_ini'   => Transaksi::whereDate('tanggal_transaksi_222297', $today)->count(),
-            'transaksi_bulan_ini'  => Transaksi::where('created_at_222297', '>=', $thisMonth)->count(),
-            'pending'              => Transaksi::where('status_222297', 'pending')->count(),
-            'dikonfirmasi'         => Transaksi::where('status_222297', 'dikonfirmasi')->count(),
-            'selesai'              => Transaksi::where('status_222297', 'selesai')->count(),
-            'total_pendapatan'     => Transaksi::where('status_222297', 'selesai')
-                ->sum('harga_total_222297'),
-            'pendapatan_bulan_ini' => Transaksi::where('status_222297', 'selesai')
-                ->where('created_at_222297', '>=', $thisMonth)
-                ->sum('harga_total_222297'),
+            'transaksi_hari_ini'   => Transaksi::whereDate('tanggal_transaksi', $today)->count(),
+            'transaksi_bulan_ini'  => Transaksi::where('created_at', '>=', $thisMonth)->count(),
+            'pending'              => Transaksi::where('status', 'pending')->count(),
+            'dikonfirmasi'         => Transaksi::where('status', 'dikonfirmasi')->count(),
+            'selesai'              => Transaksi::where('status', 'selesai')->count(),
+            'total_pendapatan'     => Transaksi::where('status', 'selesai')
+                ->sum('harga_total'),
+            'pendapatan_bulan_ini' => Transaksi::where('status', 'selesai')
+                ->where('created_at', '>=', $thisMonth)
+                ->sum('harga_total'),
         ];
 
         $recent_transaksi = Transaksi::with(['user', 'menu'])
-            ->orderBy('created_at_222297', 'desc')
+            ->orderBy('created_at', 'desc')
             ->limit(5)
             ->get();
 
@@ -494,17 +494,17 @@ class TransaksiController extends Controller
         $query = Transaksi::with(['user', 'menu']);
 
         if ($request->filled('status')) {
-            $query->where('status_222297', $request->status);
+            $query->where('status', $request->status);
         }
         if ($request->filled('tanggal_mulai')) {
-            $query->whereDate('tanggal_transaksi_222297', '>=', $request->tanggal_mulai);
+            $query->whereDate('tanggal_transaksi', '>=', $request->tanggal_mulai);
         }
         if ($request->filled('tanggal_akhir')) {
-            $query->whereDate('tanggal_transaksi_222297', '<=', $request->tanggal_akhir);
+            $query->whereDate('tanggal_transaksi', '<=', $request->tanggal_akhir);
         }
 
         // Mengambil data transaksi yang telah difilter dengan paginasi
-        $transaksi = $query->orderBy('created_at_222297', 'desc')->paginate(10);
+        $transaksi = $query->orderBy('created_at', 'desc')->paginate(10);
 
         // --- Tambahan untuk Pengguna dengan Transaksi Terbanyak ---
         $userTerbanyakTransaksi = User::withCount('transaksi')
@@ -513,7 +513,7 @@ class TransaksiController extends Controller
 
         // --- Tambahan untuk Tiga Menu Terlaris ---
         $menuTerlaris = Menu::withCount(['transaksi as jumlah_terjual' => function ($query) {
-            $query->select(DB::raw('sum(jumlah_222297)'));
+            $query->select(DB::raw('sum(jumlah)'));
         }])
             ->orderBy('jumlah_terjual', 'desc')
             ->take(3)
@@ -528,16 +528,16 @@ class TransaksiController extends Controller
         $query = Transaksi::with(['user', 'menu']);
 
         if ($request->filled('status')) {
-            $query->where('status_222297', $request->status);
+            $query->where('status', $request->status);
         }
         if ($request->filled('tanggal_mulai')) {
-            $query->whereDate('tanggal_transaksi_222297', '>=', $request->tanggal_mulai);
+            $query->whereDate('tanggal_transaksi', '>=', $request->tanggal_mulai);
         }
         if ($request->filled('tanggal_akhir')) {
-            $query->whereDate('tanggal_transaksi_222297', '<=', $request->tanggal_akhir);
+            $query->whereDate('tanggal_transaksi', '<=', $request->tanggal_akhir);
         }
 
-        $transaksi = $query->orderBy('created_at_222297', 'desc')->get();
+        $transaksi = $query->orderBy('created_at', 'desc')->get();
         $filename  = 'transaksi_' . now()->format('Y-m-d_H-i-s') . '.csv';
         $headers   = [
             'Content-Type'        => 'text/csv',
@@ -560,14 +560,14 @@ class TransaksiController extends Controller
 
             foreach ($transaksi as $t) {
                 fputcsv($file, [
-                    $t->kode_transaksi_222297,
-                    $t->email_222297,
-                    $t->menu->nama_menu_222297 ?? 'N/A',
-                    $t->jumlah_222297,
-                    $t->harga_total_222297,
-                    $t->status_222297,
-                    $t->tanggal_transaksi_222297->format('Y-m-d H:i:s'),
-                    $t->created_at_222297->format('Y-m-d H:i:s')
+                    $t->kode_transaksi,
+                    $t->email,
+                    $t->menu->nama_menu ?? 'N/A',
+                    $t->jumlah,
+                    $t->harga_total,
+                    $t->status,
+                    $t->tanggal_transaksi->format('Y-m-d H:i:s'),
+                    $t->created_at->format('Y-m-d H:i:s')
                 ]);
             }
             fclose($file);
@@ -582,7 +582,7 @@ class TransaksiController extends Controller
     public function updateStatus(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'status_222297' => 'required|in:pending,dikonfirmasi,selesai,dikirim,ditolak',
+            'status' => 'required|in:pending,dikonfirmasi,selesai,dikirim,ditolak',
         ]);
 
         if ($validator->fails()) {
@@ -592,9 +592,9 @@ class TransaksiController extends Controller
                 ->withInput();
         }
 
-        $transaksi = Transaksi::where('kode_transaksi_222297', $id)->firstOrFail();
+        $transaksi = Transaksi::where('kode_transaksi', $id)->firstOrFail();
         $transaksi->update([
-            'status_222297' => $request->status_222297,
+            'status' => $request->status,
         ]);
 
         return redirect()

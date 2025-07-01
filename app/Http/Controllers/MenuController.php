@@ -44,13 +44,13 @@ class MenuController extends RoutingController
     public function store(Request $request)
     {
         $request->validate([
-            'kode_menu_222297'     => 'required|string|max:50|unique:menu_222297,kode_menu_222297',  // Added validation for manual ID
-            'nama_222297'          => 'required|string|max:255',
-            'deskripsi_222297'     => 'required|string',
-            'harga_222297'         => 'required|numeric|min:0',
-            'kode_kategori_222297' => 'required|exists:kategori_produk_222297,kode_kategori_222297',
-            'jumlah_222297'        => 'required|integer|min:0',
-            'image'                => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'kode_menu'     => 'required|string|max:50|unique:menu,kode_menu',  // Added validation for manual ID
+            'nama'          => 'required|string|max:255',
+            'deskripsi'     => 'required|string',
+            'harga'         => 'required|numeric|min:0',
+            'kode_kategori' => 'required|exists:kategori_produk,kode_kategori',
+            'jumlah'        => 'required|integer|min:0',
+            'image'         => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $data = $request->except('image');
@@ -59,13 +59,13 @@ class MenuController extends RoutingController
         if ($request->hasFile('image')) {
             // Store in public/images directory
             $image     = $request->file('image');
-            $imageName = time() . '_' . Str::slug($request->nama_222297) . '.' . $image->getClientOriginalExtension();
+            $imageName = time() . '_' . Str::slug($request->nama) . '.' . $image->getClientOriginalExtension();
 
             // Move to public/images directory
             $image->move(public_path('images'), $imageName);
 
             // Store path relative to public directory
-            $data['path_img_222297'] = $imageName;
+            $data['path_img'] = $imageName;
         }
 
         Menu::create($data);
@@ -110,12 +110,12 @@ class MenuController extends RoutingController
         $menu = Menu::findOrFail($id);
 
         $request->validate([
-            'nama_222297'          => 'required|string|max:255',
-            'deskripsi_222297'     => 'required|string',
-            'harga_222297'         => 'required|numeric|min:0',
-            'kode_kategori_222297' => 'required|exists:kategori_produk_222297,kode_kategori_222297',
-            'jumlah_222297'        => 'required|integer|min:0',
-            'image'                => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'nama'          => 'required|string|max:255',
+            'deskripsi'     => 'required|string',
+            'harga'         => 'required|numeric|min:0',
+            'kode_kategori' => 'required|exists:kategori_produk,kode_kategori',
+            'jumlah'        => 'required|integer|min:0',
+            'image'         => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $data = $request->except(['image', '_token', '_method']);
@@ -123,21 +123,21 @@ class MenuController extends RoutingController
         // Handle image upload
         if ($request->hasFile('image')) {
             // Delete old image if it exists
-            if ($menu->path_img_222297) {
-                $oldImagePath = public_path($menu->path_img_222297);
+            if ($menu->path_img) {
+                $oldImagePath = public_path($menu->path_img);
                 if (file_exists($oldImagePath)) {
                     unlink($oldImagePath);
                 }
             }
 
             $image     = $request->file('image');
-            $imageName = time() . '_' . Str::slug($request->nama_222297) . '.' . $image->getClientOriginalExtension();
+            $imageName = time() . '_' . Str::slug($request->nama) . '.' . $image->getClientOriginalExtension();
 
             // Move to public/images directory
             $image->move(public_path('images'), $imageName);
 
             // Store path relative to public directory
-            $data['path_img_222297'] = $imageName;
+            $data['path_img'] = $imageName;
         }
 
         $menu->update($data);
@@ -158,8 +158,8 @@ class MenuController extends RoutingController
 
             // Hapus gambar dari folder public jika ada
             // Catatan: Logika upload Anda menggunakan public_path(), jadi lebih konsisten menggunakan unlink() untuk menghapus.
-            if ($menu->path_img_222297) {
-                $imagePath = public_path('images/' . $menu->path_img_222297);
+            if ($menu->path_img) {
+                $imagePath = public_path('images/' . $menu->path_img);
                 if (file_exists($imagePath)) {
                     unlink($imagePath);
                 }

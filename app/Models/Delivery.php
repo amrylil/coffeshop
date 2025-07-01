@@ -10,27 +10,27 @@ class Delivery extends Model
 {
     use HasFactory;
 
-    protected $table      = 'delivery_222297';
-    protected $primaryKey = 'kode_pengantaran_222297';
+    protected $table      = 'delivery';
+    protected $primaryKey = 'kode_pengantaran';
     public $incrementing  = false;
     protected $keyType    = 'string';
     public $timestamps    = false;
 
     protected $fillable = [
-        'kode_pengantaran_222297',
-        'kode_transaksi_222297',
-        'nama_penerima_222297',
-        'alamat_pengantaran_222297',
-        'nomor_hp_222297',
-        'jasa_kurir_222297',
-        'ongkir_222297',
-        'status_pengiriman_222297',
-        'tanggal_kirim_222297',
+        'kode_pengantaran',
+        'kode_transaksi',
+        'nama_penerima',
+        'alamat_pengantaran',
+        'nomor_hp',
+        'jasa_kurir',
+        'ongkir',
+        'status_pengiriman',
+        'tanggal_kirim',
     ];
 
     protected $casts = [
-        'ongkir_222297'        => 'decimal:2',
-        'tanggal_kirim_222297' => 'datetime',
+        'ongkir'        => 'decimal:2',
+        'tanggal_kirim' => 'datetime',
     ];
 
     protected static function boot()
@@ -38,14 +38,14 @@ class Delivery extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            if (!$model->kode_pengantaran_222297) {
-                $model->kode_pengantaran_222297 = IDGeneratorHelper::generateDeliveryID();
+            if (!$model->kode_pengantaran) {
+                $model->kode_pengantaran = IDGeneratorHelper::generateDeliveryID();
             }
         });
     }
 
     public function transaksi()
     {
-        return $this->belongsTo(Transaksi::class, 'kode_transaksi_222297', 'kode_transaksi_222297');
+        return $this->belongsTo(Transaksi::class, 'kode_transaksi', 'kode_transaksi');
     }
 }

@@ -8,7 +8,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <h1 class="text-2xl font-bold text-[#6F4E37] mb-2">Detail Transaksi</h1>
-                        <p class="text-gray-600">Kode Transaksi: {{ $transaksi->kode_transaksi_222297 }}</p>
+                        <p class="text-gray-600">Kode Transaksi: {{ $transaksi->kode_transaksi }}</p>
                     </div>
                     <div class="text-right">
                         @php
@@ -18,11 +18,11 @@
                                 'ditolak' => 'bg-red-100 text-red-800',
                                 'selesai' => 'bg-green-100 text-green-800',
                             ];
-                            $statusColor = $statusColors[$transaksi->status_222297] ?? 'bg-gray-100 text-gray-800';
+                            $statusColor = $statusColors[$transaksi->status] ?? 'bg-gray-100 text-gray-800';
                         @endphp
                         <span
                             class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $statusColor }}">
-                            {{ ucfirst($transaksi->status_222297) }}
+                            {{ ucfirst($transaksi->status) }}
                         </span>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
                 <div class="p-6">
                     <div class="space-y-1">
                         <label class="text-sm font-medium text-gray-500 uppercase tracking-wide">Email User</label>
-                        <p class="text-lg text-gray-900 font-medium">{{ $transaksi->email_222297 }}</p>
+                        <p class="text-lg text-gray-900 font-medium">{{ $transaksi->email }}</p>
                     </div>
                 </div>
 
@@ -50,12 +50,12 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-1">
                                 <label class="text-sm font-medium text-gray-500 uppercase tracking-wide">Menu</label>
-                                <p class="text-lg text-gray-900 font-medium">{{ $transaksi->menu->nama_222297 ?? '-' }}
+                                <p class="text-lg text-gray-900 font-medium">{{ $transaksi->menu->nama ?? '-' }}
                                 </p>
                             </div>
                             <div class="space-y-1">
                                 <label class="text-sm font-medium text-gray-500 uppercase tracking-wide">Jumlah</label>
-                                <p class="text-lg text-gray-900 font-medium">{{ $transaksi->jumlah_222297 }} item</p>
+                                <p class="text-lg text-gray-900 font-medium">{{ $transaksi->jumlah }} item</p>
                             </div>
                         </div>
                     </div>
@@ -71,12 +71,12 @@
                             <div class="space-y-1">
                                 <label class="text-sm font-medium text-gray-500 uppercase tracking-wide">Harga Total</label>
                                 <p class="text-2xl text-[#6F4E37] font-bold">Rp
-                                    {{ number_format($transaksi->harga_total_222297, 0, ',', '.') }}</p>
+                                    {{ number_format($transaksi->harga_total, 0, ',', '.') }}</p>
                             </div>
                             <div class="space-y-1">
                                 <label class="text-sm font-medium text-gray-500 uppercase tracking-wide">Tanggal
                                     Transaksi</label>
-                                <p class="text-lg text-gray-900 font-medium">{{ $transaksi->tanggal_transaksi_222297 }}</p>
+                                <p class="text-lg text-gray-900 font-medium">{{ $transaksi->tanggal_transaksi }}</p>
                             </div>
                         </div>
                     </div>
@@ -88,27 +88,24 @@
                         <h2 class="text-lg font-semibold text-gray-900">Bukti Transfer</h2>
                     </div>
                     <div class="p-6">
-                        @if ($transaksi->bukti_tf_222297)
+                        @if ($transaksi->bukti_tf)
                             <div class="space-y-4">
                                 <div class="space-y-1">
                                     <label class="text-sm font-medium text-gray-500 uppercase tracking-wide">File Bukti
                                         Transfer</label>
-                                    <p class="text-lg text-gray-900 font-medium">{{ basename($transaksi->bukti_tf_222297) }}
+                                    <p class="text-lg text-gray-900 font-medium">{{ basename($transaksi->bukti_tf) }}
                                     </p>
                                 </div>
 
                                 <div class="border rounded-lg p-4 bg-gray-50">
                                     @php
-                                        $fileExtension = strtolower(
-                                            pathinfo($transaksi->bukti_tf_222297, PATHINFO_EXTENSION),
-                                        );
+                                        $fileExtension = strtolower(pathinfo($transaksi->bukti_tf, PATHINFO_EXTENSION));
                                         $isImage = in_array($fileExtension, ['jpg', 'jpeg', 'png', 'gif', 'webp']);
                                     @endphp
 
                                     @if ($isImage)
                                         <div class="max-w-md mx-auto">
-                                            <img src="{{ asset('storage/' . $transaksi->bukti_tf_222297) }}"
-                                                alt="Bukti Transfer"
+                                            <img src="{{ asset('storage/' . $transaksi->bukti_tf) }}" alt="Bukti Transfer"
                                                 class="w-full h-auto rounded-lg shadow-sm border border-gray-200">
                                         </div>
                                     @else
@@ -123,7 +120,7 @@
                                     @endif
 
                                     <div class="mt-4 text-center">
-                                        <a href="{{ asset('storage/' . $transaksi->bukti_tf_222297) }}" target="_blank"
+                                        <a href="{{ asset('storage/' . $transaksi->bukti_tf) }}" target="_blank"
                                             class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6F4E37]">
                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
@@ -134,7 +131,7 @@
                                             </svg>
                                             Lihat File
                                         </a>
-                                        <a href="{{ asset('storage/' . $transaksi->bukti_tf_222297) }}" download
+                                        <a href="{{ asset('storage/' . $transaksi->bukti_tf) }}" download
                                             class="ml-2 inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6F4E37]">
                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
@@ -167,20 +164,20 @@
                     <div class="p-6">
                         <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
                             <div class="flex items-center space-x-3">
-                                @if ($transaksi->status_222297 == 'pending')
+                                @if ($transaksi->status == 'pending')
                                     <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
                                     <span class="text-yellow-700 font-medium">Transaksi sedang menunggu konfirmasi</span>
-                                @elseif($transaksi->status_222297 == 'dikonfirmasi')
+                                @elseif($transaksi->status == 'dikonfirmasi')
                                     <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
                                     <span class="text-blue-700 font-medium">Transaksi telah dikonfirmasi dan sedang
                                         diproses</span>
-                                @elseif($transaksi->status_222297 == 'dikirim')
+                                @elseif($transaksi->status == 'dikirim')
                                     <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
                                     <span class="text-blue-700 font-medium">Pesanan dalam pengiriman</span>
-                                @elseif($transaksi->status_222297 == 'ditolak')
+                                @elseif($transaksi->status == 'ditolak')
                                     <div class="w-3 h-3 bg-red-500 rounded-full"></div>
                                     <span class="text-red-700 font-medium">Transaksi ditolak</span>
-                                @elseif($transaksi->status_222297 == 'selesai')
+                                @elseif($transaksi->status == 'selesai')
                                     <div class="w-3 h-3 bg-green-500 rounded-full"></div>
                                     <span class="text-green-700 font-medium">Transaksi telah selesai</span>
                                 @endif
@@ -201,7 +198,7 @@
                         </svg>
                         Kembali
                     </a>
-                    <a href="{{ route('admin.transaksi.edit', $transaksi->kode_transaksi_222297) }}"
+                    <a href="{{ route('admin.transaksi.edit', $transaksi->kode_transaksi) }}"
                         class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm bg-[#6F4E37] text-sm font-medium text-white hover:bg-[#5a3e2e] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#6F4E37]">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -209,9 +206,8 @@
                         </svg>
                         Edit
                     </a>
-                    <form action="{{ route('admin.transaksi.destroy', $transaksi->kode_transaksi_222297) }}"
-                        method="POST" onsubmit="return confirm('Yakin ingin menghapus transaksi ini?')"
-                        class="inline-block">
+                    <form action="{{ route('admin.transaksi.destroy', $transaksi->kode_transaksi) }}" method="POST"
+                        onsubmit="return confirm('Yakin ingin menghapus transaksi ini?')" class="inline-block">
                         @csrf
                         @method('DELETE')
                         <button type="submit"

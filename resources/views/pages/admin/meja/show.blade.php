@@ -14,15 +14,15 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <h3 class="text-sm font-medium text-gray-500">Nomor Meja</h3>
-                        <p class="mt-1 text-lg font-semibold text-[#6F4E37]">{{ $meja->nomor_meja_222297 }}</p>
+                        <p class="mt-1 text-lg font-semibold text-[#6F4E37]">{{ $meja->nomor_meja }}</p>
                     </div>
                     <div>
                         <h3 class="text-sm font-medium text-gray-500">Kapasitas</h3>
-                        <p class="mt-1 text-lg font-semibold text-[#6F4E37]">{{ $meja->kapasitas_222297 }}</p>
+                        <p class="mt-1 text-lg font-semibold text-[#6F4E37]">{{ $meja->kapasitas }}</p>
                     </div>
                     <div>
                         <h3 class="text-sm font-medium text-gray-500">Status</h3>
-                        <p class="mt-1 text-lg font-semibold text-[#6F4E37]">{{ $meja->status_222297 }}</p>
+                        <p class="mt-1 text-lg font-semibold text-[#6F4E37]">{{ $meja->status }}</p>
                     </div>
                 </div>
 

@@ -10,7 +10,7 @@
                         <i class="fas fa-arrow-left text-xl"></i>
                     </a>
                     <div>
-                        <h1 class="text-4xl font-bold text-[#6F4E37]">Edit Meja {{ $meja->nomor_meja_222297 }}</h1>
+                        <h1 class="text-4xl font-bold text-[#6F4E37]">Edit Meja {{ $meja->nomor_meja }}</h1>
                         <p class="mt-2 text-gray-600">Update the details of this table</p>
                     </div>
                 </div>
@@ -26,20 +26,20 @@
                             <p class="text-sm text-gray-600">This table is currently
                                 <span
                                     class="font-medium
-                                    @if ($meja->status_222297 === 'kosong') text-green-600
-                                    @elseif($meja->status_222297 === 'dipesan') text-yellow-600
-                                    @elseif($meja->status_222297 === 'digunakan') text-red-600 @endif">
-                                    {{ ucfirst($meja->status_222297) }}
+                                    @if ($meja->status === 'kosong') text-green-600
+                                    @elseif($meja->status === 'dipesan') text-yellow-600
+                                    @elseif($meja->status === 'digunakan') text-red-600 @endif">
+                                    {{ ucfirst($meja->status) }}
                                 </span>
                             </p>
                         </div>
                     </div>
                     <span
                         class="px-4 py-2 rounded-full text-sm font-medium
-                        @if ($meja->status_222297 === 'kosong') bg-green-100 text-green-800
-                        @elseif($meja->status_222297 === 'dipesan') bg-yellow-100 text-yellow-800
-                        @elseif($meja->status_222297 === 'digunakan') bg-red-100 text-red-800 @endif">
-                        {{ ucfirst($meja->status_222297) }}
+                        @if ($meja->status === 'kosong') bg-green-100 text-green-800
+                        @elseif($meja->status === 'dipesan') bg-yellow-100 text-yellow-800
+                        @elseif($meja->status === 'digunakan') bg-red-100 text-red-800 @endif">
+                        {{ ucfirst($meja->status) }}
                     </span>
                 </div>
             </div>
@@ -53,7 +53,7 @@
                     </h2>
                 </div>
 
-                <form action="{{ route('admin.meja.update', $meja->nomor_meja_222297) }}" method="POST" class="p-8">
+                <form action="{{ route('admin.meja.update', $meja->nomor_meja) }}" method="POST" class="p-8">
                     @csrf
                     @method('PUT')
 
@@ -75,15 +75,14 @@
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <!-- Nomor Meja (readonly) -->
                         <div class="space-y-2">
-                            <label for="nomor_meja_222297"
-                                class="block text-sm font-semibold text-[#6F4E37] flex items-center">
+                            <label for="nomor_meja" class="block text-sm font-semibold text-[#6F4E37] flex items-center">
                                 <i class="fas fa-hashtag mr-2 text-gray-500"></i>
                                 Nomor Meja
                             </label>
                             <div class="relative">
-                                <input type="text" name="nomor_meja_222297" id="nomor_meja_222297" readonly
+                                <input type="text" name="nomor_meja" id="nomor_meja" readonly
                                     class="w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-xl cursor-not-allowed text-gray-600"
-                                    value="{{ old('nomor_meja_222297', $meja->nomor_meja_222297) }}">
+                                    value="{{ old('nomor_meja', $meja->nomor_meja) }}">
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-4">
                                     <i class="fas fa-lock text-gray-400"></i>
                                 </div>
@@ -96,23 +95,21 @@
 
                         <!-- Status -->
                         <div class="space-y-2">
-                            <label for="status_222297" class="block text-sm font-semibold text-[#6F4E37] flex items-center">
+                            <label for="status" class="block text-sm font-semibold text-[#6F4E37] flex items-center">
                                 <i class="fas fa-toggle-on mr-2 text-gray-500"></i>
                                 Status
                             </label>
-                            <select name="status_222297" id="status_222297"
+                            <select name="status" id="status"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#6F4E37] focus:border-[#6F4E37] transition duration-200"
                                 required>
-                                <option value="kosong"
-                                    {{ old('status_222297', $meja->status_222297) === 'kosong' ? 'selected' : '' }}>
+                                <option value="kosong" {{ old('status', $meja->status) === 'kosong' ? 'selected' : '' }}>
                                     🟢 Kosong
                                 </option>
-                                <option value="dipesan"
-                                    {{ old('status_222297', $meja->status_222297) === 'dipesan' ? 'selected' : '' }}>
+                                <option value="dipesan" {{ old('status', $meja->status) === 'dipesan' ? 'selected' : '' }}>
                                     🟡 Dipesan
                                 </option>
                                 <option value="digunakan"
-                                    {{ old('status_222297', $meja->status_222297) === 'digunakan' ? 'selected' : '' }}>
+                                    {{ old('status', $meja->status) === 'digunakan' ? 'selected' : '' }}>
                                     🔴 Digunakan
                                 </option>
                             </select>
@@ -120,16 +117,14 @@
 
                         <!-- Kapasitas -->
                         <div class="space-y-2 lg:col-span-2">
-                            <label for="kapasitas_222297"
-                                class="block text-sm font-semibold text-[#6F4E37] flex items-center">
+                            <label for="kapasitas" class="block text-sm font-semibold text-[#6F4E37] flex items-center">
                                 <i class="fas fa-users mr-2 text-gray-500"></i>
                                 Kapasitas
                             </label>
                             <div class="relative">
-                                <input type="number" name="kapasitas_222297" id="kapasitas_222297" min="1"
-                                    max="20"
+                                <input type="number" name="kapasitas" id="kapasitas" min="1" max="20"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#6F4E37] focus:border-[#6F4E37] transition duration-200 pr-16"
-                                    value="{{ old('kapasitas_222297', $meja->kapasitas_222297) }}" required>
+                                    value="{{ old('kapasitas', $meja->kapasitas) }}" required>
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-4">
                                     <span class="text-gray-500 text-sm">orang</span>
                                 </div>
@@ -150,19 +145,19 @@
                         <div class="bg-white rounded-lg p-4 shadow-sm border">
                             <div class="flex justify-between items-center">
                                 <div>
-                                    <h4 class="font-bold text-[#6F4E37]">Meja {{ $meja->nomor_meja_222297 }}</h4>
+                                    <h4 class="font-bold text-[#6F4E37]">Meja {{ $meja->nomor_meja }}</h4>
                                     <p class="text-sm text-gray-600">
                                         <i class="fas fa-users mr-1"></i>
-                                        <span id="preview-capacity">{{ $meja->kapasitas_222297 }} orang</span>
+                                        <span id="preview-capacity">{{ $meja->kapasitas }} orang</span>
                                     </p>
                                 </div>
                                 <div>
                                     <span id="preview-status"
                                         class="px-3 py-1 rounded-full text-sm font-medium
-                                        @if ($meja->status_222297 === 'kosong') bg-green-100 text-green-800
-                                        @elseif($meja->status_222297 === 'dipesan') bg-yellow-100 text-yellow-800
-                                        @elseif($meja->status_222297 === 'digunakan') bg-red-100 text-red-800 @endif">
-                                        {{ ucfirst($meja->status_222297) }}
+                                        @if ($meja->status === 'kosong') bg-green-100 text-green-800
+                                        @elseif($meja->status === 'dipesan') bg-yellow-100 text-yellow-800
+                                        @elseif($meja->status === 'digunakan') bg-red-100 text-red-800 @endif">
+                                        {{ ucfirst($meja->status) }}
                                     </span>
                                 </div>
                             </div>
@@ -192,15 +187,15 @@
     <!-- Live Preview Script -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const kapasitasInput = document.getElementById('kapasitas_222297');
-            const statusSelect = document.getElementById('status_222297');
+            const kapasitasInput = document.getElementById('kapasitas');
+            const statusSelect = document.getElementById('status');
 
             const previewCapacity = document.getElementById('preview-capacity');
             const previewStatus = document.getElementById('preview-status');
 
             function updatePreview() {
                 // Update capacity
-                const kapasitas = kapasitasInput.value || '{{ $meja->kapasitas_222297 }}';
+                const kapasitas = kapasitasInput.value || '{{ $meja->kapasitas }}';
                 previewCapacity.textContent = `${kapasitas} orang`;
 
                 // Update status

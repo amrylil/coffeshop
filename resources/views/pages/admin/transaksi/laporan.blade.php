@@ -32,8 +32,8 @@
                 </div>
                 @if ($userTerbanyakTransaksi)
                     <div>
-                        <p class="text-2xl font-bold text-gray-900">{{ $userTerbanyakTransaksi->name_222297 }}</p>
-                        <p class="text-sm text-gray-500">{{ $userTerbanyakTransaksi->email_222297 }}</p>
+                        <p class="text-2xl font-bold text-gray-900">{{ $userTerbanyakTransaksi->name }}</p>
+                        <p class="text-sm text-gray-500">{{ $userTerbanyakTransaksi->email }}</p>
                         <div class="mt-2 text-base text-gray-700">
                             <span class="font-bold text-orange-600">{{ $userTerbanyakTransaksi->transaksi_count }}</span>
                             transaksi
@@ -61,7 +61,7 @@
                         @foreach ($menuTerlaris as $menu)
                             <li class="flex items-center justify-between">
                                 <span class="font-medium text-gray-800">{{ $loop->iteration }}.
-                                    {{ $menu->nama_222297 }}</span>
+                                    {{ $menu->nama }}</span>
                                 <span
                                     class="text-sm font-semibold text-teal-800 bg-teal-100 px-3 py-1 rounded-full">{{ $menu->jumlah_terjual ?? 0 }}
                                     terjual</span>
@@ -263,7 +263,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span
                                         class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800 font-mono">
-                                        {{ $t->kode_transaksi_222297 }}
+                                        {{ $t->kode_transaksi }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
@@ -280,23 +280,23 @@
                                             </div>
                                         </div>
                                         <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900">{{ $t->email_222297 }}</div>
+                                            <div class="text-sm font-medium text-gray-900">{{ $t->email }}</div>
                                         </div>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm font-medium text-gray-900">
-                                        {{ $t->menu->nama_222297 ?? 'N/A' }}</div>
+                                        {{ $t->menu->nama ?? 'N/A' }}</div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center">
                                     <span
                                         class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                                        {{ $t->jumlah_222297 }}x
+                                        {{ $t->jumlah }}x
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right">
                                     <div class="text-sm font-bold text-green-600">
-                                        Rp {{ number_format($t->harga_total_222297, 0, ',', '.') }}
+                                        Rp {{ number_format($t->harga_total, 0, ',', '.') }}
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-center">
@@ -308,22 +308,22 @@
                                             'dikirim' => ['bg' => 'bg-purple-100', 'text' => 'text-purple-800'],
                                             'ditolak' => ['bg' => 'bg-red-100', 'text' => 'text-red-800'],
                                         ];
-                                        $config = $statusConfig[$t->status_222297] ?? [
+                                        $config = $statusConfig[$t->status] ?? [
                                             'bg' => 'bg-gray-100',
                                             'text' => 'text-gray-800',
                                         ];
                                     @endphp
                                     <span
                                         class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $config['bg'] }} {{ $config['text'] }}">
-                                        {{ ucfirst($t->status_222297) }}
+                                        {{ ucfirst($t->status) }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm text-gray-900 font-medium">
-                                        {{ $t->tanggal_transaksi_222297->format('d M Y') }}
+                                        {{ $t->tanggal_transaksi->format('d M Y') }}
                                     </div>
                                     <div class="text-sm text-gray-500">
-                                        {{ $t->tanggal_transaksi_222297->format('H:i') }}
+                                        {{ $t->tanggal_transaksi->format('H:i') }}
                                     </div>
                                 </td>
                             </tr>

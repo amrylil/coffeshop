@@ -53,18 +53,17 @@
 
             {{-- Profile Avatar --}}
             <div @click="profileDrawerOpen = !profileDrawerOpen" class="cursor-pointer">
-                @if (Auth::user()->profile_photo_222297)
+                @if (Auth::user()->profile_photo)
                     <div class="w-10 h-10 rounded-full overflow-hidden border-2"
                         :class="(scrolled || !isHome) ? 'border-gray-700' : 'border-white/50'">
-                        <img alt="{{ Auth::user()->name_222297 }}"
-                            src="{{ asset('storage/' . Auth::user()->profile_photo_222297) }}"
+                        <img alt="{{ Auth::user()->name }}" src="{{ asset('storage/' . Auth::user()->profile_photo) }}"
                             class="object-cover w-full h-full" />
                     </div>
                 @else
                     <div
                         class="relative flex items-center justify-center w-10 h-10 overflow-hidden bg-[#422424] rounded-full shadow-lg">
                         <span class="text-lg font-bold text-white">
-                            {{ strtoupper(substr(Auth::user()->name_222297, 0, 1)) }}{{ strpos(Auth::user()->name_222297, ' ') ? strtoupper(substr(Auth::user()->name_222297, strpos(Auth::user()->name_222297, ' ') + 1, 1)) : '' }}
+                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}{{ strpos(Auth::user()->name, ' ') ? strtoupper(substr(Auth::user()->name, strpos(Auth::user()->name, ' ') + 1, 1)) : '' }}
                         </span>
                     </div>
                 @endif
@@ -129,18 +128,17 @@
             style="display: none;">
 
             <div class="flex flex-col items-center p-6 text-center border-b">
-                @if (Auth::user()->profile_photo_222297)
+                @if (Auth::user()->profile_photo)
                     <img class="object-cover w-24 h-24 border-4 rounded-full border-green-500"
-                        src="{{ asset('storage/' . Auth::user()->profile_photo_222297) }}"
-                        alt="{{ Auth::user()->name_222297 }}">
+                        src="{{ asset('storage/' . Auth::user()->profile_photo) }}" alt="{{ Auth::user()->name }}">
                 @else
                     <div
                         class="flex items-center justify-center w-24 h-24 bg-[#422424] border-4 rounded-full border-green-500">
                         <span
-                            class="text-4xl font-bold text-white">{{ strtoupper(substr(Auth::user()->name_222297, 0, 1)) }}{{ strpos(Auth::user()->name_222297, ' ') ? strtoupper(substr(Auth::user()->name_222297, strpos(Auth::user()->name_222297, ' ') + 1, 1)) : '' }}</span>
+                            class="text-4xl font-bold text-white">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}{{ strpos(Auth::user()->name, ' ') ? strtoupper(substr(Auth::user()->name, strpos(Auth::user()->name, ' ') + 1, 1)) : '' }}</span>
                     </div>
                 @endif
-                <h2 class="mt-4 text-xl font-semibold">{{ Auth::user()->name_222297 }}</h2>
+                <h2 class="mt-4 text-xl font-semibold">{{ Auth::user()->name }}</h2>
                 <p class="text-sm text-gray-500">{{ Auth::user()->email }}</p>
             </div>
 

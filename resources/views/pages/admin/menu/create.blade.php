@@ -31,30 +31,29 @@
 
                         <!-- Menu Name -->
                         <div class="col-span-1">
-                            <label for="kode_menu_222297" class="block text-sm font-medium text-[#6F4E37]">ID Menu</label>
-                            <input type="text" name="kode_menu_222297" id="kode_menu_222297"
+                            <label for="kode_menu" class="block text-sm font-medium text-[#6F4E37]">ID Menu</label>
+                            <input type="text" name="kode_menu" id="kode_menu"
                                 class="mt-1 p-2 focus:ring-[#6F4E37] focus:border-[#6F4E37] block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                value="{{ old('kode_menu_222297') }}" required>
+                                value="{{ old('kode_menu') }}" required>
                         </div>
                         <div class="col-span-1">
-                            <label for="nama_222297" class="block text-sm font-medium text-[#6F4E37]">Menu Name</label>
-                            <input type="text" name="nama_222297" id="nama_222297"
+                            <label for="nama" class="block text-sm font-medium text-[#6F4E37]">Menu Name</label>
+                            <input type="text" name="nama" id="nama"
                                 class="mt-1 p-2 focus:ring-[#6F4E37] focus:border-[#6F4E37] block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                value="{{ old('nama_222297') }}" required>
+                                value="{{ old('nama') }}" required>
                         </div>
 
                         <!-- Category -->
                         <div class="col-span-1">
-                            <label for="kode_kategori_222297"
-                                class="block text-sm font-medium text-[#6F4E37]">Category</label>
-                            <select name="kode_kategori_222297" id="kode_kategori_222297"
+                            <label for="kode_kategori" class="block text-sm font-medium text-[#6F4E37]">Category</label>
+                            <select name="kode_kategori" id="kode_kategori"
                                 class="mt-1 p-2 focus:ring-[#6F4E37] focus:border-[#6F4E37] block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                                 required>
                                 <option value="">Select Category</option>
                                 @foreach ($categories as $category)
-                                    <option value="{{ $category->kode_kategori_222297 }}"
-                                        {{ old('kode_kategori_222297') == $category->kode_kategori_222297 ? 'selected' : '' }}>
-                                        {{ $category->nama_222297 }}
+                                    <option value="{{ $category->kode_kategori }}"
+                                        {{ old('kode_kategori') == $category->kode_kategori ? 'selected' : '' }}>
+                                        {{ $category->nama }}
                                     </option>
                                 @endforeach
                             </select>
@@ -62,18 +61,18 @@
 
                         <!-- Price -->
                         <div class="col-span-1">
-                            <label for="harga_222297" class="block text-sm font-medium text-[#6F4E37]">Price (Rp)</label>
-                            <input type="number" name="harga_222297" id="harga_222297"
+                            <label for="harga" class="block text-sm font-medium text-[#6F4E37]">Price (Rp)</label>
+                            <input type="number" name="harga" id="harga"
                                 class="mt-1 p-2 focus:ring-[#6F4E37] focus:border-[#6F4E37] block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                value="{{ old('harga_222297') }}" min="0" step="100" required>
+                                value="{{ old('harga') }}" min="0" step="100" required>
                         </div>
 
                         <!-- Stock -->
                         <div class="col-span-1">
-                            <label for="jumlah_222297" class="block text-sm font-medium text-[#6F4E37]">Stock</label>
-                            <input type="number" name="jumlah_222297" id="jumlah_222297"
+                            <label for="jumlah" class="block text-sm font-medium text-[#6F4E37]">Stock</label>
+                            <input type="number" name="jumlah" id="jumlah"
                                 class="mt-1 p-2 focus:ring-[#6F4E37] focus:border-[#6F4E37] block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                value="{{ old('jumlah_222297', 0) }}" min="0" required>
+                                value="{{ old('jumlah', 0) }}" min="0" required>
                         </div>
 
                         <!-- Image -->
@@ -87,10 +86,10 @@
 
                     <!-- Description -->
                     <div class="mt-6">
-                        <label for="deskripsi_222297" class="block text-sm font-medium text-[#6F4E37]">Description</label>
-                        <textarea name="deskripsi_222297" id="deskripsi_222297" rows="4"
+                        <label for="deskripsi" class="block text-sm font-medium text-[#6F4E37]">Description</label>
+                        <textarea name="deskripsi" id="deskripsi" rows="4"
                             class="mt-1 p-2 focus:ring-[#6F4E37] focus:border-[#6F4E37] block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                            required>{{ old('deskripsi_222297') }}</textarea>
+                            required>{{ old('deskripsi') }}</textarea>
                     </div>
 
                     <!-- Submit & Cancel Buttons -->

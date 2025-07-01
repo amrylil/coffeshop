@@ -47,24 +47,24 @@
                             @forelse ($reservasi as $item)
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900">
-                                        {{ $item->kode_reservasi_222297 }}
+                                        {{ $item->kode_reservasi }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                        {{ $item->nama_pelanggan_222297 }}
+                                        {{ $item->nama_pelanggan }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                        {{ $item->tanggal_reservasi_222297->isoFormat('D MMM YYYY') }} -
-                                        {{ $item->jam_reservasi_222297->format('H:i') }}
+                                        {{ $item->tanggal_reservasi->isoFormat('D MMM YYYY') }} -
+                                        {{ $item->jam_reservasi->format('H:i') }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                        {{ $item->meja->nomor_meja_222297 }}
+                                        {{ $item->meja->nomor_meja }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         @php
                                             $batasWaktu = \Carbon\Carbon::parse(
-                                                $item->tanggal_reservasi_222297->toDateString() .
+                                                $item->tanggal_reservasi->toDateString() .
                                                     ' ' .
-                                                    $item->jam_reservasi_222297->toTimeString(),
+                                                    $item->jam_reservasi->toTimeString(),
                                             )->addMinutes(15);
                                             $isBatal = \Carbon\Carbon::now()->gt($batasWaktu);
                                             $statusClass = $isBatal
@@ -77,7 +77,7 @@
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <a href="{{ route('reservasi.detail', ['kode_reservasi' => $item->kode_reservasi_222297]) }}"
+                                        <a href="{{ route('reservasi.detail', ['kode_reservasi' => $item->kode_reservasi]) }}"
                                             class="text-[#6f4e37] hover:text-[#5d4130]">Lihat Detail</a>
                                     </td>
                                 </tr>

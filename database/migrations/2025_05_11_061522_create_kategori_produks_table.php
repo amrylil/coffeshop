@@ -10,11 +10,11 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('kategori_produk_222297', function (Blueprint $table) {
-            $table->string('kode_kategori_222297', 20)->primary();
-            $table->string('nama_222297', 255)->nullable();
-            $table->text('deskripsi_222297')->nullable();
-            $table->string('path_img_222297', 255)->nullable();
+        Schema::create('kategori_produk', function (Blueprint $table) {
+            $table->string('kode_kategori', 20)->primary();
+            $table->string('nama', 255)->nullable();
+            $table->text('deskripsi')->nullable();
+            $table->string('path_img', 255)->nullable();
         });
     }
 
@@ -23,6 +23,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('kategori_produk_222297');
+        Schema::dropIfExists('kategori_produk');
     }
 };

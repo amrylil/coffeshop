@@ -33,7 +33,7 @@ class ReservasiController extends Controller
      */
     public function adminIndex()
     {
-        $reservasis = Reservasi::with('meja')->orderBy('created_at_222297', 'desc')->paginate(15);
+        $reservasis = Reservasi::with('meja')->orderBy('created_at', 'desc')->paginate(15);
         return view('pages.admin.reservasi.index', compact('reservasis'));
     }
 
@@ -46,21 +46,21 @@ class ReservasiController extends Controller
     public function adminStore(Request $request)
     {
         $request->validate([
-            'nama_pelanggan_222297'    => 'required|string|max:255',
-            'no_telepon_222297'        => 'required|string|max:15',
-            'tanggal_reservasi_222297' => 'required|date|after_or_equal:today',
-            'jam_reservasi_222297'     => 'required|date_format:H:i',
-            'nomor_meja_222297'        => 'required|exists:meja_222297,nomor_meja_222297',
-            'catatan_222297'           => 'nullable|string',
+            'nama_pelanggan'    => 'required|string|max:255',
+            'no_telepon'        => 'required|string|max:15',
+            'tanggal_reservasi' => 'required|date|after_or_equal:today',
+            'jam_reservasi'     => 'required|date_format:H:i',
+            'nomor_meja'        => 'required|exists:meja,nomor_meja',
+            'catatan'           => 'nullable|string',
         ]);
 
-        $meja = Meja::find($request->nomor_meja_222297);
+        $meja = Meja::find($request->nomor_meja);
 
-        $dataToCreate                        = $request->all();
-        $dataToCreate['jumlah_orang_222297'] = $meja->kapasitas_222297;
+        $dataToCreate                 = $request->all();
+        $dataToCreate['jumlah_orang'] = $meja->kapasitas;
 
         Reservasi::create($dataToCreate);
-        $meja->update(['status_222297' => 'Dipesan']);
+        $meja->update(['status' => 'Dipesan']);
 
         return redirect()->route('admin.reservasi.index')->with('success', 'Reservasi berhasil dibuat.');
     }
@@ -81,19 +81,19 @@ class ReservasiController extends Controller
     public function adminUpdate(Request $request, $kode_reservasi)
     {
         $request->validate([
-            'nama_pelanggan_222297'    => 'required|string|max:255',
-            'no_telepon_222297'        => 'required|string|max:15',
-            'tanggal_reservasi_222297' => 'required|date|after_or_equal:today',
-            'jam_reservasi_222297'     => 'required|date_format:H:i',
-            'nomor_meja_222297'        => 'required|exists:meja_222297,nomor_meja_222297',
-            'catatan_222297'           => 'nullable|string',
+            'nama_pelanggan'    => 'required|string|max:255',
+            'no_telepon'        => 'required|string|max:15',
+            'tanggal_reservasi' => 'required|date|after_or_equal:today',
+            'jam_reservasi'     => 'required|date_format:H:i',
+            'nomor_meja'        => 'required|exists:meja,nomor_meja',
+            'catatan'           => 'nullable|string',
         ]);
 
         $reservasi = Reservasi::findOrFail($kode_reservasi);
-        $meja      = Meja::find($request->nomor_meja_222297);
+        $meja      = Meja::find($request->nomor_meja);
 
-        $dataToUpdate                        = $request->all();
-        $dataToUpdate['jumlah_orang_222297'] = $meja->kapasitas_222297;
+        $dataToUpdate                 = $request->all();
+        $dataToUpdate['jumlah_orang'] = $meja->kapasitas;
 
         $reservasi->update($dataToUpdate);
 
@@ -106,12 +106,12 @@ class ReservasiController extends Controller
         $meja      = $reservasi->meja;
         $reservasi->delete();
 
-        $adaReservasiLain = Reservasi::where('nomor_meja_222297', $meja->nomor_meja_222297)
-            ->where('tanggal_reservasi_222297', '>=', now()->toDateString())
+        $adaReservasiLain = Reservasi::where('nomor_meja', $meja->nomor_meja)
+            ->where('tanggal_reservasi', '>=', now()->toDateString())
             ->exists();
 
         if (!$adaReservasiLain) {
-            $meja->update(['status_222297' => 'Tersedia']);
+            $meja->update(['status' => 'Tersedia']);
         }
 
         return redirect()->route('admin.reservasi.index')->with('success', 'Reservasi berhasil dihapus.');
@@ -127,35 +127,35 @@ class ReservasiController extends Controller
     {
         $validator = Validator::make($request->all(), [
             // Validasi lainnya...
-            'nama_pelanggan_222297'    => 'required|string|max:255',
-            'no_telepon_222297'        => 'required|string|max:15',
-            'tanggal_reservasi_222297' => 'required|date|after_or_equal:today',
-            'jam_reservasi_222297'     => 'required|date_format:H:i',
-            'nomor_meja_222297'        => 'required|string|exists:meja_222297,nomor_meja_222297',
-            'catatan_222297'           => 'nullable|string',
+            'nama_pelanggan'    => 'required|string|max:255',
+            'no_telepon'        => 'required|string|max:15',
+            'tanggal_reservasi' => 'required|date|after_or_equal:today',
+            'jam_reservasi'     => 'required|date_format:H:i',
+            'nomor_meja'        => 'required|string|exists:meja,nomor_meja',
+            'catatan'           => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $meja = Meja::find($request->nomor_meja_222297);
+        $meja = Meja::find($request->nomor_meja);
 
         // ... (logika cek konflik waktu reservasi)
 
-        $dataToCreate                        = $request->all();
+        $dataToCreate                 = $request->all();
         // Tambahkan user_id dari pengguna yang sedang login
-        $dataToCreate['email_222297']        = Auth::user()->email_222297;
-        $dataToCreate['jumlah_orang_222297'] = $meja->kapasitas_222297;
+        $dataToCreate['email']        = Auth::user()->email;
+        $dataToCreate['jumlah_orang'] = $meja->kapasitas;
 
         DB::beginTransaction();
         try {
             $reservasi = Reservasi::create($dataToCreate);
-            $meja->update(['status_222297' => 'Dipesan']);
+            $meja->update(['status' => 'Dipesan']);
             DB::commit();
 
             return redirect()
-                ->route('reservasi.detail', ['kode_reservasi' => $reservasi->kode_reservasi_222297])
+                ->route('reservasi.detail', ['kode_reservasi' => $reservasi->kode_reservasi])
                 ->with('success', 'Reservasi Anda berhasil dibuat!');
         } catch (Exception $e) {
             DB::rollBack();
@@ -176,9 +176,9 @@ class ReservasiController extends Controller
     public function update(Request $request, Reservasi $reservasi)
     {
         $validator = Validator::make($request->all(), [
-            'nama_pelanggan_222297' => 'sometimes|required|string|max:255',
-            'jumlah_orang_222297'   => 'sometimes|required|integer|min:1',
-            'catatan_222297'        => 'nullable|string',
+            'nama_pelanggan' => 'sometimes|required|string|max:255',
+            'jumlah_orang'   => 'sometimes|required|integer|min:1',
+            'catatan'        => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -208,12 +208,12 @@ class ReservasiController extends Controller
             $meja = $reservasi->meja;
             $reservasi->delete();
 
-            $adaReservasiLain = Reservasi::where('nomor_meja_222297', $meja->nomor_meja_222297)
-                ->where('tanggal_reservasi_222297', '>=', Carbon::today()->toDateString())
+            $adaReservasiLain = Reservasi::where('nomor_meja', $meja->nomor_meja)
+                ->where('tanggal_reservasi', '>=', Carbon::today()->toDateString())
                 ->exists();
 
             if (!$adaReservasiLain) {
-                $meja->update(['status_222297' => 'Tersedia']);
+                $meja->update(['status' => 'Tersedia']);
             }
             DB::commit();
 
@@ -240,9 +240,9 @@ class ReservasiController extends Controller
     public function history()
     {
         // Mengambil data reservasi milik user yang sedang login
-        $reservasi = Reservasi::where('email_222297', Auth::user()->email_222297)
+        $reservasi = Reservasi::where('email', Auth::user()->email)
             ->with('meja')
-            ->latest('created_at_222297')
+            ->latest('created_at')
             ->paginate(10);
 
         return view('pages.users.reservasi-history', compact('reservasi'));

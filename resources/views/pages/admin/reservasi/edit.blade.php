@@ -13,7 +13,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                    Kode Reservasi: {{ $reservasi->kode_reservasi_222297 }}
+                    Kode Reservasi: {{ $reservasi->kode_reservasi }}
                 </div>
             </div>
 
@@ -32,7 +32,7 @@
                     </div>
                 </div>
 
-                <form action="{{ route('admin.reservasi.update', $reservasi->kode_reservasi_222297) }}" method="POST"
+                <form action="{{ route('admin.reservasi.update', $reservasi->kode_reservasi) }}" method="POST"
                     class="p-8 space-y-8">
                     @csrf
                     @method('PUT')
@@ -40,7 +40,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <!-- Nama Pelanggan -->
                         <div class="space-y-2">
-                            <label for="nama_pelanggan_222297" class="block text-sm font-semibold text-gray-700 mb-2">
+                            <label for="nama_pelanggan" class="block text-sm font-semibold text-gray-700 mb-2">
                                 <span class="flex items-center space-x-2">
                                     <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
@@ -50,11 +50,11 @@
                                     <span>Nama Pelanggan</span>
                                 </span>
                             </label>
-                            <input type="text" name="nama_pelanggan_222297" id="nama_pelanggan_222297"
-                                value="{{ old('nama_pelanggan_222297', $reservasi->nama_pelanggan_222297) }}"
+                            <input type="text" name="nama_pelanggan" id="nama_pelanggan"
+                                value="{{ old('nama_pelanggan', $reservasi->nama_pelanggan) }}"
                                 class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-purple-500 focus:ring-4 focus:ring-purple-500/20 transition-all duration-200 bg-gray-50/50 hover:bg-white"
                                 placeholder="Masukkan nama lengkap pelanggan" required>
-                            @error('nama_pelanggan_222297')
+                            @error('nama_pelanggan')
                                 <p class="text-red-500 text-sm mt-2 flex items-center space-x-1">
                                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd"
@@ -68,7 +68,7 @@
 
                         <!-- No Telepon -->
                         <div class="space-y-2">
-                            <label for="no_telepon_222297" class="block text-sm font-semibold text-gray-700 mb-2">
+                            <label for="no_telepon" class="block text-sm font-semibold text-gray-700 mb-2">
                                 <span class="flex items-center space-x-2">
                                     <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
@@ -79,11 +79,11 @@
                                     <span>No Telepon</span>
                                 </span>
                             </label>
-                            <input type="text" name="no_telepon_222297" id="no_telepon_222297"
-                                value="{{ old('no_telepon_222297', $reservasi->no_telepon_222297) }}"
+                            <input type="text" name="no_telepon" id="no_telepon"
+                                value="{{ old('no_telepon', $reservasi->no_telepon) }}"
                                 class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-purple-500 focus:ring-4 focus:ring-purple-500/20 transition-all duration-200 bg-gray-50/50 hover:bg-white"
                                 placeholder="Contoh: 08123456789" required>
-                            @error('no_telepon_222297')
+                            @error('no_telepon')
                                 <p class="text-red-500 text-sm mt-2 flex items-center space-x-1">
                                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd"
@@ -97,7 +97,7 @@
 
                         <!-- Tanggal Reservasi -->
                         <div class="space-y-2">
-                            <label for="tanggal_reservasi_222297" class="block text-sm font-semibold text-gray-700 mb-2">
+                            <label for="tanggal_reservasi" class="block text-sm font-semibold text-gray-700 mb-2">
                                 <span class="flex items-center space-x-2">
                                     <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
@@ -108,11 +108,11 @@
                                     <span>Tanggal Reservasi</span>
                                 </span>
                             </label>
-                            <input type="date" name="tanggal_reservasi_222297" id="tanggal_reservasi_222297"
-                                value="{{ old('tanggal_reservasi_222297', $reservasi->tanggal_reservasi_222297) }}"
+                            <input type="date" name="tanggal_reservasi" id="tanggal_reservasi"
+                                value="{{ old('tanggal_reservasi', $reservasi->tanggal_reservasi) }}"
                                 class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-purple-500 focus:ring-4 focus:ring-purple-500/20 transition-all duration-200 bg-gray-50/50 hover:bg-white"
                                 required>
-                            @error('tanggal_reservasi_222297')
+                            @error('tanggal_reservasi')
                                 <p class="text-red-500 text-sm mt-2 flex items-center space-x-1">
                                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd"
@@ -126,7 +126,7 @@
 
                         <!-- Jam Reservasi -->
                         <div class="space-y-2">
-                            <label for="jam_reservasi_222297" class="block text-sm font-semibold text-gray-700 mb-2">
+                            <label for="jam_reservasi" class="block text-sm font-semibold text-gray-700 mb-2">
                                 <span class="flex items-center space-x-2">
                                     <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
@@ -136,11 +136,11 @@
                                     <span>Jam Reservasi</span>
                                 </span>
                             </label>
-                            <input type="time" name="jam_reservasi_222297" id="jam_reservasi_222297"
-                                value="{{ old('jam_reservasi_222297', $reservasi->jam_reservasi_222297) }}"
+                            <input type="time" name="jam_reservasi" id="jam_reservasi"
+                                value="{{ old('jam_reservasi', $reservasi->jam_reservasi) }}"
                                 class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-purple-500 focus:ring-4 focus:ring-purple-500/20 transition-all duration-200 bg-gray-50/50 hover:bg-white"
                                 required>
-                            @error('jam_reservasi_222297')
+                            @error('jam_reservasi')
                                 <p class="text-red-500 text-sm mt-2 flex items-center space-x-1">
                                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd"
@@ -155,7 +155,7 @@
 
                     <!-- Nomor Meja -->
                     <div class="space-y-2">
-                        <label for="nomor_meja_222297" class="block text-sm font-semibold text-gray-700 mb-2">
+                        <label for="nomor_meja" class="block text-sm font-semibold text-gray-700 mb-2">
                             <span class="flex items-center space-x-2">
                                 <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
@@ -166,18 +166,18 @@
                                 <span>Nomor Meja</span>
                             </span>
                         </label>
-                        <select name="nomor_meja_222297" id="nomor_meja_222297"
+                        <select name="nomor_meja" id="nomor_meja"
                             class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-purple-500 focus:ring-4 focus:ring-purple-500/20 transition-all duration-200 bg-gray-50/50 hover:bg-white"
                             required>
                             <option value="" class="text-gray-500">Pilih meja yang tersedia</option>
                             @foreach ($mejas as $meja)
-                                <option value="{{ $meja->nomor_meja_222297 }}"
-                                    {{ old('nomor_meja_222297', $reservasi->nomor_meja_222297) == $meja->nomor_meja_222297 ? 'selected' : '' }}>
-                                    Meja {{ $meja->nomor_meja_222297 }} - Kapasitas {{ $meja->kapasitas_222297 }} orang
+                                <option value="{{ $meja->nomor_meja }}"
+                                    {{ old('nomor_meja', $reservasi->nomor_meja) == $meja->nomor_meja ? 'selected' : '' }}>
+                                    Meja {{ $meja->nomor_meja }} - Kapasitas {{ $meja->kapasitas }} orang
                                 </option>
                             @endforeach
                         </select>
-                        @error('nomor_meja_222297')
+                        @error('nomor_meja')
                             <p class="text-red-500 text-sm mt-2 flex items-center space-x-1">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd"
@@ -191,7 +191,7 @@
 
                     <!-- Catatan -->
                     <div class="space-y-2">
-                        <label for="catatan_222297" class="block text-sm font-semibold text-gray-700 mb-2">
+                        <label for="catatan" class="block text-sm font-semibold text-gray-700 mb-2">
                             <span class="flex items-center space-x-2">
                                 <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
@@ -203,10 +203,10 @@
                                 <span class="text-gray-400 text-xs">(Opsional)</span>
                             </span>
                         </label>
-                        <textarea name="catatan_222297" id="catatan_222297" rows="4"
+                        <textarea name="catatan" id="catatan" rows="4"
                             class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-purple-500 focus:ring-4 focus:ring-purple-500/20 transition-all duration-200 bg-gray-50/50 hover:bg-white resize-none"
-                            placeholder="Tambahkan catatan khusus untuk reservasi ini (contoh: alergi makanan, permintaan khusus, dll.)">{{ old('catatan_222297', $reservasi->catatan_222297) }}</textarea>
-                        @error('catatan_222297')
+                            placeholder="Tambahkan catatan khusus untuk reservasi ini (contoh: alergi makanan, permintaan khusus, dll.)">{{ old('catatan', $reservasi->catatan) }}</textarea>
+                        @error('catatan')
                             <p class="text-red-500 text-sm mt-2 flex items-center space-x-1">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd"

@@ -64,9 +64,9 @@
                             @forelse($users as $user)
                                 <tr class="hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        @if ($user->profile_photo_222297)
-                                            <img src="{{ asset('storage/' . $user->profile_photo_222297) }}"
-                                                alt="{{ $user->name_222297 }}" class="h-16 w-16 object-cover rounded">
+                                        @if ($user->profile_photo)
+                                            <img src="{{ asset('storage/' . $user->profile_photo) }}"
+                                                alt="{{ $user->name }}" class="h-16 w-16 object-cover rounded">
                                         @else
                                             <div class="h-16 w-16 bg-gray-200 flex items-center justify-center rounded">
                                                 <span class="text-gray-400">No Image</span>
@@ -74,32 +74,31 @@
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-[#6F4E37]">
-                                        {{ $user->name_222297 }}
+                                        {{ $user->name }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {{ $user->email_222297 }}
+                                        {{ $user->email }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {{ $user->role_222297 }}
+                                        {{ $user->role }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {{ $user->gender_222297 }}
+                                        {{ $user->gender }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {{ $user->phone_222297 }}
+                                        {{ $user->phone }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-center">
                                         <div class="flex items-center justify-center space-x-2">
-                                            <a href="{{ route('admin.users.show', $user->email_222297) }}"
+                                            <a href="{{ route('admin.users.show', $user->email) }}"
                                                 class="text-blue-600 hover:text-blue-800">
                                                 <span class="px-2 py-1 bg-blue-100 rounded-md">View</span>
                                             </a>
-                                            <a href="{{ route('admin.users.edit', $user->email_222297) }}"
+                                            <a href="{{ route('admin.users.edit', $user->email) }}"
                                                 class="text-[#6F4E37] hover:text-[#5D4037]">
                                                 <span class="px-2 py-1 bg-[#F5E6DD] rounded-md">Edit</span>
                                             </a>
-                                            <form action="{{ route('admin.users.destroy', $user->email_222297) }}"
-                                                method="POST"
+                                            <form action="{{ route('admin.users.destroy', $user->email) }}" method="POST"
                                                 onsubmit="return confirm('Are you sure you want to delete this user?');">
                                                 @csrf
                                                 @method('DELETE')

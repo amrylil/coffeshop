@@ -10,16 +10,16 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('keranjang_222297', function (Blueprint $table) {
-            $table->string('kode_keranjang_222297', 100)->primary();
-            $table->string('email_222297')->nullable();
-            $table->timestamp('created_at_222297')->nullable();
-            $table->timestamp('updated_at_222297')->nullable();
+        Schema::create('keranjang', function (Blueprint $table) {
+            $table->string('kode_keranjang', 100)->primary();
+            $table->string('email')->nullable();
+            $table->timestamp('created_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
 
             $table
-                ->foreign('email_222297')
-                ->references('email_222297')
-                ->on('users_222297');
+                ->foreign('email')
+                ->references('email')
+                ->on('users');
         });
     }
 
@@ -28,6 +28,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('keranjang_222297');
+        Schema::dropIfExists('keranjang');
     }
 };

@@ -46,14 +46,13 @@
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <!-- Nomor Meja -->
                         <div class="space-y-2">
-                            <label for="nomor_meja_222297"
-                                class="block text-sm font-semibold text-[#6F4E37] flex items-center">
+                            <label for="nomor_meja" class="block text-sm font-semibold text-[#6F4E37] flex items-center">
                                 <i class="fas fa-hashtag mr-2 text-gray-500"></i>
                                 Nomor Meja
                             </label>
-                            <input type="text" name="nomor_meja_222297" id="nomor_meja_222297"
+                            <input type="text" name="nomor_meja" id="nomor_meja"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#6F4E37] focus:border-[#6F4E37] transition duration-200"
-                                value="{{ old('nomor_meja_222297') }}" placeholder="e.g., A1, B2, 01">
+                                value="{{ old('nomor_meja') }}" placeholder="e.g., A1, B2, 01">
                             <p class="text-xs text-gray-500 flex items-center">
                                 <i class="fas fa-info-circle mr-1"></i>
                                 Leave empty to auto-generate
@@ -62,21 +61,21 @@
 
                         <!-- Status -->
                         <div class="space-y-2">
-                            <label for="status_222297" class="block text-sm font-semibold text-[#6F4E37] flex items-center">
+                            <label for="status" class="block text-sm font-semibold text-[#6F4E37] flex items-center">
                                 <i class="fas fa-toggle-on mr-2 text-gray-500"></i>
                                 Status
                             </label>
-                            <select name="status_222297" id="status_222297"
+                            <select name="status" id="status"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#6F4E37] focus:border-[#6F4E37] transition duration-200"
                                 required>
                                 <option value="">Pilih Status</option>
-                                <option value="kosong" {{ old('status_222297') === 'kosong' ? 'selected' : '' }}>
+                                <option value="kosong" {{ old('status') === 'kosong' ? 'selected' : '' }}>
                                     🟢 Kosong
                                 </option>
-                                <option value="dipesan" {{ old('status_222297') === 'dipesan' ? 'selected' : '' }}>
+                                <option value="dipesan" {{ old('status') === 'dipesan' ? 'selected' : '' }}>
                                     🟡 Dipesan
                                 </option>
-                                <option value="digunakan" {{ old('status_222297') === 'digunakan' ? 'selected' : '' }}>
+                                <option value="digunakan" {{ old('status') === 'digunakan' ? 'selected' : '' }}>
                                     🔴 Digunakan
                                 </option>
                             </select>
@@ -84,16 +83,14 @@
 
                         <!-- Kapasitas -->
                         <div class="space-y-2 lg:col-span-2">
-                            <label for="kapasitas_222297"
-                                class="block text-sm font-semibold text-[#6F4E37] flex items-center">
+                            <label for="kapasitas" class="block text-sm font-semibold text-[#6F4E37] flex items-center">
                                 <i class="fas fa-users mr-2 text-gray-500"></i>
                                 Kapasitas
                             </label>
                             <div class="relative">
-                                <input type="number" name="kapasitas_222297" id="kapasitas_222297" min="1"
-                                    max="20"
+                                <input type="number" name="kapasitas" id="kapasitas" min="1" max="20"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#6F4E37] focus:border-[#6F4E37] transition duration-200 pr-16"
-                                    value="{{ old('kapasitas_222297') }}" placeholder="Maximum guests" required>
+                                    value="{{ old('kapasitas') }}" placeholder="Maximum guests" required>
                                 <div class="absolute inset-y-0 right-0 flex items-center pr-4">
                                     <span class="text-gray-500 text-sm">orang</span>
                                 </div>
@@ -153,9 +150,9 @@
     <!-- Live Preview Script -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const nomorInput = document.getElementById('nomor_meja_222297');
-            const kapasitasInput = document.getElementById('kapasitas_222297');
-            const statusSelect = document.getElementById('status_222297');
+            const nomorInput = document.getElementById('nomor_meja');
+            const kapasitasInput = document.getElementById('kapasitas');
+            const statusSelect = document.getElementById('status');
 
             const previewNumber = document.getElementById('preview-number');
             const previewCapacity = document.getElementById('preview-capacity');

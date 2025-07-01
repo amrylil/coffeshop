@@ -21,7 +21,7 @@ class KeranjangController extends Controller
         $items     = $keranjang->items()->with('menu')->get();
 
         $total = $items->sum(function ($item) {
-            return $item->quantity_222297 * $item->menu->harga_222297;
+            return $item->quantity * $item->menu->harga;
         });
 
         return view('pages.users.keranjang', compact('keranjang', 'items', 'total'));
@@ -33,14 +33,14 @@ class KeranjangController extends Controller
     public function addToCart(Request $request)
     {
         $request->validate([
-            'kode_menu_222297' => 'required|exists:menu_222297,kode_menu_222297',
-            'quantity_222297'  => 'required|integer|min:1'
+            'kode_menu' => 'required|exists:menu,kode_menu',
+            'quantity'  => 'required|integer|min:1'
         ]);
 
         try {
             DB::beginTransaction();
 
-            $menu = Menu::where('kode_menu_222297', $request->kode_menu_222297)->first();
+            $menu = Menu::where('kode_menu', $request->kode_menu)->first();
             if (!$menu) {
                 return response()->json([
                     'success' => false,
@@ -51,22 +51,22 @@ class KeranjangController extends Controller
             $keranjang = $this->getOrCreateKeranjang();
 
             // Check if item already exists in cart
-            $existingItem = ItemKeranjang::where('kode_keranjang_222297', $keranjang->kode_keranjang_222297)
-                ->where('kode_menu_222297', $request->kode_menu_222297)
+            $existingItem = ItemKeranjang::where('kode_keranjang', $keranjang->kode_keranjang)
+                ->where('kode_menu', $request->kode_menu)
                 ->first();
 
             if ($existingItem) {
                 // Update quantity if item exists
-                $existingItem->quantity_222297 += $request->quantity_222297;
+                $existingItem->quantity += $request->quantity;
                 $existingItem->save();
                 $item = $existingItem;
             } else {
                 // Create new item
                 $item = ItemKeranjang::create([
-                    'kode_keranjang_222297' => $keranjang->kode_keranjang_222297,
-                    'kode_menu_222297'      => $request->kode_menu_222297,
-                    'quantity_222297'       => $request->quantity_222297,
-                    'price_222297'          => $menu->harga_222297 ?? 0
+                    'kode_keranjang' => $keranjang->kode_keranjang,
+                    'kode_menu'      => $request->kode_menu,
+                    'quantity'       => $request->quantity,
+                    'price'          => $menu->harga ?? 0
                 ]);
             }
 
@@ -92,11 +92,11 @@ class KeranjangController extends Controller
     public function updateQuantity(Request $request, $kodeItem)
     {
         $request->validate([
-            'quantity_222297' => 'required|integer|min:1'
+            'quantity' => 'required|integer|min:1'
         ]);
 
         try {
-            $item = ItemKeranjang::where('kode_item_222297', $kodeItem)->first();
+            $item = ItemKeranjang::where('kode_item', $kodeItem)->first();
 
             if (!$item) {
                 return response()->json([
@@ -106,14 +106,14 @@ class KeranjangController extends Controller
             }
 
             // Verify item belongs to current user's cart
-            if ($item->keranjang->email_222297 !== Auth::user()->email_222297) {
+            if ($item->keranjang->email !== Auth::user()->email) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Tidak memiliki akses ke item ini'
                 ], 403);
             }
 
-            $item->quantity_222297 = $request->quantity_222297;
+            $item->quantity = $request->quantity;
             $item->save();
 
             return response()->json([
@@ -135,7 +135,7 @@ class KeranjangController extends Controller
     public function removeItem($kodeItem)
     {
         try {
-            $item = ItemKeranjang::where('kode_item_222297', $kodeItem)->first();
+            $item = ItemKeranjang::where('kode_item', $kodeItem)->first();
 
             if (!$item) {
                 return response()->json([
@@ -145,7 +145,7 @@ class KeranjangController extends Controller
             }
 
             // Verify item belongs to current user's cart
-            if ($item->keranjang->email_222297 !== Auth::user()->email_222297) {
+            if ($item->keranjang->email !== Auth::user()->email) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Tidak memiliki akses ke item ini'
@@ -172,10 +172,10 @@ class KeranjangController extends Controller
     public function clearCart()
     {
         try {
-            $keranjang = Keranjang::where('email_222297', Auth::user()->email_222297)->first();
+            $keranjang = Keranjang::where('email', Auth::user()->email)->first();
 
             if ($keranjang) {
-                ItemKeranjang::where('kode_keranjang_222297', $keranjang->kode_keranjang_222297)->delete();
+                ItemKeranjang::where('kode_keranjang', $keranjang->kode_keranjang)->delete();
             }
 
             return response()->json([
@@ -195,12 +195,12 @@ class KeranjangController extends Controller
      */
     public function getCartCount()
     {
-        $keranjang = Keranjang::where('email_222297', Auth::user()->email_222297)->first();
+        $keranjang = Keranjang::where('email', Auth::user()->email)->first();
 
         $count = 0;
         if ($keranjang) {
-            $count = ItemKeranjang::where('kode_keranjang_222297', $keranjang->kode_keranjang_222297)
-                ->sum('quantity_222297');
+            $count = ItemKeranjang::where('kode_keranjang', $keranjang->kode_keranjang)
+                ->sum('quantity');
         }
 
         return response()->json([
@@ -214,13 +214,13 @@ class KeranjangController extends Controller
      */
     public function getCartTotal()
     {
-        $keranjang = Keranjang::where('email_222297', Auth::user()->email_222297)->first();
+        $keranjang = Keranjang::where('email', Auth::user()->email)->first();
 
         $total = 0;
         if ($keranjang) {
-            $items = ItemKeranjang::where('kode_keranjang_222297', $keranjang->kode_keranjang_222297)->get();
+            $items = ItemKeranjang::where('kode_keranjang', $keranjang->kode_keranjang)->get();
             $total = $items->sum(function ($item) {
-                return $item->quantity_222297 * $item->price_222297;
+                return $item->quantity * $item->price;
             });
         }
 
@@ -235,11 +235,11 @@ class KeranjangController extends Controller
      */
     private function getOrCreateKeranjang()
     {
-        $keranjang = Keranjang::where('email_222297', Auth::user()->email_222297)->first();
+        $keranjang = Keranjang::where('email', Auth::user()->email)->first();
 
         if (!$keranjang) {
             $keranjang = Keranjang::create([
-                'email_222297' => Auth::user()->email_222297
+                'email' => Auth::user()->email
             ]);
         }
 
@@ -252,7 +252,7 @@ class KeranjangController extends Controller
     public function incrementQuantity($kodeItem)
     {
         try {
-            $item = ItemKeranjang::where('kode_item_222297', $kodeItem)->first();
+            $item = ItemKeranjang::where('kode_item', $kodeItem)->first();
 
             if (!$item) {
                 return response()->json([
@@ -262,14 +262,14 @@ class KeranjangController extends Controller
             }
 
             // Verify item belongs to current user's cart
-            if ($item->keranjang->email_222297 !== Auth::user()->email_222297) {
+            if ($item->keranjang->email !== Auth::user()->email) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Tidak memiliki akses ke item ini'
                 ], 403);
             }
 
-            $item->quantity_222297 += 1;
+            $item->quantity += 1;
             $item->save();
 
             return response()->json([
@@ -291,7 +291,7 @@ class KeranjangController extends Controller
     public function decrementQuantity($kodeItem)
     {
         try {
-            $item = ItemKeranjang::where('kode_item_222297', $kodeItem)->first();
+            $item = ItemKeranjang::where('kode_item', $kodeItem)->first();
 
             if (!$item) {
                 return response()->json([
@@ -301,14 +301,14 @@ class KeranjangController extends Controller
             }
 
             // Verify item belongs to current user's cart
-            if ($item->keranjang->email_222297 !== Auth::user()->email_222297) {
+            if ($item->keranjang->email !== Auth::user()->email) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Tidak memiliki akses ke item ini'
                 ], 403);
             }
 
-            if ($item->quantity_222297 <= 1) {
+            if ($item->quantity <= 1) {
                 // If quantity is 1 or less, remove the item
                 $item->delete();
                 return response()->json([
@@ -317,7 +317,7 @@ class KeranjangController extends Controller
                     'removed' => true
                 ]);
             } else {
-                $item->quantity_222297 -= 1;
+                $item->quantity -= 1;
                 $item->save();
                 return response()->json([
                     'success' => true,

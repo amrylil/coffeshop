@@ -43,15 +43,15 @@ class UserController extends Controller
   public function store(Request $request)
   {
     $validator = Validator::make($request->all(), [
-      'email_222297'         => 'required|email|unique:users_222297',
-      'name_222297'          => 'required|string|max:255',
-      'password_222297'      => 'required|string|min:8',
-      'gender_222297'        => 'nullable|in:male,female',
-      'role_222297'          => 'required|string',
-      'address_222297'       => 'nullable|string',
-      'phone_222297'         => 'nullable|string',
-      'birth_date_222297'    => 'nullable|date',
-      'profile_photo_222297' => 'nullable|image|max:2048',
+      'email'         => 'required|email|unique:users',
+      'name'          => 'required|string|max:255',
+      'password'      => 'required|string|min:8',
+      'gender'        => 'nullable|in:male,female',
+      'role'          => 'required|string',
+      'address'       => 'nullable|string',
+      'phone'         => 'nullable|string',
+      'birth_date'    => 'nullable|date',
+      'profile_photo' => 'nullable|image|max:2048',
     ]);
 
     if ($validator->fails()) {
@@ -61,13 +61,13 @@ class UserController extends Controller
         ->withInput();
     }
 
-    $userData                    = $request->all();
-    $userData['password_222297'] = Hash::make($request->password_222297);
+    $userData             = $request->all();
+    $userData['password'] = Hash::make($request->password);
 
     // Handle profile photo upload if exists
-    if ($request->hasFile('profile_photo_222297')) {
-      $path                             = $request->file('profile_photo_222297')->store('profile_photos', 'public');
-      $userData['profile_photo_222297'] = $path;
+    if ($request->hasFile('profile_photo')) {
+      $path                      = $request->file('profile_photo')->store('profile_photos', 'public');
+      $userData['profile_photo'] = $path;
     }
 
     User::create($userData);
@@ -114,14 +114,14 @@ class UserController extends Controller
 
     $validator = Validator::make($request->all(), [
       // [PERBAIKAN] Menggunakan Rule::unique untuk kemudahan membaca dan keamanan
-      'email_222297'         => ['required', 'email', Rule::unique('users_222297', 'email_222297')->ignore($user)],
-      'name_222297'          => 'required|string|max:255',
-      'gender_222297'        => 'nullable|in:male,female',
-      'role_222297'          => 'required|string',
-      'address_222297'       => 'nullable|string',
-      'phone_222297'         => 'nullable|string',
-      'birth_date_222297'    => 'nullable|date',
-      'profile_photo_222297' => 'nullable|image|max:2048',
+      'email'         => ['required', 'email', Rule::unique('users', 'email')->ignore($user)],
+      'name'          => 'required|string|max:255',
+      'gender'        => 'nullable|in:male,female',
+      'role'          => 'required|string',
+      'address'       => 'nullable|string',
+      'phone'         => 'nullable|string',
+      'birth_date'    => 'nullable|date',
+      'profile_photo' => 'nullable|image|max:2048',
     ]);
 
     if ($validator->fails()) {
@@ -132,25 +132,25 @@ class UserController extends Controller
     }
 
     // Ambil semua data kecuali yang tidak perlu diupdate secara langsung
-    $userData = $request->except(['_token', '_method', 'password_222297', 'profile_photo_222297']);
+    $userData = $request->except(['_token', '_method', 'password', 'profile_photo']);
 
     // Update password hanya jika diisi
-    if ($request->filled('password_222297')) {
-      $userData['password_222297'] = Hash::make($request->password_222297);
+    if ($request->filled('password')) {
+      $userData['password'] = Hash::make($request->password);
     }
 
     // [PERBAIKAN & LOGIKA BARU] Handle upload foto profil
-    if ($request->hasFile('profile_photo_222297')) {
+    if ($request->hasFile('profile_photo')) {
       // 1. Hapus foto lama jika ada
-      if ($user->profile_photo_222297) {
-        Storage::disk('public')->delete($user->profile_photo_222297);
+      if ($user->profile_photo) {
+        Storage::disk('public')->delete($user->profile_photo);
       }
 
       // 2. Simpan foto baru dan dapatkan path-nya
-      $path = $request->file('profile_photo_222297')->store('profile_photos', 'public');
+      $path = $request->file('profile_photo')->store('profile_photos', 'public');
 
       // 3. Masukkan path foto baru ke data yang akan diupdate
-      $userData['profile_photo_222297'] = $path;
+      $userData['profile_photo'] = $path;
     }
 
     $user->update($userData);
@@ -183,8 +183,8 @@ class UserController extends Controller
     // -- JIKA VALIDASI LOLOS, LANJUTKAN HAPUS --
 
     // (Opsional) Hapus foto profil dari storage jika ada
-    if ($user->profile_photo_222297) {
-      Storage::disk('public')->delete($user->profile_photo_222297);
+    if ($user->profile_photo) {
+      Storage::disk('public')->delete($user->profile_photo);
     }
 
     $user->delete();
@@ -207,7 +207,7 @@ class UserController extends Controller
     $user = User::findOrFail($id);
 
     $validator = Validator::make($request->all(), [
-      'role_222297' => 'required|string',
+      'role' => 'required|string',
     ]);
 
     if ($validator->fails()) {
@@ -218,7 +218,7 @@ class UserController extends Controller
     }
 
     $user->update([
-      'role_222297' => $request->role_222297
+      'role' => $request->role
     ]);
 
     return redirect()

@@ -40,18 +40,18 @@
 
                                             <div class="flex-1">
                                                 <h3 class="font-semibold text-amber-900 text-lg">
-                                                    {{ $item->menu->nama_222297 ?? 'Menu Item' }}</h3>
+                                                    {{ $item->menu->nama ?? 'Menu Item' }}</h3>
                                                 <p class="text-amber-600 text-sm hidden md:block">
-                                                    {{ $item->menu->deskripsi_222297 ?? 'Deskripsi menu' }}</p>
+                                                    {{ $item->menu->deskripsi ?? 'Deskripsi menu' }}</p>
                                                 <div class="flex items-center mt-2">
                                                     <span class="text-amber-800 font-medium">Rp
-                                                        {{ number_format($item->menu->harga_222297, 0, ',', '.') }}</span>
+                                                        {{ number_format($item->menu->harga, 0, ',', '.') }}</span>
                                                     <span class="text-amber-600 text-sm ml-2">per item</span>
                                                 </div>
                                             </div>
 
                                             <div class="flex items-center space-x-3">
-                                                <button onclick="decrementQuantity('{{ $item->kode_item_222297 }}')"
+                                                <button onclick="decrementQuantity('{{ $item->kode_item }}')"
                                                     class="w-8 h-8 bg-amber-600 hover:bg-amber-700 text-white rounded-full flex items-center justify-center transition-colors duration-200">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
@@ -62,10 +62,10 @@
 
                                                 <span
                                                     class="w-12 text-center font-semibold text-amber-900 bg-white px-3 py-1 rounded-lg border border-amber-200">
-                                                    {{ $item->quantity_222297 }}
+                                                    {{ $item->quantity }}
                                                 </span>
 
-                                                <button onclick="incrementQuantity('{{ $item->kode_item_222297 }}')"
+                                                <button onclick="incrementQuantity('{{ $item->kode_item }}')"
                                                     class="w-8 h-8 bg-amber-600 hover:bg-amber-700 text-white rounded-full flex items-center justify-center transition-colors duration-200">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
@@ -78,9 +78,9 @@
                                             <div class="text-right">
                                                 <div class="font-bold text-amber-900 text-lg">
                                                     Rp
-                                                    {{ number_format($item->quantity_222297 * $item->menu->harga_222297, 0, ',', '.') }}
+                                                    {{ number_format($item->quantity * $item->menu->harga, 0, ',', '.') }}
                                                 </div>
-                                                <button onclick="removeItem('{{ $item->kode_item_222297 }}')"
+                                                <button onclick="removeItem('{{ $item->kode_item }}')"
                                                     class="text-red-500 hover:text-red-700 text-sm mt-1 transition-colors duration-200">
                                                     Hapus
                                                 </button>
@@ -214,14 +214,14 @@
                                         <div
                                             class="flex justify-between items-center py-2 border-b border-amber-100 last:border-0">
                                             <div class="flex-1">
-                                                <h4 class="font-medium text-amber-900">{{ $item->menu->nama_222297 }}
+                                                <h4 class="font-medium text-amber-900">{{ $item->menu->nama }}
                                                 </h4>
-                                                <p class="text-sm text-amber-600">{{ $item->quantity_222297 }} x Rp
-                                                    {{ number_format($item->menu->harga_222297, 0, ',', '.') }}</p>
+                                                <p class="text-sm text-amber-600">{{ $item->quantity }} x Rp
+                                                    {{ number_format($item->menu->harga, 0, ',', '.') }}</p>
                                             </div>
                                             <div class="font-semibold text-amber-900">
                                                 Rp
-                                                {{ number_format($item->quantity_222297 * $item->menu->harga_222297, 0, ',', '.') }}
+                                                {{ number_format($item->quantity * $item->menu->harga, 0, ',', '.') }}
                                             </div>
                                         </div>
                                     @endforeach
@@ -266,13 +266,13 @@
                                 <div class="space-y-3">
                                     <label
                                         class="flex items-center p-4 bg-gradient-to-r from-amber-50 to-orange-100 rounded-xl border border-amber-200 cursor-pointer hover:shadow-md has-[:checked]:ring-2 has-[:checked]:ring-amber-600 transition-all duration-200">
-                                        <input type="radio" name="jenis_pesanan_222297" value="delivery"
+                                        <input type="radio" name="jenis_pesanan" value="delivery"
                                             class="mr-4 text-amber-600 focus:ring-amber-500" required>
                                         <div class="font-semibold text-amber-900">Pesan Antar (Delivery)</div>
                                     </label>
                                     <label
                                         class="flex items-center p-4 bg-gradient-to-r from-amber-50 to-orange-100 rounded-xl border border-amber-200 cursor-pointer hover:shadow-md has-[:checked]:ring-2 has-[:checked]:ring-amber-600 transition-all duration-200">
-                                        <input type="radio" name="jenis_pesanan_222297" value="di_lokasi"
+                                        <input type="radio" name="jenis_pesanan" value="di_lokasi"
                                             class="mr-4 text-amber-600 focus:ring-amber-500" required checked>
                                         <div class="font-semibold text-amber-900">Ambil di Lokasi</div>
                                     </label>
@@ -284,21 +284,21 @@
                                 <div>
                                     <label for="nama_penerima" class="block text-sm font-medium text-amber-900 mb-1">Nama
                                         Penerima</label>
-                                    <input type="text" id="nama_penerima" name="nama_penerima_222297"
+                                    <input type="text" id="nama_penerima" name="nama_penerima"
                                         class="w-full px-4 py-3 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
                                         placeholder="Masukkan nama lengkap">
                                 </div>
                                 <div>
                                     <label for="telepon_penerima"
                                         class="block text-sm font-medium text-amber-900 mb-1">Nomor Telepon</label>
-                                    <input type="tel" id="telepon_penerima" name="telepon_penerima_222297"
+                                    <input type="tel" id="telepon_penerima" name="telepon_penerima"
                                         class="w-full px-4 py-3 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
                                         placeholder="Contoh: 08123456789">
                                 </div>
                                 <div>
                                     <label for="alamat_pengiriman"
                                         class="block text-sm font-medium text-amber-900 mb-1">Alamat Lengkap</label>
-                                    <textarea id="alamat_pengiriman" name="alamat_pengiriman_222297" rows="3"
+                                    <textarea id="alamat_pengiriman" name="alamat_pengiriman" rows="3"
                                         class="w-full px-4 py-3 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none"
                                         placeholder="Masukkan jalan, nomor rumah, kelurahan, kecamatan, kota, dan kode pos"></textarea>
                                 </div>
@@ -381,7 +381,7 @@
                                     Upload Bukti Transfer *
                                 </label>
                                 <div class="relative">
-                                    <input type="file" name="bukti_tf_222297" id="bukti_tf"
+                                    <input type="file" name="bukti_tf" id="bukti_tf"
                                         accept="image/jpeg,image/png,image/jpg"
                                         class="block w-full text-sm text-gray-500 file:mr-4 file:py-3 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100 border border-amber-300 rounded-lg p-3"
                                         required>
@@ -393,7 +393,7 @@
                                 <label class="block text-sm font-medium text-amber-900 mb-2">
                                     Catatan Tambahan (Opsional)
                                 </label>
-                                <textarea name="catatan_222297" rows="3"
+                                <textarea name="catatan" rows="3"
                                     class="w-full px-4 py-3 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none"
                                     placeholder="Tambahkan catatan khusus untuk pesanan Anda..."></textarea>
                             </div>
@@ -597,7 +597,7 @@
             // Trigger change on page load for default checked radio
             document.querySelector('input[name="payment_method"]:checked')?.dispatchEvent(new Event('change'));
 
-            const orderTypeRadios = document.querySelectorAll('input[name="jenis_pesanan_222297"]');
+            const orderTypeRadios = document.querySelectorAll('input[name="jenis_pesanan"]');
             const deliveryForm = document.getElementById('deliveryAddressForm');
             const deliveryInputs = deliveryForm.querySelectorAll('input, textarea');
 
@@ -628,17 +628,17 @@
                 return;
             }
 
-            const orderType = formData.get('jenis_pesanan_222297');
+            const orderType = formData.get('jenis_pesanan');
             const paymentMethod = formData.get('payment_method');
-            const buktiTf = formData.get('bukti_tf_222297');
+            const buktiTf = formData.get('bukti_tf');
 
             if (!orderType) {
                 alert('Silakan pilih metode pengambilan (Delivery atau Ambil di Lokasi)');
                 return;
             }
             if (orderType === 'delivery') {
-                if (!formData.get('nama_penerima_222297') || !formData.get('telepon_penerima_222297') || !formData
-                    .get('alamat_pengiriman_222297')) {
+                if (!formData.get('nama_penerima') || !formData.get('telepon_penerima') || !formData
+                    .get('alamat_pengiriman')) {
                     alert('Untuk pesanan delivery, harap isi semua detail alamat pengiriman.');
                     return;
                 }

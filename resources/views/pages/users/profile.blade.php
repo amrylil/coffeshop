@@ -15,10 +15,10 @@
                 <div class="bg-gradient-to-r from-amber-900 to-yellow-900 px-6 py-8 text-center">
                     <img id="profileImage"
                         class="w-32 h-32 rounded-full mx-auto border-4 border-white shadow-lg object-cover mb-4"
-                        src="{{ $user->profile_photo_222297 ? asset('storage/' . $user->profile_photo_222297) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name_222297) . '&color=ffffff&background=92400e' }}"
-                        alt="{{ $user->name_222297 }}">
-                    <h1 class="text-2xl font-bold text-white">{{ $user->name_222297 }}</h1>
-                    <p class="text-amber-100">{{ $user->email_222297 }}</p>
+                        src="{{ $user->profile_photo ? asset('storage/' . $user->profile_photo) : 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&color=ffffff&background=92400e' }}"
+                        alt="{{ $user->name }}">
+                    <h1 class="text-2xl font-bold text-white">{{ $user->name }}</h1>
+                    <p class="text-amber-100">{{ $user->email }}</p>
                 </div>
 
                 <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="p-6">
@@ -38,9 +38,9 @@
                     <!-- Profile Photo Upload -->
                     <div class="mb-6 text-center">
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Change Photo</label>
-                        <input type="file" name="profile_photo_222297" id="profilePhotoInput" accept="image/*"
+                        <input type="file" name="profile_photo" id="profilePhotoInput" accept="image/*"
                             class="block mx-auto text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-amber-50 file:text-amber-800 hover:file:bg-amber-100">
-                        @error('profile_photo_222297')
+                        @error('profile_photo')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
                     </div>
@@ -50,10 +50,9 @@
                         <!-- Name -->
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1">Name</label>
-                            <input type="text" name="name_222297" value="{{ old('name_222297', $user->name_222297) }}"
-                                required
-                                class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent @error('name_222297') border-red-400 @enderror">
-                            @error('name_222297')
+                            <input type="text" name="name" value="{{ old('name', $user->name) }}" required
+                                class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent @error('name') border-red-400 @enderror">
+                            @error('name')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
@@ -61,7 +60,7 @@
                         <!-- Email (readonly) -->
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1">Email</label>
-                            <input type="email" value="{{ $user->email_222297 }}" readonly
+                            <input type="email" value="{{ $user->email }}" readonly
                                 class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg cursor-not-allowed">
                             <p class="text-xs text-gray-500 mt-1">Email cannot be changed</p>
                         </div>
@@ -70,22 +69,21 @@
                         <div class="grid md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-1">Gender</label>
-                                <select name="gender_222297"
-                                    class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 @error('gender_222297') border-red-400 @enderror">
+                                <select name="gender"
+                                    class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 @error('gender') border-red-400 @enderror">
                                     <option value="">Select Gender</option>
-                                    <option value="male" @selected(old('gender_222297', $user->gender_222297) == 'male')>Male</option>
-                                    <option value="female" @selected(old('gender_222297', $user->gender_222297) == 'female')>Female</option>
+                                    <option value="male" @selected(old('gender', $user->gender) == 'male')>Male</option>
+                                    <option value="female" @selected(old('gender', $user->gender) == 'female')>Female</option>
                                 </select>
-                                @error('gender_222297')
+                                @error('gender')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-1">Phone</label>
-                                <input type="text" name="phone_222297"
-                                    value="{{ old('phone_222297', $user->phone_222297) }}"
-                                    class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 @error('phone_222297') border-red-400 @enderror">
-                                @error('phone_222297')
+                                <input type="text" name="phone" value="{{ old('phone', $user->phone) }}"
+                                    class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 @error('phone') border-red-400 @enderror">
+                                @error('phone')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
@@ -94,10 +92,10 @@
                         <!-- Birth Date -->
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1">Birth Date</label>
-                            <input type="date" name="birth_date_222297"
-                                value="{{ old('birth_date_222297', $user->birth_date_222297?->format('Y-m-d')) }}"
-                                class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 @error('birth_date_222297') border-red-400 @enderror">
-                            @error('birth_date_222297')
+                            <input type="date" name="birth_date"
+                                value="{{ old('birth_date', $user->birth_date?->format('Y-m-d')) }}"
+                                class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 @error('birth_date') border-red-400 @enderror">
+                            @error('birth_date')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
@@ -105,9 +103,9 @@
                         <!-- Address -->
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-1">Address</label>
-                            <textarea name="address_222297" rows="3"
-                                class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 @error('address_222297') border-red-400 @enderror">{{ old('address_222297', $user->address_222297) }}</textarea>
-                            @error('address_222297')
+                            <textarea name="address" rows="3"
+                                class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 @error('address') border-red-400 @enderror">{{ old('address', $user->address) }}</textarea>
+                            @error('address')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
@@ -118,15 +116,15 @@
                             <div class="grid md:grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-1">New Password</label>
-                                    <input type="password" name="password_222297"
-                                        class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 @error('password_222297') border-red-400 @enderror">
-                                    @error('password_222297')
+                                    <input type="password" name="password"
+                                        class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 @error('password') border-red-400 @enderror">
+                                    @error('password')
                                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-1">Confirm Password</label>
-                                    <input type="password" name="password_222297_confirmation"
+                                    <input type="password" name="password_confirmation"
                                         class="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500">
                                 </div>
                             </div>

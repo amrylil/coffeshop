@@ -10,27 +10,27 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('reservasi_222297', function (Blueprint $table) {
-            $table->string('kode_reservasi_222297', 20)->primary();
-            $table->string('nama_pelanggan_222297', 255)->nullable();
-            $table->string('no_telepon_222297', 50)->nullable();
-            $table->date('tanggal_reservasi_222297')->nullable();
-            $table->time('jam_reservasi_222297')->nullable();
-            $table->integer('jumlah_orang_222297')->nullable();
-            $table->string('email_222297', 100)->nullable();
-            $table->string('nomor_meja_222297', 10)->nullable();
-            $table->text('catatan_222297')->nullable();
-            $table->timestamp('created_at_222297')->nullable();
-            $table->timestamp('updated_at_222297')->nullable();
+        Schema::create('reservasi', function (Blueprint $table) {
+            $table->string('kode_reservasi', 20)->primary();
+            $table->string('nama_pelanggan', 255)->nullable();
+            $table->string('no_telepon', 50)->nullable();
+            $table->date('tanggal_reservasi')->nullable();
+            $table->time('jam_reservasi')->nullable();
+            $table->integer('jumlah_orang')->nullable();
+            $table->string('email', 100)->nullable();
+            $table->string('nomor_meja', 10)->nullable();
+            $table->text('catatan')->nullable();
+            $table->timestamp('created_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
 
             $table
-                ->foreign('nomor_meja_222297')
-                ->references('nomor_meja_222297')
-                ->on('meja_222297');
+                ->foreign('nomor_meja')
+                ->references('nomor_meja')
+                ->on('meja');
             $table
-                ->foreign('email_222297')
-                ->references('email_222297')
-                ->on('users_222297');
+                ->foreign('email')
+                ->references('email')
+                ->on('users');
         });
     }
 
@@ -39,6 +39,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('reservasi_222297');
+        Schema::dropIfExists('reservasi');
     }
 };

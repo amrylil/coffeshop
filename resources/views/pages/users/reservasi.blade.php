@@ -66,7 +66,7 @@
                 </div>
 
                 <!-- Sidebar Reservation -->
-                <div class="w-full lg:w-1/2" x-data="{ selectedTable: '{{ old('nomor_meja_222297') }}' }">
+                <div class="w-full lg:w-1/2" x-data="{ selectedTable: '{{ old('nomor_meja') }}' }">
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-[#d7cdc3]">
                         <h3 class="text-2xl font-serif text-[#3a2a1d] mb-6">Pilih Meja</h3>
 
@@ -75,14 +75,14 @@
                             @php
                                 $tables = $mejas->map(function ($meja) {
                                     $color = 'red'; // Default untuk 'Perbaikan'
-                                    if ($meja->status_222297 === 'kosong') {
+                                    if ($meja->status === 'kosong') {
                                         $color = 'green';
-                                    } elseif ($meja->status_222297 === 'dipesan') {
+                                    } elseif ($meja->status === 'dipesan') {
                                         $color = 'yellow';
                                     }
                                     return [
-                                        'name' => $meja->nomor_meja_222297,
-                                        'status' => $meja->status_222297,
+                                        'name' => $meja->nomor_meja,
+                                        'status' => $meja->status,
                                         'color' => $color,
                                     ];
                                 });
@@ -151,8 +151,8 @@
                             <form action="{{ route('reservasi.store') }}" method="POST" class="space-y-5">
                                 @csrf
                                 <div>
-                                    <label for="nomor_meja_222297"
-                                        class="block text-sm font-medium text-gray-700 mb-1">Meja yang Dipilih</label>
+                                    <label for="nomor_meja" class="block text-sm font-medium text-gray-700 mb-1">Meja yang
+                                        Dipilih</label>
                                     <div class="flex">
                                         <span
                                             class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-[#d7cdc3] bg-gray-50 text-gray-500">
@@ -165,15 +165,15 @@
                                                 <path d="M16 4v4"></path>
                                             </svg>
                                         </span>
-                                        <input type="text" name="nomor_meja_222297" x-model="selectedTable"
+                                        <input type="text" name="nomor_meja" x-model="selectedTable"
                                             class="flex-1 rounded-r-md border border-[#d7cdc3] px-4 py-3 focus:ring-[#6f4e37] focus:border-[#6f4e37]"
                                             readonly>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label for="nama_pelanggan_222297"
-                                        class="block text-sm font-medium text-gray-700 mb-1">Nama Pemesan</label>
+                                    <label for="nama_pelanggan" class="block text-sm font-medium text-gray-700 mb-1">Nama
+                                        Pemesan</label>
                                     <div class="flex">
                                         <span
                                             class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-[#d7cdc3] bg-gray-50 text-gray-500">
@@ -184,15 +184,15 @@
                                                 <circle cx="12" cy="7" r="4"></circle>
                                             </svg>
                                         </span>
-                                        <input type="text" name="nama_pelanggan_222297"
-                                            value="{{ old('nama_pelanggan_222297') }}" required
+                                        <input type="text" name="nama_pelanggan" value="{{ old('nama_pelanggan') }}"
+                                            required
                                             class="flex-1 rounded-r-md border border-[#d7cdc3] px-4 py-3 focus:ring-[#6f4e37] focus:border-[#6f4e37]">
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label for="no_telepon_222297"
-                                        class="block text-sm font-medium text-gray-700 mb-1">Nomor Telepon</label>
+                                    <label for="no_telepon" class="block text-sm font-medium text-gray-700 mb-1">Nomor
+                                        Telepon</label>
                                     <div class="flex">
                                         <span
                                             class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-[#d7cdc3] bg-gray-50 text-gray-500">
@@ -204,15 +204,14 @@
                                                 </path>
                                             </svg>
                                         </span>
-                                        <input type="tel" name="no_telepon_222297"
-                                            value="{{ old('no_telepon_222297') }}" required
+                                        <input type="tel" name="no_telepon" value="{{ old('no_telepon') }}" required
                                             class="flex-1 rounded-r-md border border-[#d7cdc3] px-4 py-3 focus:ring-[#6f4e37] focus:border-[#6f4e37]">
                                     </div>
                                 </div>
 
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
-                                        <label for="tanggal_reservasi_222297"
+                                        <label for="tanggal_reservasi"
                                             class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
                                         <div class="flex">
                                             <span
@@ -230,14 +229,14 @@
                                                     </line>
                                                 </svg>
                                             </span>
-                                            <input type="date" name="tanggal_reservasi_222297"
-                                                value="{{ old('tanggal_reservasi_222297') }}" required
+                                            <input type="date" name="tanggal_reservasi"
+                                                value="{{ old('tanggal_reservasi') }}" required
                                                 class="flex-1 rounded-r-md border border-[#d7cdc3] px-4 py-3 focus:ring-[#6f4e37] focus:border-[#6f4e37]">
                                         </div>
                                     </div>
 
                                     <div>
-                                        <label for="jam_reservasi_222297"
+                                        <label for="jam_reservasi"
                                             class="block text-sm font-medium text-gray-700 mb-1">Waktu</label>
                                         <div class="flex">
                                             <span
@@ -249,19 +248,19 @@
                                                     <polyline points="12 6 12 12 16 14"></polyline>
                                                 </svg>
                                             </span>
-                                            <input type="time" name="jam_reservasi_222297"
-                                                value="{{ old('jam_reservasi_222297') }}" required
+                                            <input type="time" name="jam_reservasi"
+                                                value="{{ old('jam_reservasi') }}" required
                                                 class="flex-1 rounded-r-md border border-[#d7cdc3] px-4 py-3 focus:ring-[#6f4e37] focus:border-[#6f4e37]">
                                         </div>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label for="catatan_222297"
-                                        class="block text-sm font-medium text-gray-700 mb-1">Catatan Tambahan</label>
-                                    <textarea name="catatan_222297" rows="3"
+                                    <label for="catatan" class="block text-sm font-medium text-gray-700 mb-1">Catatan
+                                        Tambahan</label>
+                                    <textarea name="catatan" rows="3"
                                         class="w-full rounded-md border border-[#d7cdc3] px-4 py-3 focus:ring-[#6f4e37] focus:border-[#6f4e37]"
-                                        placeholder="Masukkan permintaan khusus atau catatan tambahan di sini...">{{ old('catatan_222297') }}</textarea>
+                                        placeholder="Masukkan permintaan khusus atau catatan tambahan di sini...">{{ old('catatan') }}</textarea>
                                 </div>
 
                                 <div class="pt-2">

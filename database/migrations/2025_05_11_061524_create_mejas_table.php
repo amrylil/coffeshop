@@ -10,10 +10,10 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('meja_222297', function (Blueprint $table) {
-            $table->string('nomor_meja_222297', 10)->primary();
-            $table->integer('kapasitas_222297')->nullable();
-            $table->enum('status_222297', ['kosong', 'dipesan', 'digunakan'])->default('kosong');
+        Schema::create('meja', function (Blueprint $table) {
+            $table->string('nomor_meja', 10)->primary();
+            $table->integer('kapasitas')->nullable();
+            $table->enum('status', ['kosong', 'dipesan', 'digunakan'])->default('kosong');
         });
     }
 
@@ -22,6 +22,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('meja_222297');
+        Schema::dropIfExists('meja');
     }
 };
