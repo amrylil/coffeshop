@@ -4,18 +4,16 @@
 
 @section('content')
 
-    <!-- Hero Section -->
-    <section class="text-center flex">
-        <div class="bg-[#523433] w-1/2 pl-24 pt-40 px-10 flex flex-col justify-center items-center">
-            <h1 class="font text-[#e6dbd1] font-playfair text-5xl md:text-7xl font-bold mb-8 ">
+    <section class="flex flex-col md:flex-row text-center">
+        <div class="bg-[#523433] w-full md:w-1/2 p-10 md:pl-24 md:pt-40 md:px-10 flex flex-col justify-center items-center">
+            <h1 class="font text-[#e6dbd1] font-playfair text-5xl md:text-7xl font-bold mb-8">
                 Saatnya Menikmati Kopi
             </h1>
             <p class="text-[#e6dbd1] text-lg mb-12 max-w-2xl mx-auto">
                 Jika Anda minum kopi secara teratur, Anda akan tahu perbedaan antara kopi segar dan kopi lama.
                 Tujuan kami adalah menyediakan dua buku kopi yang relevan setiap harinya.
             </p>
-
-            <div class="flex justify-center gap-6 mb-20">
+            <div class="flex flex-col sm:flex-row justify-center gap-6 mb-10 md:mb-20">
                 <button class="bg-amber-600 text-[#e6dbd1] px-8 py-4 rounded-full hover:bg-amber-700 transition">
                     Jelajahi Toko
                 </button>
@@ -24,27 +22,25 @@
                     Buat Sendiri
                 </button>
             </div>
-
-
         </div>
-        <div class="w-1/2 h-screen ">
+        <div class="w-full md:w-1/2 h-64 md:h-screen">
             <img class="w-full h-full object-cover" src="{{ asset('images/bannercoffe.jpg') }}" alt="Banner Kopi">
-
         </div>
     </section>
 
-    <!-- Bagian Fitur -->
-    <section class=" bg-[#422424] p-24">
-        <div class="flex justify-between items-center mb-20">
-            <h3 class="text-5xl  text-[#e6dbd1] font-playfair font-bold  ">
+    <section class="bg-[#422424] p-10 md:p-24">
+        <div class="flex flex-col md:flex-row justify-between items-center mb-12 md:mb-20 text-center md:text-left">
+            <h3 class="text-4xl md:text-5xl text-[#e6dbd1] font-playfair font-bold mb-6 md:mb-0">
                 Sajian Terbaik <br /> Dari Proses Berkualitas
             </h3>
-            <p class="w-96 text-[#e6dbd1]">Kami menyajikan kopi dengan standar kualitas tertinggi. Setiap proses pembuatan
-                kopi kami dilakukan dengan penuh ketelitian untuk menghasilkan cita rasa yang sempurna.</p>
+            <p class="w-full md:w-96 text-[#e6dbd1]">
+                Kami menyajikan kopi dengan standar kualitas tertinggi. Setiap proses pembuatan kopi kami dilakukan dengan
+                penuh ketelitian untuk menghasilkan cita rasa yang sempurna.
+            </p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-8 text-[#e6dbd1]">
-            <div class="p-6 bg-[#523433] rounded-lg flex justify-center items-center flex-col gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 text-[#e6dbd1]">
+            <div class="p-6 bg-[#523433] rounded-lg flex justify-center items-center flex-col gap-4 text-center">
                 <svg viewBox="0 0 16 16" fill="#f8fafc" xmlns="http://www.w3.org/2000/svg" id="Java-Line--Streamline-Remix"
                     height="60" width="60">
                     <desc>Java Line Streamline Icon: https://streamlinehq.com</desc>
@@ -54,7 +50,7 @@
                 </svg>
                 <h4 class="text-xl font-bold mb-4">Sangrai Tangan</h4>
             </div>
-            <div class="p-6 bg-[#523433] rounded-lg flex justify-center items-center flex-col gap-4">
+            <div class="p-6 bg-[#523433] rounded-lg flex justify-center items-center flex-col gap-4 text-center">
                 <svg width="50" height="50" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M6.34511 0.832838C6.0672 0.834776 5.79286 0.874276 5.52658 0.953869C5.26239 1.03293 5.01902 1.14753 4.79814 1.29346C5.03945 1.90665 5.65549 2.68503 6.36908 3.34949C7.11414 4.04331 7.96845 4.63278 8.52017 4.89862L8.52664 4.90174L8.53299 4.90496C9.03999 5.16543 9.39892 5.57537 9.60611 6.02759C9.73955 6.31878 9.81727 6.62378 9.86258 6.93384C10.2688 6.61696 10.6971 6.36321 11.1325 6.17906C11.0993 5.60687 10.9735 5.00687 10.7442 4.40609C10.2634 3.14609 9.42358 2.13171 8.47249 1.51309C7.78889 1.06846 7.05533 0.827901 6.34511 0.832838ZM3.95736 2.15487C3.79758 2.40281 3.66655 2.67924 3.56699 2.97946C3.23449 3.98178 3.26145 5.23909 3.7423 6.49915C4.0333 7.26174 4.45595 7.93415 4.95511 8.48353C5.44686 8.63065 5.93324 8.85796 6.39011 9.1664C6.74311 9.40474 7.05767 9.67756 7.33027 9.97428C7.41924 9.9959 7.50824 10.0143 7.59714 10.0288C7.76652 9.58703 7.98636 9.14746 8.25727 8.72103C8.42117 8.46278 8.60077 8.21484 8.79508 7.97862C8.79733 7.81637 8.79602 7.65915 8.7883 7.50906C8.76736 7.10312 8.70236 6.75593 8.5833 6.49612C8.4643 6.23631 8.30924 6.05481 8.01892 5.90568L8.03174 5.91199C7.3168 5.56746 6.42402 4.93787 5.60236 4.17278C4.94924 3.56465 4.34336 2.88349 3.95736 2.15487ZM12.6996 6.39628C12.2775 6.39971 11.831 6.49774 11.3792 6.68528C10.4155 7.08534 9.4478 7.89621 8.73205 9.02268C8.36589 9.59899 8.10277 10.1999 7.93917 10.789C8.58136 11.8665 8.73908 13.1041 8.27645 14.1435C8.35125 14.2503 8.43472 14.3508 8.52602 14.4439C9.20239 13.8603 9.98189 13.3769 10.5359 12.8805C10.8387 12.6092 11.068 12.3407 11.1954 12.0849C11.3228 11.829 11.3666 11.5943 11.3004 11.2748L11.2965 11.2562L11.294 11.2374C11.0423 9.41574 11.4838 8.34518 12.1272 7.69024C12.6446 7.16368 13.1596 6.88634 13.5149 6.52018C13.2582 6.43487 12.9845 6.39393 12.6996 6.39628ZM14.4729 7.14481C13.9532 7.79074 13.3125 8.08909 12.9297 8.47874C12.4898 8.92649 12.1862 9.46546 12.4074 11.0757C12.5139 11.6232 12.4203 12.1491 12.2024 12.5864C11.9806 13.0317 11.649 13.3937 11.2866 13.7184C10.7362 14.2116 10.1013 14.6339 9.5702 15.0459C10.1725 15.2023 10.8583 15.1266 11.5566 14.8367C12.5204 14.4367 13.4881 13.6258 14.2038 12.4993C14.9196 11.3728 15.2425 10.1522 15.1953 9.10984C15.1592 8.31265 14.913 7.62959 14.473 7.14484L14.4729 7.14481ZM12.4074 11.0757C12.4055 11.0659 12.404 11.0561 12.4019 11.0463L12.4084 11.0836C12.4081 11.0809 12.4078 11.0783 12.4074 11.0757H12.4074ZM3.65039 8.84374C3.07592 8.83856 2.53477 8.96452 2.0793 9.21271C2.08242 9.21281 2.08514 9.21302 2.08827 9.21312C2.35795 9.22265 2.69652 9.19084 3.08633 9.24406C3.47611 9.29731 3.93274 9.47431 4.27864 9.86571C4.62458 10.2571 4.86177 10.812 5.02699 11.6088L5.03089 11.6274L5.03345 11.6462C5.11011 12.2022 5.46427 12.5239 6.07827 12.825C6.60214 13.082 7.27474 13.2655 7.91317 13.4523C8.19911 12.1711 7.52067 10.6084 6.07536 9.63262C5.29605 9.10649 4.4418 8.8509 3.65045 8.84374H3.65039ZM1.1167 10.139C0.327017 11.4993 0.960329 13.4954 2.68252 14.6581C4.37705 15.8022 6.42583 15.6667 7.41189 14.48C6.83577 14.3158 6.18264 14.1293 5.58283 13.8351C4.80939 13.4558 4.0722 12.8183 3.92345 11.8282C3.7818 11.1501 3.59252 10.7882 3.43564 10.6107C3.27814 10.4324 3.15533 10.389 2.93408 10.3588C2.71283 10.3286 2.40877 10.3502 2.04867 10.3375C1.76805 10.3276 1.4388 10.2873 1.1167 10.139V10.139ZM3.92349 11.8282C3.92417 11.8313 3.92486 11.8342 3.92552 11.8373L3.91905 11.8C3.92036 11.8095 3.92208 11.8187 3.92352 11.8282L3.92349 11.8282Z"
@@ -62,7 +58,7 @@
                 </svg>
                 <h4 class="text-xl font-bold mb-4">Kopi Organik</h4>
             </div>
-            <div class="p-6 bg-[#523433] rounded-lg flex justify-center items-center flex-col gap-4">
+            <div class="p-6 bg-[#523433] rounded-lg flex justify-center items-center flex-col gap-4 text-center">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                     id="Coffee-Espresso-Machine--Streamline-Ultimate" height="50" width="50">
                     <desc>Coffee Espresso Machine Streamline Icon: https://streamlinehq.com</desc>
@@ -77,37 +73,37 @@
                 </svg>
                 <h4 class="text-xl font-bold mb-4">Kopi Langsung</h4>
             </div>
-
         </div>
     </section>
 
-    <!-- Product Section -->
-    <section class="bg-[#523433] py-16 px-24 text-[#e6dbd1] text-center">
+    <section class="bg-[#523433] py-16 px-6 sm:px-12 md:px-24 text-[#e6dbd1] text-center">
         <h2 class="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow font-jost">Produk Terbaru Kami</h2>
-        <p class="max-w-xl mx-auto mb-12 text-gray-300">Kami selalu berusaha menghadirkan kopi single origin dari berbagai
-            daerah dengan rasa yang khas. Ditujukan untuk para penikmat kopi sejati.</p>
+        <p class="max-w-xl mx-auto mb-12 text-gray-300">
+            Kami selalu berusaha menghadirkan kopi single origin dari berbagai daerah dengan rasa yang khas. Ditujukan untuk
+            para penikmat kopi sejati.
+        </p>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-            <!-- Card 1 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
             @foreach ($latestMenus as $menu)
                 <div class="product-card fade-in">
-                    <div class="bg-white rounded-xl shadow-md text-left text-[#3e1f1f] relative">
+                    <div class="bg-white rounded-xl shadow-md text-left text-[#3e1f1f] relative overflow-hidden">
                         <a href="#">
                             <div class="p-4 w-full h-72">
-                                <span class="absolute top-2 left-4 bg-[#5e3c3c] text-white px-2 py-1 text-xs rounded">
+                                <span class="absolute top-2 left-4 bg-[#5e3c3c] text-white px-2 py-1 text-xs rounded z-10">
                                     {{ $menu->kategori->nama_kategori_222297 }}
                                 </span>
                                 @if ($menu->path_img_222297)
                                     <img src="{{ asset('images/' . $menu->path_img_222297) }}"
-                                        alt="{{ $menu->nama_222297 }}" class="w-full h-full scale-110 object-cover">
+                                        alt="{{ $menu->nama_222297 }}"
+                                        class="w-full h-full object-cover transform hover:scale-110 transition-transform duration-300">
                                 @else
                                     <img src="{{ asset('images/coffe.png') }}" alt="{{ $menu->nama_222297 }}"
-                                        class="w-full h-full scale-110 object-cover">
+                                        class="w-full h-full object-cover transform hover:scale-110 transition-transform duration-300">
                                 @endif
                             </div>
                         </a>
                         <div class="bg-[#eee3d2] p-4">
-                            <h3 class="font-semibold text-sm mb-2">{{ $menu->nama_222297 }}</h3>
+                            <h3 class="font-semibold text-sm mb-2 truncate">{{ $menu->nama_222297 }}</h3>
                             <div class="flex justify-between items-center">
                                 <span class="font-bold text-base">Rp
                                     {{ number_format($menu->harga_222297, 0, ',', '.') }}</span>
@@ -121,28 +117,22 @@
                     </div>
                 </div>
             @endforeach
-
-
-
-            <!-- Tambahkan Card 3 dan 4 dengan struktur yang sama -->
         </div>
 
-        <!-- Dots Indicator -->
         <div class="mt-8 flex justify-center items-center space-x-2">
             <span class="w-3 h-3 rounded-full bg-white opacity-50"></span>
             <span class="w-10 h-3 rounded-full bg-yellow-500"></span>
             <span class="w-3 h-3 rounded-full bg-white opacity-50"></span>
         </div>
     </section>
-    <section class="bg-[#e6dbd1] py-16 px-24">
-        <div class="flex justify-between items-center ">
 
-            <!-- Left Content -->
-            <div class="space-y-6 ">
+    <section class="bg-[#e6dbd1] py-16 px-6 sm:px-12 md:px-24">
+        <div class="flex flex-col lg:flex-row justify-between items-center text-center lg:text-left">
+            <div class="space-y-6 lg:w-1/2">
                 <h2 class="text-4xl font-bold text-[#3C1E1E] leading-tight">
                     Reservasi Meja Lebih Mudah
                 </h2>
-                <p class="text-gray-700 text-lg pr-40">
+                <p class="text-gray-700 text-lg lg:pr-20">
                     Hindari antrian dan pastikan kenyamananmu. Reservasi meja secara online hanya dengan beberapa klik.
                     Waktu berharga kamu tak akan terbuang sia-sia.
                 </p>
@@ -151,14 +141,12 @@
                     Reservasi Sekarang
                 </a>
             </div>
-
-            <!-- Right Image -->
-            <img src="{{ asset('images/reservasi.jpg') }}" alt="Reservasi Meja"
-                class="max-w-md w-full rounded-xl shadow-lg object-cover">
-
+            <div class="mt-10 lg:mt-0 lg:w-1/2 flex justify-center lg:justify-end">
+                <img src="{{ asset('images/reservasi.jpg') }}" alt="Reservasi Meja"
+                    class="max-w-sm md:max-w-md w-full rounded-xl shadow-lg object-cover">
+            </div>
         </div>
     </section>
-
 
 @endsection
 
@@ -189,6 +177,7 @@
             transform: scale(1) !important;
         }
     </style>
+
     <script>
         function toggleModal(modalId, show = true) {
             const modal = document.getElementById(modalId);
@@ -222,29 +211,29 @@
         });
     </script>
 
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const scrollToTopButton = document.getElementById("scrollToTopButton");
 
-            window.addEventListener("scroll", () => {
-                if (window.scrollY > 00) {
-                    scrollToTopButton.classList.remove("hidden");
-                } else {
-                    scrollToTopButton.classList.add("hidden");
-                }
-            });
-
-            scrollToTopButton.addEventListener("click", () => {
-                window.scrollTo({
-                    top: 0,
-                    behavior: "smooth",
+            if (scrollToTopButton) {
+                window.addEventListener("scroll", () => {
+                    if (window.scrollY > 200) { // Show button after scrolling 200px
+                        scrollToTopButton.classList.remove("hidden");
+                    } else {
+                        scrollToTopButton.classList.add("hidden");
+                    }
                 });
-            });
+
+                scrollToTopButton.addEventListener("click", () => {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: "smooth",
+                    });
+                });
+            }
         });
     </script>
 
-    <!-- JavaScript untuk Animasi Modal -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const modal = document.getElementById('my_modal_3');
@@ -258,8 +247,8 @@
         });
 
         // Tambahkan delay ke setiap kartu produk untuk animasi berurutan
-        document.querySelectorAll('.fade-in').forEach((el, index) => {
-            el.style.animationDelay = `${index * 0.2}s`;
+        document.querySelectorAll('.product-card').forEach((el, index) => {
+            el.style.animationDelay = `${index * 0.1}s`;
         });
     </script>
 @endsection

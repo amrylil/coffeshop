@@ -41,7 +41,7 @@
                                             <div class="flex-1">
                                                 <h3 class="font-semibold text-amber-900 text-lg">
                                                     {{ $item->menu->nama_222297 ?? 'Menu Item' }}</h3>
-                                                <p class="text-amber-600 text-sm">
+                                                <p class="text-amber-600 text-sm hidden md:block">
                                                     {{ $item->menu->deskripsi_222297 ?? 'Deskripsi menu' }}</p>
                                                 <div class="flex items-center mt-2">
                                                     <span class="text-amber-800 font-medium">Rp
@@ -566,7 +566,7 @@
 
                     } else if (this.value === 'shopee_pay') {
                         instructionsDiv.classList.add('bg-orange-50', 'border',
-                        'border-orange-200');
+                            'border-orange-200');
                         instructionTitle.className = 'font-semibold text-orange-800 mb-2';
                         instructionContent.className = 'text-sm text-orange-700';
 

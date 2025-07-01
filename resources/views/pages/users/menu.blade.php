@@ -104,7 +104,7 @@
                                                 data-menu-id="{{ $menu->kode_menu_222297 }}"
                                                 data-menu-name="{{ $menu->nama_222297 }}"
                                                 data-menu-price="{{ $menu->harga_222297 }}">
-                                                <span class="btn-text">ADD TO CART</span>
+                                                <span class="btn-text p-2 rounded-2xl">ADD TO CART</span>
                                                 <span class="btn-loading hidden">
                                                     <svg class="animate-spin h-4 w-4 text-white"
                                                         xmlns="http://www.w3.org/2000/svg" fill="none"
