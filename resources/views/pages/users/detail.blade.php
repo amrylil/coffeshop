@@ -3,166 +3,118 @@
 @section('title', $menu->nama)
 
 @section('content')
-    <section class="min-h-screen py-12">
+    <section class="min-h-screen py-8">
         <div class="max-w-7xl mx-auto px-4">
-            <!-- Navigasi Breadcrumb -->
-            <nav class="flex mb-8 text-sm" aria-label="Breadcrumb">
-                <ol class="inline-flex items-center space-x-1 md:space-x-3">
-                    <li class="inline-flex items-center">
-                        <a href="/" class="text-slate-50 hover:text-[#e6dbd1]">
-                            Beranda
-                        </a>
-                    </li>
-                    <li>
-                        <div class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-50" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                            <a href="{{ route('menu.index') }}"
-                                class="ml-1 text-slate-50 hover:text-[#e6dbd1] md:ml-2">Menu</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-50" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                            <a href="{{ route('menu.category', $menu->kode_kategori) }}"
-                                class="ml-1 text-slate-50 hover:text-[#e6dbd1] md:ml-2">{{ $menu->kategori->nama }}</a>
-                        </div>
-                    </li>
-                    <li aria-current="page">
-                        <div class="flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-50" viewBox="0 0 20 20"
-                                fill="currentColor">
-                                <path fill-rule="evenodd"
-                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                    clip-rule="evenodd" />
-                            </svg>
-                            <span class="ml-1 text-[#e6dbd1] font-medium md:ml-2">{{ $menu->nama }}</span>
-                        </div>
-                    </li>
-                </ol>
+            <!-- Breadcrumb -->
+            <nav class="mb-8" aria-label="Breadcrumb">
+                <div class="flex items-center space-x-2 text-sm text-slate-50/80">
+                    <a href="/" class="hover:text-[#e6dbd1]">Beranda</a>
+                    <span>/</span>
+                    <a href="{{ route('menu.index') }}" class="hover:text-[#e6dbd1]">Menu</a>
+                    <span>/</span>
+                    <a href="{{ route('menu.category', $menu->kode_kategori) }}"
+                        class="hover:text-[#e6dbd1]">{{ $menu->kategori->nama }}</a>
+                    <span>/</span>
+                    <span class="text-[#e6dbd1] font-medium">{{ $menu->nama }}</span>
+                </div>
             </nav>
 
-            <!-- Bagian Detail Produk -->
-            <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-                <div class="flex flex-col lg:flex-row">
-                    <!-- Gambar Produk -->
-                    <div class="lg:w-1/2 h-96 lg:h-auto">
+            <!-- Product Detail Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12  items-stretch mb-16 ">
+                <!-- Product Image -->
+                <div class="space-y-4 p-5 bg-slate-50 rounded-2xl shadow-lg overflow-hidden">
+                    <div class="relative rounded-2xl  bg-white shadow-lg overflow-hidden">
                         @if ($menu->path_img)
                             <img src="{{ asset('images/' . $menu->path_img) }}" alt="{{ $menu->nama }}"
-                                class="w-full h-full object-cover">
+                                class="w-full h-[450px] object-cover">
                         @else
                             <img src="{{ asset('images/coffe.png') }}" alt="{{ $menu->nama }}"
-                                class="w-full h-full object-cover">
+                                class="w-full h-80 object-cover">
                         @endif
+                        <div class="absolute top-4 left-4">
+                            <span class="bg-[#3e1f1f] text-white px-3 py-1 rounded-full text-sm font-medium">
+                                {{ $menu->kategori->nama }}
+                            </span>
+                        </div>
                     </div>
+                </div>
 
-                    <!-- Informasi Produk -->
-                    <div class="lg:w-1/2 p-8 bg-[#eee3d2] text-[#3e1f1f]">
-                        <span class="inline-block bg-[#5e3c3c] text-white px-3 py-1 text-xs rounded mb-4">
-                            {{ $menu->kategori->nama }}
-                        </span>
-
-                        <h1 class="text-3xl font-serif font-bold mb-4">{{ $menu->nama }}</h1>
-
-                        <div class="text-lg font-bold text-[#3e1f1f] mb-4">
-                            Rp {{ number_format($menu->harga, 0, ',', '.') }}
-                        </div>
-
-                        <div class="prose mb-8 text-gray-700">
-                            <p>{{ $menu->deskripsi ?? 'Minuman lezat yang dibuat dengan penuh keahlian oleh barista kami. Sempurna untuk dinikmati kapan saja, minuman ini menggabungkan bahan-bahan berkualitas untuk pengalaman rasa yang tak terlupakan.' }}
-                            </p>
-                        </div>
-
-                        <div class="mb-8">
-                            <div class="flex items-center mb-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600 mr-2"
-                                    viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd"
-                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                                <span>Tersedia: {{ $menu->jumlah }} porsi</span>
+                <!-- Product Info -->
+                <div class="bg-white rounded-2xl p-8 shadow-lg  h-full">
+                    <div class="space-y-6">
+                        <!-- Title & Price -->
+                        <div>
+                            <h1 class="text-3xl font-serif font-bold text-[#3e1f1f] mb-3">{{ $menu->nama }}</h1>
+                            <div class="text-2xl font-bold text-[#3e1f1f]">
+                                Rp {{ number_format($menu->harga, 0, ',', '.') }}
                             </div>
-
-                            @if ($menu->jumlah > 0)
-                                <div class="flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600 mr-2"
-                                        viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                    <span>Siap disajikan</span>
-                                </div>
-                            @else
-                                <div class="flex items-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-600 mr-2"
-                                        viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                    <span>Saat ini tidak tersedia</span>
-                                </div>
-                            @endif
                         </div>
 
-                        <div class="flex flex-col gap-4 sm:flex-row">
-                            <div class="flex items-center border border-[#3e1f1f] rounded-lg">
-                                <button id="decrement" class="px-4 py-2 text-[#3e1f1f] hover:bg-[#d4c7b6] rounded-l-lg">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                        fill="currentColor">
-                                        <path fill-rule="evenodd" d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                </button>
-                                <input type="number" id="quantity" value="1" min="1"
-                                    max="{{ $menu->jumlah }}"
-                                    class="w-12 text-center border-0 focus:ring-0 text-[#3e1f1f] bg-transparent"
-                                    {{ $menu->jumlah <= 0 ? 'disabled' : '' }}>
-                                <button id="increment" class="px-4 py-2 text-[#3e1f1f] hover:bg-[#d4c7b6] rounded-r-lg">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                                        fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                                            clip-rule="evenodd" />
-                                    </svg>
+                        <!-- Description -->
+                        <div class="text-gray-600 leading-relaxed">
+                            {{ $menu->deskripsi ?? 'Minuman lezat yang dibuat dengan penuh keahlian oleh barista kami. Sempurna untuk dinikmati kapan saja, minuman ini menggabungkan bahan-bahan berkualitas untuk pengalaman rasa yang tak terlupakan.' }}
+                        </div>
+
+                        <!-- Availability -->
+                        <div class="border-t border-gray-100 pt-6">
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-gray-700">Ketersediaan:</span>
+                                    <span class="font-medium text-[#3e1f1f]">{{ $menu->jumlah }} porsi</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-gray-700">Status:</span>
+                                    @if ($menu->jumlah > 0)
+                                        <span class="text-green-600 font-medium">✓ Tersedia</span>
+                                    @else
+                                        <span class="text-red-600 font-medium">✗ Habis</span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Purchase Section -->
+                        @if ($menu->jumlah > 0)
+                            <div class="space-y-4 border-t border-gray-100 pt-6">
+                                <!-- Quantity -->
+                                <div class="flex items-center justify-between">
+                                    <span class="text-gray-700 font-medium">Jumlah:</span>
+                                    <div class="flex items-center border border-gray-300 rounded-lg">
+                                        <button id="decrement" class="px-3 py-2 text-gray-600 hover:bg-gray-50">−</button>
+                                        <input type="number" id="quantity" value="1" min="1"
+                                            max="{{ $menu->jumlah }}"
+                                            class="w-12 text-center border-0 focus:ring-0 text-[#3e1f1f] font-medium">
+                                        <button id="increment" class="px-3 py-2 text-gray-600 hover:bg-gray-50">+</button>
+                                    </div>
+                                </div>
+
+                                <!-- Add to Cart Button -->
+                                <button id="addToCartBtn"
+                                    class="w-full bg-[#3e1f1f] hover:bg-[#5a2d2d] text-white py-3 px-6 rounded-lg font-medium"
+                                    data-product-id="{{ $menu->kode_menu }}">
+                                    <span class="btn-text">Tambahkan ke Keranjang</span>
                                 </button>
                             </div>
-
-                            <button id="addToCartBtn"
-                                class="flex-1 bg-[#3e1f1f] hover:bg-[#5a2d2d] text-white py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
-                                {{ $menu->jumlah <= 0 ? 'disabled' : '' }} data-product-id="{{ $menu->kode_menu }}">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                                </svg>
-                                <span class="btn-text">Tambahkan ke Keranjang</span>
-                            </button>
-                        </div>
+                        @else
+                            <div class="border-t border-gray-100 pt-6">
+                                <button disabled
+                                    class="w-full bg-gray-300 text-gray-500 py-3 px-6 rounded-lg font-medium cursor-not-allowed">
+                                    Saat Ini Tidak Tersedia
+                                </button>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
 
-            <!-- Deskripsi Produk -->
-            <div class="mt-12 bg-white rounded-2xl shadow-xl overflow-hidden p-8">
-                <div class="prose max-w-none">
-                    <h3 class="font-serif text-2xl mb-4 text-[#3e1f1f]">Tentang {{ $menu->nama }}</h3>
-                    <p class="text-gray-700">
-                        {{ $menu->deskripsi ?? 'Biji kopi kami dipilih dengan hati-hati dari daerah penghasil kopi terbaik di seluruh dunia. Setiap biji dipanggang dengan ahli untuk mengeluarkan aroma dan rasa uniknya. Barista terampil kami kemudian menyeduh setiap cangkir dengan presisi dan perhatian, memastikan setiap tegukan memberikan pengalaman yang luar biasa. Baik Anda penikmat kopi atau hanya mencari minuman menyegarkan, hidangan kami menjanjikan kepuasan.' }}
+            <!-- Description Section -->
+            <div class="bg-white rounded-2xl p-8 shadow-lg mb-16">
+                <h2 class="text-2xl font-serif font-bold text-[#3e1f1f] mb-6">Tentang {{ $menu->nama }}</h2>
+                <div class="text-gray-600 leading-relaxed space-y-4">
+                    <p>
+                        {{ $menu->deskripsi ?? 'Biji kopi kami dipilih dengan hati-hati dari daerah penghasil kopi terbaik di seluruh dunia. Setiap biji dipanggang dengan ahli untuk mengeluarkan aroma dan rasa uniknya. Barista terampil kami kemudian menyeduh setiap cangkir dengan presisi dan perhatian, memastikan setiap tegukan memberikan pengalaman yang luar biasa.' }}
                     </p>
-
-                    <p class="text-gray-700 mt-4">
+                    <p>
                         Keseimbangan sempurna antara kekayaan rasa dan tekstur yang halus menjadikan ini favorit di antara
                         pelanggan tetap kami. Nikmati panas atau dingin, dengan susu atau hitam - cukup serbaguna untuk
                         memuaskan preferensi apa pun.
@@ -170,38 +122,32 @@
                 </div>
             </div>
 
-            <!-- Produk Terkait -->
+            <!-- Related Products -->
             @if ($relatedMenus->count() > 0)
-                <div class="mt-16">
-                    <h2 class="text-3xl font-serif text-center text-[#e6dbd1] mb-8">Anda Mungkin Juga Suka</h2>
+                <div class="space-y-8">
+                    <div class="text-center">
+                        <h2 class="text-3xl font-serif font-bold text-[#e6dbd1] mb-2">Menu Lainnya</h2>
+                        <p class="text-slate-50/70">Produk yang mungkin Anda sukai</p>
+                    </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         @foreach ($relatedMenus as $relatedMenu)
-                            <div
-                                class="bg-white rounded-xl shadow-md overflow-hidden transition transform hover:scale-105">
+                            <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg">
                                 <a href="{{ route('menu.show', $relatedMenu->kode_menu) }}">
-                                    <div class="h-48 w-full overflow-hidden">
-                                        @if ($relatedMenu->path_img)
-                                            <img src="{{ asset($relatedMenu->path_img) }}"
-                                                alt="{{ $relatedMenu->nama }}"
-                                                class="w-full h-full object-cover transform hover:scale-110 transition duration-500">
-                                        @else
-                                            <img src="{{ asset('images/coffe.png') }}" alt="{{ $relatedMenu->nama }}"
-                                                class="w-full h-full object-cover transform hover:scale-110 transition duration-500">
-                                        @endif
-                                    </div>
+                                    <img src="{{ asset('images/' . $relatedMenu->path_img) }}"
+                                        alt="{{ $relatedMenu->nama }}" class="w-full h-48 object-cover">
                                 </a>
                                 <div class="p-4">
-                                    <h3 class="font-medium text-[#3e1f1f] mb-2">{{ $relatedMenu->nama }}</h3>
+                                    <h3 class="font-medium text-[#3e1f1f] mb-2 text-sm">{{ $relatedMenu->nama }}</h3>
                                     <div class="flex justify-between items-center">
-                                        <span class="text-[#3e1f1f] font-bold">
+                                        <span class="text-[#3e1f1f] font-bold text-sm">
                                             Rp {{ number_format($relatedMenu->harga, 0, ',', '.') }}
                                         </span>
                                         <button
-                                            class="bg-[#3e1f1f] hover:bg-[#5a2d2d] text-white text-xs px-3 py-1 rounded transition add-to-cart-btn disabled:opacity-50 disabled:cursor-not-allowed"
+                                            class="bg-[#3e1f1f] hover:bg-[#5a2d2d] text-white text-xs px-3 py-1.5 rounded disabled:opacity-50 disabled:cursor-not-allowed add-to-cart-btn"
                                             data-product-id="{{ $relatedMenu->kode_menu }}"
                                             {{ $relatedMenu->jumlah <= 0 ? 'disabled' : '' }}>
-                                            TAMBAH
+                                            Tambah
                                         </button>
                                     </div>
                                 </div>
@@ -213,66 +159,40 @@
         </div>
 
         <!-- Loading Overlay -->
-        <div id="loadingOverlay"
-            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-            <div class="bg-white rounded-lg p-6 flex items-center space-x-3">
-                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-[#3e1f1f]"></div>
+        <div id="loadingOverlay" class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 hidden">
+            <div class="bg-white rounded-xl p-6 flex items-center space-x-3 shadow-xl">
+                <div class="w-5 h-5 border-2 border-[#3e1f1f] border-t-transparent rounded-full animate-spin"></div>
                 <span class="text-[#3e1f1f]">Menambahkan ke keranjang...</span>
             </div>
         </div>
 
-        <!-- Tombol kembali ke atas -->
+        <!-- Scroll to Top -->
         <button id="scrollToTopButton"
-            class="fixed bottom-6 right-6 bg-[#3e1f1f] text-white p-3 rounded-full shadow-lg opacity-0 transition-all duration-300 hover:bg-[#5a2d2d]">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+            class="fixed bottom-6 right-6 bg-[#3e1f1f] hover:bg-[#5a2d2d] text-white p-3 rounded-full shadow-lg opacity-0 pointer-events-none">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
             </svg>
         </button>
     </section>
 @endsection
 
 @section('scripts')
-    <!-- Add CSRF token meta tag -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <style>
-        /* Gaya Dasar */
         body {
-            font-family: 'Nunito', sans-serif;
+            font-family: 'Inter', system-ui, sans-serif;
         }
 
         .font-serif {
             font-family: 'Playfair Display', serif;
         }
 
-        /* Animasi Konten */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Tombol Kembali ke Atas */
-        #scrollToTopButton {
-            opacity: 0;
-            transform: translateY(20px);
-            pointer-events: none;
-        }
-
         #scrollToTopButton.visible {
             opacity: 1;
-            transform: translateY(0);
             pointer-events: auto;
         }
 
-        /* Gaya Input Jumlah */
         input[type=number]::-webkit-inner-spin-button,
         input[type=number]::-webkit-outer-spin-button {
             -webkit-appearance: none;
@@ -283,45 +203,39 @@
             -moz-appearance: textfield;
         }
 
-        /* Loading spinner animation */
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+        .hover\:shadow-lg:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
-        .animate-spin {
-            animation: spin 1s linear infinite;
+        * {
+            transition: all 0.2s ease;
         }
     </style>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Setup CSRF token for AJAX requests
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-
-            // Tombol Tambah/Kurang Kuantitas
             const quantityInput = document.getElementById('quantity');
             const incrementBtn = document.getElementById('increment');
             const decrementBtn = document.getElementById('decrement');
             const maxQuantity = {{ $menu->jumlah }};
 
-            incrementBtn.addEventListener('click', () => {
+            // Quantity controls
+            incrementBtn?.addEventListener('click', () => {
                 let currentValue = parseInt(quantityInput.value);
                 if (currentValue < maxQuantity) {
                     quantityInput.value = currentValue + 1;
                 }
             });
 
-            decrementBtn.addEventListener('click', () => {
+            decrementBtn?.addEventListener('click', () => {
                 let currentValue = parseInt(quantityInput.value);
                 if (currentValue > 1) {
                     quantityInput.value = currentValue - 1;
                 }
             });
 
-            // Mencegah input manual melebihi batas
-            quantityInput.addEventListener('change', () => {
+            quantityInput?.addEventListener('change', () => {
                 let value = parseInt(quantityInput.value);
                 if (isNaN(value) || value < 1) {
                     quantityInput.value = 1;
@@ -330,60 +244,36 @@
                 }
             });
 
-            // Function to show loading
+            // Loading functions
             function showLoading() {
                 document.getElementById('loadingOverlay').classList.remove('hidden');
             }
 
-            // Function to hide loading
             function hideLoading() {
                 document.getElementById('loadingOverlay').classList.add('hidden');
             }
 
-            // Function to show toast notification
+            // Toast notification
             function showToast(message, type = 'success') {
                 const toast = document.createElement('div');
                 const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
-                const icon = type === 'success' ?
-                    `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                    </svg>` :
-                    `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                    </svg>`;
 
                 toast.className =
-                    `fixed bottom-4 right-4 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out`;
-                toast.style.zIndex = '9999';
-                toast.innerHTML = `
-                    <div class="flex items-center">
-                        ${icon}
-                        <span>${message}</span>
-                    </div>
-                `;
+                    `fixed top-4 right-4 ${bgColor} text-white px-4 py-2 rounded-lg shadow-lg z-50 transform translate-x-full`;
+                toast.textContent = message;
                 document.body.appendChild(toast);
 
-                // Animate in
-                setTimeout(() => {
-                    toast.classList.remove('translate-x-full');
-                }, 100);
-
-                // Animate out and remove
+                setTimeout(() => toast.classList.remove('translate-x-full'), 100);
                 setTimeout(() => {
                     toast.classList.add('translate-x-full');
-                    setTimeout(() => {
-                        if (document.body.contains(toast)) {
-                            document.body.removeChild(toast);
-                        }
-                    }, 300);
+                    setTimeout(() => document.body.removeChild(toast), 300);
                 }, 3000);
             }
 
-            // Function to add item to cart
+            // Add to cart function
             async function addToCart(productId, quantity = 1) {
                 try {
                     showLoading();
-
                     const response = await fetch('{{ route('keranjang.add') }}', {
                         method: 'POST',
                         headers: {
@@ -398,90 +288,73 @@
                     });
 
                     const data = await response.json();
-
                     if (data.success) {
                         showToast(data.message || 'Item berhasil ditambahkan ke keranjang!');
-
-                        // Optional: Update cart count in header if you have one
-                        // updateCartCount();
                     } else {
                         showToast(data.message || 'Gagal menambahkan item ke keranjang', 'error');
                     }
                 } catch (error) {
-                    console.error('Error:', error);
                     showToast('Terjadi kesalahan saat menambahkan item ke keranjang', 'error');
                 } finally {
                     hideLoading();
                 }
             }
 
-            // Tombol Tambah ke Keranjang Utama
+            // Main add to cart button
             const addToCartBtn = document.getElementById('addToCartBtn');
-            if (addToCartBtn) {
-                addToCartBtn.addEventListener('click', async function() {
-                    const isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
+            addToCartBtn?.addEventListener('click', async function() {
+                const isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
+                if (!isLoggedIn) {
+                    window.location.href = "{{ route('login') }}";
+                    return;
+                }
 
-                    if (!isLoggedIn) {
-                        window.location.href = "{{ route('login') }}";
-                        return;
-                    }
+                const productId = this.getAttribute('data-product-id');
+                const quantity = parseInt(quantityInput?.value || 1);
 
-                    const productId = this.getAttribute('data-product-id');
-                    const quantity = parseInt(document.getElementById('quantity').value);
+                this.disabled = true;
+                const originalText = this.querySelector('.btn-text').textContent;
+                this.querySelector('.btn-text').textContent = 'Menambahkan...';
 
-                    // Disable button during request
-                    this.disabled = true;
-                    const originalText = this.querySelector('.btn-text').textContent;
-                    this.querySelector('.btn-text').textContent = 'Menambahkan...';
+                await addToCart(productId, quantity);
 
-                    await addToCart(productId, quantity);
+                this.disabled = false;
+                this.querySelector('.btn-text').textContent = originalText;
+            });
 
-                    // Re-enable button
-                    this.disabled = false;
-                    this.querySelector('.btn-text').textContent = originalText;
-                });
-            }
-
-            // Tombol Tambah ke Keranjang untuk Produk Terkait
-            const addToCartBtns = document.querySelectorAll('.add-to-cart-btn');
-            addToCartBtns.forEach(btn => {
+            // Related products add to cart
+            document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
                 btn.addEventListener('click', async function(e) {
                     e.preventDefault();
-
                     const isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
-
                     if (!isLoggedIn) {
                         window.location.href = "{{ route('login') }}";
                         return;
                     }
 
                     const productId = this.getAttribute('data-product-id');
-
-                    // Disable button during request
                     this.disabled = true;
                     const originalText = this.textContent;
-                    this.textContent = 'MENAMBAH...';
+                    this.textContent = 'Menambah...';
 
                     await addToCart(productId, 1);
 
-                    // Re-enable button
                     this.disabled = false;
                     this.textContent = originalText;
                 });
             });
 
-            // Tombol Kembali ke Atas
-            const scrollToTopButton = document.getElementById('scrollToTopButton');
-
+            // Scroll to top
+            const scrollBtn = document.getElementById('scrollToTopButton');
             window.addEventListener('scroll', () => {
                 if (window.scrollY > 300) {
-                    scrollToTopButton.classList.add('visible');
+                    scrollBtn.classList.add('visible');
                 } else {
-                    scrollToTopButton.classList.remove('visible');
+                    scrollBtn.classList.remove('visible');
                 }
             });
 
-            scrollToTopButton.addEventListener('click', () => {
+            scrollBtn?.addEventListener('click', () => {
                 window.scrollTo({
                     top: 0,
                     behavior: 'smooth'

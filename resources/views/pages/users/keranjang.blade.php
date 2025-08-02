@@ -175,7 +175,8 @@
         </div>
     </div>
 
-    <div id="checkoutModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+    <div id="checkoutModal" class="fixed inset-0  z-50 hidden flex items-center justify-center p-4"
+        style="background-color: rgba(0, 0, 0, 0.5);">
         <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div class="bg-[#422424] text-white p-6 rounded-t-2xl sticky top-0 z-10">
                 <div class="flex justify-between items-center">

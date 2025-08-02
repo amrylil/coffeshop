@@ -88,7 +88,6 @@ class UserMenuController extends RoutingController
   {
     $menu = Menu::with('kategori')->findOrFail($id);
 
-    // Get related menu items (same category)
     $relatedMenus = Menu::where('kode_kategori', $menu->kode_kategori)
       ->where('kode_menu', '!=', $menu->kode_menu)
       ->where('jumlah', '>', 0)

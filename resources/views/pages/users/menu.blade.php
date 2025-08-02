@@ -86,7 +86,7 @@
                                             </span>
                                             @if ($menu->path_img)
                                                 <img src="{{ asset('images/' . $menu->path_img) }}"
-                                                    alt="{{ $menu->nama }}" class="w-full h-full scale-110 object-cover">
+                                                    alt="{{ $menu->nama }}" class="w-full h-full scale-110 object-cover rounded-lg">
                                             @else
                                                 <img src="{{ asset('images/coffe.png') }}" alt="{{ $menu->nama }}"
                                                     class="w-full h-full scale-110 object-cover">
