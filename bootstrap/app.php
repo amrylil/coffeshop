@@ -10,7 +10,13 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__ . '/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware) {
+     ->withMiddleware(function (Middleware $middleware) {
+        // 2. Tambahkan middleware Inertia ke grup 'web'
+        $middleware->web(append: [
+            \App\Http\Middleware\HandleInertiaRequests::class,
+        ]);
+
+        // Middleware alias Anda tetap di sini
         $middleware->alias([
             'role' => \App\Http\Middleware\CheckRole::class,
         ]);

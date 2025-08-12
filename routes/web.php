@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\MejaController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\ProfileController;
@@ -22,6 +21,13 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::get('/', [UserMenuController::class, 'latestMenus'])->name('beranda');
+
+// <-- JANGAN LUPA IMPORT
+
+// Route::get('/', function () {
+//     // Nama 'Beranda' merujuk ke file Beranda.vue
+//     return Inertia::render('Beranda');
+// });
 
 // Route::get('/reservasi', function () {
 //     return view('pages.users.reservasi');

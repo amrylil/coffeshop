@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "target": "ESNext", // Menargetkan versi JavaScript modern
+        "module": "ESNext", // Menggunakan sistem modul modern
+        "moduleResolution": "node",
+        "strict": true, // Mengaktifkan semua aturan pengecekan tipe yang ketat (praktik terbaik)
+        "jsx": "preserve", // Diperlukan untuk Vue
+        "sourceMap": true,
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "lib": ["esnext", "dom"],
+        "baseUrl": ".",
+        "paths": {
+            "@/*": [ // Mengatur alias '@' agar menunjuk ke folder 'resources/js'
+                "resources/js/*"
+            ]
+        },
+        "types": [
+            "node",
+            "vite/client" // Ini akan memperbaiki error 'import.meta.glob'
+        ]
+    },
+    "include": [ // Folder mana saja yang akan diperiksa oleh TypeScript
+        "resources/js/**/*.ts",
+        "resources/js/**/*.d.ts",
+        "resources/js/**/*.vue"
+    ],
+    "exclude": ["node_modules"] // Folder yang diabaikan
+}
