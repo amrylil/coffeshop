@@ -1,335 +1,119 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use App\Models\ItemKeranjang;
-use App\Models\Keranjang;
-use App\Models\Menu;
+use App\Http\Services\KeranjangService;
+use Exception;
+use function Termwind\render;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
 
 class KeranjangController extends Controller
 {
+    protected $keranjangService;
+
+    public function __construct(KeranjangService $keranjangService)
+    {
+        $this->keranjangService = $keranjangService;
+    }
+
     /**
-     * Display keranjang for current user
+     * Display the user's shopping cart page.
      */
     public function index()
     {
-        $keranjang = $this->getOrCreateKeranjang();
-        $items     = $keranjang->items()->with('menu')->get();
+        $cartDetails = $this->keranjangService->getCartDetails();
+        return Inertia::render('Users/Keranjang', [
+            'cartDetails' => $cartDetails,
 
-        $total = $items->sum(function ($item) {
-            return $item->quantity * $item->menu->harga;
-        });
-
-        return view('pages.users.keranjang', compact('keranjang', 'items', 'total'));
+        ]);
     }
 
     /**
-     * Add item to cart
+     * Add an item to the cart via API.
      */
     public function addToCart(Request $request)
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'kode_menu' => 'required|exists:menu,kode_menu',
-            'quantity'  => 'required|integer|min:1'
+            'quantity'  => 'required|integer|min:1',
         ]);
 
         try {
-            DB::beginTransaction();
-
-            $menu = Menu::where('kode_menu', $request->kode_menu)->first();
-            if (!$menu) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Menu tidak ditemukan'
-                ], 404);
-            }
-
-            $keranjang = $this->getOrCreateKeranjang();
-
-            // Check if item already exists in cart
-            $existingItem = ItemKeranjang::where('kode_keranjang', $keranjang->kode_keranjang)
-                ->where('kode_menu', $request->kode_menu)
-                ->first();
-
-            if ($existingItem) {
-                // Update quantity if item exists
-                $existingItem->quantity += $request->quantity;
-                $existingItem->save();
-                $item = $existingItem;
-            } else {
-                // Create new item
-                $item = ItemKeranjang::create([
-                    'kode_keranjang' => $keranjang->kode_keranjang,
-                    'kode_menu'      => $request->kode_menu,
-                    'quantity'       => $request->quantity,
-                    'price'          => $menu->harga ?? 0
-                ]);
-            }
-
-            DB::commit();
-
+            $item = $this->keranjangService->addToCart($validatedData);
             return response()->json([
                 'success' => true,
                 'message' => 'Item berhasil ditambahkan ke keranjang',
-                'data'    => $item
+                'data'    => $item,
             ]);
-        } catch (\Exception $e) {
-            DB::rollBack();
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal menambahkan item ke keranjang: ' . $e->getMessage()
+                'message' => 'Gagal menambahkan item: ' . $e->getMessage(),
             ], 500);
         }
     }
 
     /**
-     * Update item quantity in cart
+     * Update an item's quantity via API.
      */
     public function updateQuantity(Request $request, $kodeItem)
     {
-        $request->validate([
-            'quantity' => 'required|integer|min:1'
+        $validatedData = $request->validate([
+            'quantity' => 'required|integer|min:1',
         ]);
 
         try {
-            $item = ItemKeranjang::where('kode_item', $kodeItem)->first();
-
-            if (!$item) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Item tidak ditemukan'
-                ], 404);
-            }
-
-            // Verify item belongs to current user's cart
-            if ($item->keranjang->email !== Auth::user()->email) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Tidak memiliki akses ke item ini'
-                ], 403);
-            }
-
-            $item->quantity = $request->quantity;
-            $item->save();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Quantity berhasil diupdate',
-                'data'    => $item
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Gagal mengupdate quantity: ' . $e->getMessage()
-            ], 500);
+            $item = $this->keranjangService->updateItemQuantity($kodeItem, $validatedData['quantity']);
+            return redirect()->back();
+        } catch (Exception $e) {
+            return redirect()->back();
         }
     }
 
     /**
-     * Remove item from cart
+     * Remove an item from the cart via API.
      */
     public function removeItem($kodeItem)
     {
         try {
-            $item = ItemKeranjang::where('kode_item', $kodeItem)->first();
+            $this->keranjangService->removeItem($kodeItem);
+            return redirect()->back();
 
-            if (!$item) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Item tidak ditemukan'
-                ], 404);
-            }
-
-            // Verify item belongs to current user's cart
-            if ($item->keranjang->email !== Auth::user()->email) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Tidak memiliki akses ke item ini'
-                ], 403);
-            }
-
-            $item->delete();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Item berhasil dihapus dari keranjang'
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors([
+                'error' => 'Gagal menghapus item: ' . $e->getMessage(),
             ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Gagal menghapus item: ' . $e->getMessage()
-            ], 500);
+
         }
     }
 
     /**
-     * Clear all items from cart
+     * Clear the entire cart via API.
      */
     public function clearCart()
     {
         try {
-            $keranjang = Keranjang::where('email', Auth::user()->email)->first();
+            $this->keranjangService->clearCart();
+            return redirect()->back();
 
-            if ($keranjang) {
-                ItemKeranjang::where('kode_keranjang', $keranjang->kode_keranjang)->delete();
-            }
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Keranjang berhasil dikosongkan'
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors([
+                'error' => 'Gagal mengosongkan keranjang: ' . $e->getMessage(),
             ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Gagal mengosongkan keranjang: ' . $e->getMessage()
-            ], 500);
+
         }
     }
 
     /**
-     * Get cart item count for current user
+     * Get the total item count for the cart via API.
      */
     public function getCartCount()
     {
-        $keranjang = Keranjang::where('email', Auth::user()->email)->first();
-
-        $count = 0;
-        if ($keranjang) {
-            $count = ItemKeranjang::where('kode_keranjang', $keranjang->kode_keranjang)
-                ->sum('quantity');
-        }
-
+        $cartDetails = $this->keranjangService->getCartDetails();
         return response()->json([
             'success' => true,
-            'count'   => $count
+            'count'   => $cartDetails['count'],
         ]);
-    }
-
-    /**
-     * Get cart total for current user
-     */
-    public function getCartTotal()
-    {
-        $keranjang = Keranjang::where('email', Auth::user()->email)->first();
-
-        $total = 0;
-        if ($keranjang) {
-            $items = ItemKeranjang::where('kode_keranjang', $keranjang->kode_keranjang)->get();
-            $total = $items->sum(function ($item) {
-                return $item->quantity * $item->price;
-            });
-        }
-
-        return response()->json([
-            'success' => true,
-            'total'   => $total
-        ]);
-    }
-
-    /**
-     * Get or create keranjang for current user
-     */
-    private function getOrCreateKeranjang()
-    {
-        $keranjang = Keranjang::where('email', Auth::user()->email)->first();
-
-        if (!$keranjang) {
-            $keranjang = Keranjang::create([
-                'email' => Auth::user()->email
-            ]);
-        }
-
-        return $keranjang;
-    }
-
-    /**
-     * Increment item quantity
-     */
-    public function incrementQuantity($kodeItem)
-    {
-        try {
-            $item = ItemKeranjang::where('kode_item', $kodeItem)->first();
-
-            if (!$item) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Item tidak ditemukan'
-                ], 404);
-            }
-
-            // Verify item belongs to current user's cart
-            if ($item->keranjang->email !== Auth::user()->email) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Tidak memiliki akses ke item ini'
-                ], 403);
-            }
-
-            $item->quantity += 1;
-            $item->save();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Quantity berhasil ditambah',
-                'data'    => $item
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Gagal menambah quantity: ' . $e->getMessage()
-            ], 500);
-        }
-    }
-
-    /**
-     * Decrement item quantity
-     */
-    public function decrementQuantity($kodeItem)
-    {
-        try {
-            $item = ItemKeranjang::where('kode_item', $kodeItem)->first();
-
-            if (!$item) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Item tidak ditemukan'
-                ], 404);
-            }
-
-            // Verify item belongs to current user's cart
-            if ($item->keranjang->email !== Auth::user()->email) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Tidak memiliki akses ke item ini'
-                ], 403);
-            }
-
-            if ($item->quantity <= 1) {
-                // If quantity is 1 or less, remove the item
-                $item->delete();
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Item dihapus karena quantity menjadi 0',
-                    'removed' => true
-                ]);
-            } else {
-                $item->quantity -= 1;
-                $item->save();
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Quantity berhasil dikurangi',
-                    'data'    => $item
-                ]);
-            }
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Gagal mengurangi quantity: ' . $e->getMessage()
-            ], 500);
-        }
     }
 }

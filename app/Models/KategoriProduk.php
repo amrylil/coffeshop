@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use App\Helpers\IDGeneratorHelper;
@@ -23,16 +22,16 @@ class KategoriProduk extends Model
         'path_img',
     ];
 
-    // protected static function boot()
-    // {
-    //     parent::boot();
+    protected static function boot()
+    {
+        parent::boot();
 
-    //     static::creating(function ($model) {
-    //         if (!$model->kode_kategori) {
-    //             $model->kode_kategori = IDGeneratorHelper::generateKategoriID();
-    //         }
-    //     });
-    // }
+        static::creating(function ($model) {
+            if (! $model->kode_kategori) {
+                $model->kode_kategori = IDGeneratorHelper::generateKategoriID();
+            }
+        });
+    }
 
     public function menu()
     {

@@ -1,7 +1,7 @@
 <?php
-
 namespace Database\Seeders;
 
+use App\Helpers\IDGeneratorHelper;
 use App\Models\Meja;
 use Illuminate\Database\Seeder;
 
@@ -14,32 +14,32 @@ class MejaSeeder extends Seeder
     {
         $tables = [
             [
-                'nomor_meja' => 'T01',
+                'nomor_meja' => IDGeneratorHelper::generateMejaID(),
                 'kapasitas'  => 2,
                 'status'     => 'kosong',
             ],
             [
-                'nomor_meja' => 'T02',
+                'nomor_meja' => IDGeneratorHelper::generateMejaID(),
                 'kapasitas'  => 2,
                 'status'     => 'kosong',
             ],
             [
-                'nomor_meja' => 'T03',
+                'nomor_meja' => IDGeneratorHelper::generateMejaID(),
                 'kapasitas'  => 4,
                 'status'     => 'kosong',
             ],
             [
-                'nomor_meja' => 'T04',
+                'nomor_meja' => IDGeneratorHelper::generateMejaID(),
                 'kapasitas'  => 4,
                 'status'     => 'kosong',
             ],
             [
-                'nomor_meja' => 'T05',
+                'nomor_meja' => IDGeneratorHelper::generateMejaID(),
                 'kapasitas'  => 6,
                 'status'     => 'kosong',
             ],
             [
-                'nomor_meja' => 'T06',
+                'nomor_meja' => IDGeneratorHelper::generateMejaID(),
                 'kapasitas'  => 8,
                 'status'     => 'kosong',
             ],

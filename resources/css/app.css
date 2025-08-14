@@ -29,6 +29,10 @@
     }
 }
 
+.font-serif {
+  font-family: 'Playfair Display', serif;
+}
+
 .animate-shimmer {
     background: linear-gradient(
         90deg,

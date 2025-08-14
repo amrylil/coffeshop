@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use App\Helpers\IDGeneratorHelper;
@@ -20,7 +19,7 @@ class Keranjang extends Model
 
     protected $fillable = [
         'kode_keranjang',
-        'email',
+        'user_id',
     ];
 
     protected static function boot()
@@ -28,7 +27,7 @@ class Keranjang extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            if (!$model->kode_keranjang) {
+            if (! $model->kode_keranjang) {
                 $model->kode_keranjang = IDGeneratorHelper::generateKeranjangID();
             }
         });
@@ -41,7 +40,7 @@ class Keranjang extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'email', 'email');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function items()

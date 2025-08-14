@@ -11,7 +11,7 @@ export interface Menu {
     kode_menu: string;
     nama: string;
     deskripsi?: string;
-    harga: number; // DIUBAH: Sesuai dengan response JSON dari Laravel
+    harga: number;
     path_img?: string;
     jumlah: number;
     created_at?: string;

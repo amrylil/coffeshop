@@ -1,10 +1,9 @@
 <?php
-
 namespace Database\Seeders;
 
+use App\Helpers\IDGeneratorHelper;
 use App\Models\Menu;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 
 class MenuSeeder extends Seeder
 {
@@ -16,7 +15,7 @@ class MenuSeeder extends Seeder
         $menus = [
             // Kopi
             [
-                'kode_menu'     => 'MNU' . Str::random(5),
+                'kode_menu'     => IDGeneratorHelper::generateMenuID(),
                 'nama'          => 'Kopi Hitam',
                 'deskripsi'     => 'Kopi hitam dengan biji kopi pilihan yang disangrai sempurna',
                 'harga'         => 15000.0,
@@ -26,7 +25,7 @@ class MenuSeeder extends Seeder
                 'created_at'    => now(),
             ],
             [
-                'kode_menu'     => 'MNU' . Str::random(5),
+                'kode_menu'     => IDGeneratorHelper::generateMenuID(),
                 'nama'          => 'Cappuccino',
                 'deskripsi'     => 'Espresso dengan tambahan susu yang lembut dan foam yang creamy',
                 'harga'         => 25000.0,
@@ -36,7 +35,7 @@ class MenuSeeder extends Seeder
                 'created_at'    => now(),
             ],
             [
-                'kode_menu'     => 'MNU' . Str::random(5),
+                'kode_menu'     => IDGeneratorHelper::generateMenuID(),
                 'nama'          => 'Latte',
                 'deskripsi'     => 'Espresso dengan tambahan susu yang banyak dan foam tipis',
                 'harga'         => 27000.0,
@@ -46,7 +45,7 @@ class MenuSeeder extends Seeder
                 'created_at'    => now(),
             ],
             [
-                'kode_menu'     => 'MNU' . Str::random(5),
+                'kode_menu'     => IDGeneratorHelper::generateMenuID(),
                 'nama'          => 'Espresso',
                 'deskripsi'     => 'Sari kopi pekat yang disajikan dalam jumlah kecil',
                 'harga'         => 18000.0,
@@ -57,7 +56,7 @@ class MenuSeeder extends Seeder
             ],
             // Teh
             [
-                'kode_menu'     => 'MNU' . Str::random(5),
+                'kode_menu'     => IDGeneratorHelper::generateMenuID(),
                 'nama'          => 'Green Tea',
                 'deskripsi'     => 'Teh hijau segar yang kaya akan antioksidan',
                 'harga'         => 20000.0,
@@ -67,7 +66,7 @@ class MenuSeeder extends Seeder
                 'created_at'    => now(),
             ],
             [
-                'kode_menu'     => 'MNU' . Str::random(5),
+                'kode_menu'     => IDGeneratorHelper::generateMenuID(),
                 'nama'          => 'Earl Grey',
                 'deskripsi'     => 'Teh hitam dengan tambahan aroma jeruk bergamot',
                 'harga'         => 22000.0,
@@ -78,7 +77,7 @@ class MenuSeeder extends Seeder
             ],
             // Makanan Ringan
             [
-                'kode_menu'     => 'MNU' . Str::random(5),
+                'kode_menu'     => IDGeneratorHelper::generateMenuID(),
                 'nama'          => 'Kentang Goreng',
                 'deskripsi'     => 'Kentang goreng renyah yang disajikan dengan saus sambal dan mayones',
                 'harga'         => 25000.0,
@@ -88,7 +87,7 @@ class MenuSeeder extends Seeder
                 'created_at'    => now(),
             ],
             [
-                'kode_menu'     => 'MNU' . Str::random(5),
+                'kode_menu'     => IDGeneratorHelper::generateMenuID(),
                 'nama'          => 'Sandwich Chicken',
                 'deskripsi'     => 'Sandwich dengan isian ayam panggang, selada, tomat, dan saus mayo',
                 'harga'         => 35000.0,
@@ -99,7 +98,7 @@ class MenuSeeder extends Seeder
             ],
             // Dessert
             [
-                'kode_menu'     => 'MNU' . Str::random(5),
+                'kode_menu'     => IDGeneratorHelper::generateMenuID(),
                 'nama'          => 'Cheesecake',
                 'deskripsi'     => 'Kue dengan lapisan keju lembut di atas biscuit yang renyah',
                 'harga'         => 35000.0,
@@ -109,7 +108,7 @@ class MenuSeeder extends Seeder
                 'created_at'    => now(),
             ],
             [
-                'kode_menu'     => 'MNU' . Str::random(5),
+                'kode_menu'     => IDGeneratorHelper::generateMenuID(),
                 'nama'          => 'Chocolate Lava Cake',
                 'deskripsi'     => 'Kue coklat hangat dengan isian coklat cair di tengahnya',
                 'harga'         => 30000.0,

@@ -1,19 +1,33 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from "vue";
 import { Link, usePage } from "@inertiajs/vue3";
-import type { User } from "@/types";
 import { route } from "ziggy-js";
-const page = usePage();
+import { PageProps, User } from "@/types";
+const page = usePage<PageProps>();
 const authUser = computed<User | null>(() => page.props.auth.user);
 
 const scrolled = ref<boolean>(false);
 const isHome = ref<boolean>(window.location.pathname === "/");
-const profileDrawerOpen = ref<boolean>(false);
 const mobileMenuOpen = ref<boolean>(false);
 
 const handleScroll = (): void => {
-    scrolled.value = window.scrollY > 50;
+    scrolled.value = window.scrollY > 30;
 };
+
+const emit = defineEmits<{
+    (e: "toggle-sidebar"): void;
+}>();
+
+const userInitials = computed(() => {
+    if (!authUser.value?.name) {
+        return "?";
+    }
+    const words = authUser.value.name.split(" ");
+
+    const initials = words.map((word) => word[0]).join("");
+
+    return initials.substring(0, 2).toUpperCase();
+});
 
 onMounted(() => {
     window.addEventListener("scroll", handleScroll);
@@ -35,7 +49,11 @@ onUnmounted(() => {
         </Link>
 
         <nav
-            class="hidden md:flex items-center gap-x-3 lg:gap-x-5 md:-translate-x-14"
+            class="hidden md:flex items-center gap-x-3 lg:gap-x-5"
+            :class="{
+                'md:-translate-x-[50px]': authUser,
+                'md:-translate-x-[65px]': !authUser,
+            }"
         >
             <Link
                 :href="route('beranda')"
@@ -48,7 +66,8 @@ onUnmounted(() => {
             <Link
                 :href="route('menu.index')"
                 :class="{
-                    'bg-[#422424] py-1 px-3 rounded text-white': $page.url.startsWith('/menu'),
+                    'bg-[#422424] py-1 px-3 rounded text-white':
+                        $page.url.startsWith('/menu'),
                 }"
                 >Menu</Link
             >
@@ -63,16 +82,18 @@ onUnmounted(() => {
             <Link
                 :href="route('about-us')"
                 :class="{
-                    'bg-[#422424] py-1 px-3 rounded text-white': $page.url.startsWith('/about'),
+                    'bg-[#422424] py-1 px-3 rounded ':
+                        $page.url.startsWith('/about'),
                 }"
-                >Tentang Kami</Link
+                ><span class="text-slate-950">Tentang Kami</span></Link
             >
             <Link
                 :href="route('kontak')"
                 :class="{
-                    'bg-[#422424] py-1 px-3 rounded text-white': $page.url.startsWith('/contact'),
+                    'bg-[#422424] py-1 px-3 rounded text-white':
+                        $page.url.startsWith('/contact'),
                 }"
-                >Kontak</Link
+                ><span class="text-slate-950">Kontak</span></Link
             >
         </nav>
 
@@ -98,10 +119,7 @@ onUnmounted(() => {
                     </svg>
                 </Link>
 
-                <div
-                    @click="profileDrawerOpen = !profileDrawerOpen"
-                    class="cursor-pointer"
-                >
+                <div @click="emit('toggle-sidebar')" class="cursor-pointer">
                     <div
                         v-if="authUser.profile_photo"
                         class="w-10 h-10 rounded-full overflow-hidden border-2"
@@ -122,7 +140,7 @@ onUnmounted(() => {
                         class="relative flex items-center justify-center w-10 h-10 overflow-hidden bg-[#422424] rounded-full shadow-lg"
                     >
                         <span class="text-lg font-bold text-white">{{
-                            authUser.initials
+                            userInitials
                         }}</span>
                     </div>
                 </div>
@@ -131,12 +149,7 @@ onUnmounted(() => {
                 <div class="hidden md:block">
                     <Link
                         href="/login"
-                        class="px-4 py-2 text-sm transition-colors duration-300 border rounded-md"
-                        :class="
-                            scrolled || !isHome
-                                ? 'border-slate-800 hover:bg-slate-800 hover:text-white'
-                                : 'border-white hover:bg-white hover:text-slate-800'
-                        "
+                        class="px-4 py-2 text-sm transition-colors duration-300 border rounded-md border-black text-slate-950 hover:bg-coklat hover:text-white"
                     >
                         Masuk
                     </Link>

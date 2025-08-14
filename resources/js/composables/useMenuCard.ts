@@ -5,9 +5,7 @@ interface Props {
     menu: Menu;
 }
 
-type EmitFn = (event: "add-to-cart" | "click", payload: Menu) => void;
-
-export function useMenuCard(props: Props, emit: EmitFn) {
+export function useMenuCard(props: Props) {
     const imageLoading: Ref<boolean> = ref(true);
     const isAdding: Ref<boolean> = ref(false);
     const isFavorite: Ref<boolean> = ref(false);
@@ -20,7 +18,6 @@ export function useMenuCard(props: Props, emit: EmitFn) {
         isAdding.value = true;
         try {
             await new Promise((resolve) => setTimeout(resolve, 800));
-            emit("add-to-cart", props.menu);
             console.log("Item added to cart:", props.menu.nama);
         } catch (error) {
             console.error("Failed to add item to cart:", error);
@@ -31,10 +28,6 @@ export function useMenuCard(props: Props, emit: EmitFn) {
 
     const toggleFavorite = () => {
         isFavorite.value = !isFavorite.value;
-    };
-
-    const handleClick = () => {
-        emit("click", props.menu);
     };
 
     const handleImageError = () => {
@@ -48,7 +41,6 @@ export function useMenuCard(props: Props, emit: EmitFn) {
         formatPrice,
         addToCart,
         toggleFavorite,
-        handleClick,
         handleImageError,
     };
 }

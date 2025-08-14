@@ -1,5 +1,4 @@
 <?php
-
 namespace Database\Seeders;
 
 use App\Models\User;
@@ -16,6 +15,7 @@ class UserSeeder extends Seeder
     {
         // Admin user
         User::create([
+            'id'         => (string) Str::uuid(),
             'email'      => 'admin@kedaikopi.com',
             'name'       => 'Admin Kedai Kopi',
             'password'   => Hash::make('admin123'),

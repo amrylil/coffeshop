@@ -18,6 +18,7 @@
         "vite": "^6.0.11"
     },
     "dependencies": {
+        "@heroicons/vue": "^2.2.0",
         "@inertiajs/vue3": "^2.0.17",
         "@types/lodash": "^4.17.20",
         "@vitejs/plugin-vue": "^6.0.1",

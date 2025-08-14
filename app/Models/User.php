@@ -1,29 +1,25 @@
 <?php
-
 namespace App\Models;
 
-use App\Helpers\IDGeneratorHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Str;
+
+// <- ini untuk UUID
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
     protected $table      = 'users';
-    protected $primaryKey = 'email';
+    protected $primaryKey = 'id';
     public $incrementing  = false;
     protected $keyType    = 'string';
     public $timestamps    = false;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
+        'id',
         'email',
         'name',
         'password',
@@ -35,40 +31,21 @@ class User extends Authenticatable
         'profile_photo',
     ];
 
-    public function getAuthPassword()
+    protected static function boot()
     {
-        return $this->password;
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (! $model->id) {
+                $model->id = (string) Str::uuid();
+            }
+        });
     }
 
-    public function getAuthIdentifierName()
-    {
-        return 'email';
-    }
-
-    /**
-     * Get the unique identifier for the user.
-     *
-     * @return mixed
-     */
-    public function getAuthIdentifier()
-    {
-        return $this->{$this->getAuthIdentifierName()};
-    }
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'birth_date' => 'date',
         'created_at' => 'datetime',
@@ -77,11 +54,11 @@ class User extends Authenticatable
 
     public function keranjang()
     {
-        return $this->hasMany(Keranjang::class, 'email', 'email');
+        return $this->hasMany(Keranjang::class, 'user_id', 'id');
     }
 
     public function transaksi()
     {
-        return $this->hasMany(Transaksi::class, 'email', 'email');
+        return $this->hasMany(Transaksi::class, 'user_id', 'id');
     }
 }

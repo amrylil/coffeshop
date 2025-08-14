@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\KategoriProduk;
 use App\Models\Menu;
+use function Termwind\render;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as RoutingController;
 use Inertia\Inertia;
@@ -29,7 +30,6 @@ class UserMenuController extends RoutingController
 
         $query = Menu::with('kategori')->where('jumlah', '>', 0);
 
-        // Terapkan filter berdasarkan query string
         $query->when($request->input('search'), function ($q, $search) {
             $q->where(function ($subQ) use ($search) {
                 $subQ->where('nama', 'like', "%{$search}%")
@@ -59,7 +59,6 @@ class UserMenuController extends RoutingController
     }
     public function latestMenus()
     {
-        // Ambil 4 produk terbaru dengan stok > 0
         $latestMenus = Menu::with('kategori')
             ->where('jumlah', '>', 0)
             ->orderBy('created_at', 'desc')
@@ -104,7 +103,12 @@ class UserMenuController extends RoutingController
             ->limit(4)
             ->get();
 
-        return view('pages.users.detail', compact('menu', 'relatedMenus'));
+        return Inertia::render('Users/MenuDetail', [
+            'menu'         => $menu,
+            'relatedMenus' => $relatedMenus,
+
+        ]);
+
     }
 
     /**

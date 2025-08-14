@@ -16,7 +16,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
 
     // Registration routes
-    Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+    Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
 });
 
@@ -62,10 +62,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/keranjang/count', [App\Http\Controllers\KeranjangController::class, 'getCartCount'])->name('keranjang.count');
     Route::get('/keranjang/total', [App\Http\Controllers\KeranjangController::class, 'getCartTotal'])->name('keranjang.total');
 
-    Route::prefix('user/transaksi')->name('user.transaksi.')->group(function () {
+    Route::prefix('transaksi')->name('transaksi.')->group(function () {
         Route::get('/', [TransaksiController::class, 'userIndex'])->name('index');
-        Route::get('/create', [TransaksiController::class, 'userCreate'])->name('create');
-        Route::post('/', [TransaksiController::class, 'userCheckoutStore'])->name('store');
+        Route::post('/create', [TransaksiController::class, 'checkout'])->name('store');
         // Route::get('/{id}', [TransaksiController::class, 'userShow'])->name('show');
         Route::patch('/{id}/cancel', [TransaksiController::class, 'userCancel'])->name('cancel');
         Route::get('/{kode_transaksi}', [TransaksiController::class, 'userDetail'])->name('show');

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use App\Helpers\IDGeneratorHelper;
@@ -19,13 +18,10 @@ class Reservasi extends Model
     const UPDATED_AT = 'updated_at';
 
     protected $fillable = [
-        'email',
+        'user_id',
         'kode_reservasi',
-        'nama_pelanggan',
-        'no_telepon',
         'tanggal_reservasi',
         'jam_reservasi',
-        'jumlah_orang',
         'nomor_meja',
         'catatan',
     ];
@@ -42,7 +38,7 @@ class Reservasi extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            if (!$model->kode_reservasi) {
+            if (! $model->kode_reservasi) {
                 $model->kode_reservasi = IDGeneratorHelper::generateReservasiID();
             }
         });
@@ -50,7 +46,7 @@ class Reservasi extends Model
 
     public function user()
     {
-        return $this->belongsTo(Meja::class, 'email', 'email');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function meja()
