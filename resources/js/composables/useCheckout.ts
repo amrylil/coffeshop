@@ -1,6 +1,7 @@
 import { ref } from "vue";
 import type { Ref } from "vue";
 import { router } from "@inertiajs/vue3";
+import { useCart } from "./useCart";
 
 interface CheckoutItem {
     kode_menu: string;
@@ -29,12 +30,32 @@ export function useCheckout(): UseCheckout {
     const isProcessing = ref(false);
     const error = ref<string | null>(null);
 
+    const { clearCart } = useCart();
+
+    const updateStatus = async (orderId: string, status: string) => {
+        try {
+            await fetch(`/transaksi/update-status`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": getCsrfToken(),
+                },
+                body: JSON.stringify({
+                    order_id: orderId,
+                    status: status,
+                }),
+            });
+        } catch (err) {
+            console.error("Gagal update status transaksi:", err);
+        }
+    };
+
     const processCheckout = async (data: CheckoutData) => {
         isProcessing.value = true;
         error.value = null;
 
         try {
-            const response = await fetch("transaksi/create", {
+            const response = await fetch("/transaksi/create", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -45,7 +66,6 @@ export function useCheckout(): UseCheckout {
             });
 
             const result = await response.json();
-
             console.log("Checkout Result:", result);
 
             if (!response.ok) {
@@ -60,22 +80,22 @@ export function useCheckout(): UseCheckout {
             }
 
             window.snap.pay(snapToken, {
-                onSuccess: function (paymentResult) {
+                onSuccess: async function (paymentResult) {
                     console.log("Payment Success:", paymentResult);
+                    await updateStatus(paymentResult.order_id, "paid");
                     alert("Pembayaran sukses!");
-                    router.visit(`/transaksi/${paymentResult.order_id}`, {
-                        method: "get",
-                    });
+                    router.visit(`/transaksi/${paymentResult.order_id}`);
+                    clearCart();
                 },
-                onPending: function (paymentResult) {
+                onPending: async function (paymentResult) {
                     console.log("Payment Pending:", paymentResult);
+                    await updateStatus(paymentResult.order_id, "pending");
                     alert("Pembayaran Anda sedang diproses.");
-                    router.visit(`/transaksi/${paymentResult.order_id}`, {
-                        method: "get",
-                    });
+                    router.visit(`/transaksi/${paymentResult.order_id}`);
                 },
-                onError: function (paymentResult) {
+                onError: async function (paymentResult) {
                     console.error("Payment Error:", paymentResult);
+                    await updateStatus(paymentResult.order_id, "failed");
                     error.value =
                         "Terjadi kesalahan saat pembayaran. Silakan coba lagi.";
                 },

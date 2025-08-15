@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\MejaController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\ProfileController;
@@ -63,11 +64,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/keranjang/total', [App\Http\Controllers\KeranjangController::class, 'getCartTotal'])->name('keranjang.total');
 
     Route::prefix('transaksi')->name('transaksi.')->group(function () {
-        Route::get('/', [TransaksiController::class, 'userIndex'])->name('index');
+        Route::get('/', [TransaksiController::class, 'index'])->name('index');
         Route::post('/create', [TransaksiController::class, 'checkout'])->name('store');
         // Route::get('/{id}', [TransaksiController::class, 'userShow'])->name('show');
         Route::patch('/{id}/cancel', [TransaksiController::class, 'userCancel'])->name('cancel');
         Route::get('/{kode_transaksi}', [TransaksiController::class, 'userDetail'])->name('show');
+        Route::post('/midtrans/webhook', [TransaksiController::class, 'handleWebhook'])->name('midtrans.webhook');
+        Route::post('/update-status', [TransaksiController::class, 'updateStatus'])->name('updateStatus');
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -75,7 +78,7 @@ Route::middleware('auth')->group(function () {
 
     // Route::apiResource('reservasi', ReservasiController::class);
 
-    Route::get('/reservasi', [ReservasiController::class, 'index'])->name('reservasi.index');
+    Route::get('/reservasi', [ReservasiController::class, 'getAllMeja'])->name('reservasi.meja');
 
     // Rute untuk memproses form reservasi
     Route::post('/reservasi', [ReservasiController::class, 'store'])->name('reservasi.store');
@@ -94,7 +97,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Menu routes
     Route::resource('menu', MenuController::class);
     // Add these routes to your web.php file inside the admin group
-    Route::resource('kategori', App\Http\Controllers\KategoriProdukController::class);
+    Route::resource('kategori', KategoriController::class);
 
     Route::resource('meja', App\Http\Controllers\MejaController::class);
 

@@ -1,17 +1,14 @@
 <template>
     <div
-        class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-50 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2"
+        class="bg-lunen border border-stone-200 shadow-sm hover:shadow-md transition-shadow duration-300 group"
     >
-        <div
-            class="absolute inset-0 bg-gradient-to-r from-purple-400/10 via-pink-400/10 to-orange-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-        ></div>
-
-        <Link :href="route('menu.show', menu.kode_menu)" class="block">
-            <div class="relative h-64 overflow-hidden px-1 pt-1">
+        <!-- Product Image -->
+        <div class="relative overflow-hidden">
+            <Link :href="route('menu.show', menu.kode_menu)" class="block">
                 <!-- Loading Skeleton -->
                 <div
                     v-if="imageLoading"
-                    class="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 animate-pulse rounded-t-xl"
+                    class="w-full h-56 bg-stone-200 animate-pulse"
                 ></div>
 
                 <!-- Actual Image -->
@@ -23,143 +20,78 @@
                             : '/images/coffe.png'
                     "
                     :alt="menu.nama"
-                    class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out rounded-t-xl"
+                    class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                     @load="imageLoading = false"
                     @error="handleImageError"
                 />
 
-                <!-- Overlay Gradient -->
+                <!-- Overlay on hover -->
                 <div
-                    class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300"
                 ></div>
+            </Link>
+
+            <!-- Category Badge -->
+            <div class="absolute top-4 left-4">
+                <span
+                    class="bg-white border border-stone-300 px-3 py-1 text-xs font-medium text-stone-700 shadow-sm"
+                >
+                    {{ menu.kategori?.nama }}
+                </span>
             </div>
-        </Link>
+        </div>
 
-        <!-- Content Container -->
-        <div class="relative p-4 bg-gradient-to-br from-amber-50 to-orange-50">
-            <h3
-                class="font-bold text-lg text-gray-900 mb-1 leading-tight group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-gray-900 group-hover:to-gray-600 group-hover:bg-clip-text transition-all duration-300 text-start"
-            >
-                {{ menu.nama }}
-            </h3>
+        <!-- Content -->
+        <div class="p-4">
+            <!-- Product Title -->
+            <Link :href="route('menu.show', menu.kode_menu)">
+                <h3
+                    class="font-serif text-xl text-stone-800 mb-3 leading-tight hover:text-stone-600 transition-colors duration-200 text-start"
+                >
+                    {{ menu.nama }}
+                </h3>
+            </Link>
 
+            <!-- Price and Action -->
             <div class="flex items-center justify-between">
-                <!-- Price -->
-                <div class="flex flex-col">
-                    <span
-                        class="text-lg font-black text-slate-950 bg-clip-text"
-                    >
+                <div>
+                    <div class="text-2xl font-bold text-stone-800 mb-1">
                         Rp {{ formatPrice(menu.harga) }}
-                    </span>
-                    <span class="text-xs text-gray-500 font-medium"
-                        >per item</span
-                    >
+                    </div>
                 </div>
 
                 <!-- Add to Cart Button -->
                 <button
+                    v-if="menu.jumlah > 0"
                     @click.prevent="handleAddToCart"
                     :disabled="loading"
-                    class="group/btn relative overflow-hidden bg-coklat text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    class="bg-coklat text-white font-medium px-4 py-2 hover:bg-stone-900 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-stone-500 focus:ring-offset-2 disabled:bg-stone-400 disabled:cursor-not-allowed flex items-center space-x-2"
                 >
-                    <div
-                        class="absolute inset-0 bg-slate-950 transform scale-x-0 group-hover/btn:scale-x-100 transition-transform duration-300 origin-left"
-                    ></div>
-
-                    <!-- Button Content -->
-                    <span class="relative flex items-center space-x-2 text-sm">
-                        <!-- Shopping Cart Icon -->
-                        <svg
-                            v-if="!loading"
-                            class="w-4 h-4 transition-transform duration-300 group-hover/btn:scale-110"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m4.5 0h3.5m-7 0a1 1 0 100 2 1 1 0 000-2zm7 0a1 1 0 100 2 1 1 0 000-2z"
-                            />
-                        </svg>
-
-                        <!-- Loading Spinner -->
-                        <svg
-                            v-if="loading"
-                            class="animate-spin w-4 h-4"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                        >
-                            <circle
-                                class="opacity-25"
-                                cx="12"
-                                cy="12"
-                                r="10"
-                                stroke="currentColor"
-                                stroke-width="4"
-                            ></circle>
-                            <path
-                                class="opacity-75"
-                                fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                            ></path>
-                        </svg>
-
-                        <span>{{ loading ? "Tambah" : "Tambah" }}</span>
-                    </span>
-                </button>
-            </div>
-
-            <!-- User Feedback Messages -->
-            <p v-if="error" class="text-red-500 text-xs mt-2">{{ error }}</p>
-        </div>
-    </div>
-
-    <!-- Toast Notification - Outside card container -->
-    <Teleport to="body">
-        <div
-            v-if="showToast"
-            class="fixed top-4 right-4 z-50 transform transition-all duration-500 ease-in-out"
-            :class="{
-                'translate-x-0 opacity-100 scale-100': showToast,
-                'translate-x-full opacity-0 scale-95': !showToast,
-            }"
-        >
-            <div
-                class="bg-green-500 text-white px-6 py-4 rounded-lg shadow-2xl flex items-center space-x-3 min-w-[300px] backdrop-blur-sm border border-green-400/20"
-            >
-                <!-- Success Icon -->
-                <div class="flex-shrink-0">
+                    <!-- Loading Spinner -->
                     <svg
-                        class="w-6 h-6 text-green-100"
+                        v-if="loading"
+                        class="animate-spin w-4 h-4"
                         fill="none"
-                        stroke="currentColor"
                         viewBox="0 0 24 24"
                     >
+                        <circle
+                            class="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            stroke-width="4"
+                        ></circle>
                         <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M5 13l4 4L19 7"
-                        />
+                            class="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
                     </svg>
-                </div>
 
-                <!-- Toast Content -->
-                <div class="flex-1">
-                    <p class="font-medium text-sm">Berhasil ditambahkan!</p>
-                    <p class="text-green-100 text-xs">
-                        {{ menu.nama }} sudah masuk keranjang
-                    </p>
-                </div>
-
-                <!-- Close Button -->
-                <button
-                    @click="closeToast"
-                    class="flex-shrink-0 text-green-100 hover:text-white transition-colors duration-200"
-                >
+                    <!-- Shopping Cart Icon -->
                     <svg
+                        v-else
                         class="w-4 h-4"
                         fill="none"
                         stroke="currentColor"
@@ -169,10 +101,81 @@
                             stroke-linecap="round"
                             stroke-linejoin="round"
                             stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12"
+                            d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m4.5 0h3.5m-7 0a1 1 0 100 2 1 1 0 000-2zm7 0a1 1 0 100 2 1 1 0 000-2z"
                         />
                     </svg>
+
+                    <span class="text-sm">{{
+                        loading ? "Adding..." : "Tambah"
+                    }}</span>
                 </button>
+
+                <!-- Out of Stock -->
+                <div v-else class="text-stone-400 text-sm font-medium">
+                    Out of Stock
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Classic Toast Notification -->
+    <Teleport to="body">
+        <div
+            v-if="showToast"
+            class="fixed top-8 right-8 z-50 transform transition-all duration-300 ease-out"
+            :class="{
+                'translate-x-0 opacity-100': showToast,
+                'translate-x-full opacity-0': !showToast,
+            }"
+        >
+            <div
+                class="bg-white border border-stone-200 shadow-lg p-6 max-w-sm"
+            >
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 mr-4">
+                        <div
+                            class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center"
+                        >
+                            <svg
+                                class="w-5 h-5 text-green-600"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                    clip-rule="evenodd"
+                                />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-medium text-stone-800 mb-1">
+                            Added to Cart
+                        </h4>
+                        <p class="text-sm text-stone-600">
+                            {{ menu.nama }} has been added to your cart.
+                        </p>
+                    </div>
+                    <button
+                        @click="closeToast"
+                        class="ml-4 text-stone-400 hover:text-stone-600 transition-colors duration-200"
+                    >
+                        <svg
+                            class="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"
+                            />
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
     </Teleport>
@@ -181,7 +184,7 @@
 <script setup lang="ts">
 import { defineProps, ref } from "vue";
 import { useMenuCard } from "@/composables/useMenuCard";
-import type { Menu } from "@/types/menu"; // Assuming you have this type definition
+import type { Menu } from "@/types/menu";
 import { Link } from "@inertiajs/vue3";
 import { useCart } from "@/composables/useCart";
 import { route } from "ziggy-js";
@@ -191,9 +194,7 @@ const props = defineProps<{
 }>();
 
 const { imageLoading, formatPrice, handleImageError } = useMenuCard(props);
-
 const { loading, error, addToCart } = useCart();
-
 const showToast = ref<boolean>(false);
 
 const handleAddToCart = async () => {
@@ -201,11 +202,10 @@ const handleAddToCart = async () => {
 
     if (success) {
         showToast.value = true;
-
-        // Auto hide toast after 3 seconds
+        // Auto hide toast after 4 seconds
         setTimeout(() => {
             showToast.value = false;
-        }, 3000);
+        }, 4000);
     }
 };
 
@@ -215,26 +215,10 @@ const closeToast = () => {
 </script>
 
 <style scoped>
-/* Toast slide-in animation */
-@keyframes slideInRight {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-@keyframes slideOutRight {
-    from {
-        transform: translateX(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateX(100%);
-        opacity: 0;
-    }
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 </style>

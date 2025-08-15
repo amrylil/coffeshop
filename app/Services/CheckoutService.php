@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Services;
+namespace App\Services;
 
 use App\Models\ItemTransaksi;
 use App\Models\Transaksi;
@@ -56,7 +56,6 @@ class CheckoutService
 
             $snapToken = Snap::getSnapToken($params);
 
-            // Simpan order_id dari Midtrans (yang sama dengan kode_transaksi kita)
             $transaksi->update(['order_id_midtrans' => $orderId]);
 
             DB::commit();
@@ -68,10 +67,26 @@ class CheckoutService
 
         } catch (Exception $e) {
             DB::rollBack();
-            // Log error yang lebih spesifik untuk debugging
             Log::error('Gagal memproses checkout: ' . $e->getMessage() . ' on line ' . $e->getLine());
             throw new Exception('Gagal memproses pembayaran Anda. Silakan coba beberapa saat lagi.');
         }
+    }
+
+    public function updateStatus(string $orderId, string $status): Transaksi
+    {
+        $transaksi = Transaksi::where('order_id_midtrans', $orderId)
+            ->first();
+
+        if (! $transaksi) {
+            throw new Exception("Transaksi dengan order_id {$orderId} tidak ditemukan.");
+        }
+
+        $transaksi->status = $status;
+        $transaksi->save();
+
+        Log::info("Status transaksi {$orderId} diupdate menjadi {$status}");
+
+        return $transaksi;
     }
     public function getUserTransactions(User $user): LengthAwarePaginator
     {

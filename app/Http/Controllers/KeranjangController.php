@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Http\Services\KeranjangService;
+use App\Services\KeranjangService;
 use Exception;
 use function Termwind\render;
 use Illuminate\Http\Request;

@@ -1,125 +1,159 @@
 <template>
-  <AuthLayout background-image-url="/images/login.jpg">
-    
-    <div class="text-center mb-8">
-      <h2 class="font-playfair text-3xl font-bold text-[#1a1a1a] mb-3 bg-gradient-to-r from-[#1a1a1a] to-[#4a4a4a] bg-clip-text text-transparent">
-        Selamat Datang Kembali
-      </h2>
-      <p class="font-montserrat text-gray-600 text-sm">Masuk ke akun Anda untuk melanjutkan perjalanan kopi</p>
-    </div>
-
-    <div v-if="hasErrors" class="mb-6 bg-red-50/80 backdrop-blur-sm border border-red-200/50 text-red-700 p-4 rounded-2xl text-sm">
-      <ul class="list-disc pl-4">
-        <li v-for="(error, key) in errors" :key="key">{{ error }}</li>
-      </ul>
-    </div>
-
-    <button
-      @click="loginWithGoogle"
-      :disabled="form.processing"
-      class="w-full mb-6 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-montserrat font-medium py-4 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center space-x-3 group"
-    >
-      <span>{{ form.processing ? 'Memproses...' : 'Masuk dengan Google' }}</span>
-    </button>
-
-    <div class="relative mb-6">
-      <div class="absolute inset-0 flex items-center">
-        <div class="w-full border-t border-gray-200"></div>
-      </div>
-      <div class="relative flex justify-center text-sm">
-        <span class="px-4 bg-white text-gray-500 font-montserrat">atau masuk dengan email</span>
-      </div>
-    </div>
-    
-    <form @submit.prevent="submit" class="space-y-6">
-      <div class="space-y-5">
-        <div class="group">
-          <label for="email" class="font-montserrat text-xs font-semibold text-gray-700 ml-2 mb-2 block uppercase tracking-wider">Alamat Email</label>
-          <div class="relative">
-            <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-[#a07942] transition-colors duration-300">
-              <i class="far fa-envelope"></i>
-            </div>
-            <input
-              id="email"
-              v-model="form.email"
-              class="w-full border-2 border-gray-200 bg-gray-50/50 rounded-2xl py-4 pl-12 pr-4 font-montserrat text-sm focus:ring-0 focus:border-[#a07942] focus:bg-white transition-all duration-300 hover:border-gray-300"
-              type="email"
-              placeholder="nama@email.com"
-              required
-            />
-          </div>
-        </div>
-
-        <div class="group">
-          <div class="flex justify-between items-center mb-2">
-            <label for="password" class="font-montserrat text-xs font-semibold text-gray-700 ml-2 uppercase tracking-wider">Kata Sandi</label>
-            <Link :href="route('login')" class="text-xs text-[#a07942] hover:text-[#8b6835] font-montserrat font-medium hover:underline">Lupa kata sandi?</Link>
-          </div>
-          <div class="relative">
-            <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-[#a07942] transition-colors duration-300">
-              <i class="fas fa-lock"></i>
-            </div>
-            <input
-              id="password"
-              v-model="form.password"
-              class="w-full border-2 border-gray-200 bg-gray-50/50 rounded-2xl py-4 pl-12 pr-12 font-montserrat text-sm focus:outline-none focus:ring-0 focus:border-[#a07942] focus:bg-white"
-              :type="passwordFieldType"
-              placeholder="••••••••••"
-              required
-            />
-            <button 
-              type="button" 
-              @click="togglePasswordVisibility" 
-              class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-[#a07942] p-1"
+    <AuthLayout background-image-url="/images/login.jpg">
+        <div class="text-center mb-8">
+            <h2
+                class="font-playfair text-3xl font-bold text-[#1a1a1a] mb-3 bg-gradient-to-r from-[#1a1a1a] to-[#4a4a4a] bg-clip-text text-transparent"
             >
-              <i class="far transition-transform duration-300 hover:scale-110" :class="passwordIconClass"></i>
-            </button>
-          </div>
+                Selamat Datang Kembali
+            </h2>
+            <p class="font-montserrat text-gray-600 text-sm">
+                Masuk ke akun Anda untuk melanjutkan perjalanan kopi
+            </p>
         </div>
-      </div>
 
-      <button
-        type="submit"
-        :disabled="form.processing"
-        class="w-full bg-gradient-to-r from-[#1a1a1a] to-[#2d2d2d] hover:from-[#2d2d2d] hover:to-[#1a1a1a] text-white font-montserrat font-semibold py-4 rounded-2xl transition-all duration-500 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        <span>{{ form.processing ? 'Memproses...' : 'Masuk ke Akun' }}</span>
-      </button>
-    </form>
+        <div
+            v-if="hasErrors"
+            class="mb-6 bg-red-50/80 backdrop-blur-sm border border-red-200/50 text-red-700 p-4 rounded-2xl text-sm"
+        >
+            <ul class="list-disc pl-4">
+                <li v-for="(error, key) in errors" :key="key">{{ error }}</li>
+            </ul>
+        </div>
 
-    <div class="text-center font-montserrat text-sm mt-8">
-      <span class="text-gray-600">Belum memiliki akun?</span>
-      <Link :href="route('register')" class="text-[#a07942] font-semibold ml-2 hover:text-[#8b6835] hover:underline">
-        Buat akun baru
-      </Link>
-    </div>
-    
-  </AuthLayout>
+        <button
+            @click="loginWithGoogle"
+            :disabled="form.processing"
+            class="w-full mb-6 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-montserrat font-medium py-4 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center space-x-3 group"
+        >
+            <span>{{
+                form.processing ? "Memproses..." : "Masuk dengan Google"
+            }}</span>
+        </button>
+
+        <div class="relative mb-6">
+            <div class="absolute inset-0 flex items-center">
+                <div class="w-full border-t border-gray-200"></div>
+            </div>
+            <div class="relative flex justify-center text-sm">
+                <span class="px-4 bg-white text-gray-500 font-montserrat"
+                    >atau masuk dengan email</span
+                >
+            </div>
+        </div>
+
+        <form @submit.prevent="submit" class="space-y-6">
+            <div class="space-y-5">
+                <div class="group">
+                    <label
+                        for="email"
+                        class="font-montserrat text-xs font-semibold text-gray-700 ml-2 mb-2 block uppercase tracking-wider"
+                        >Alamat Email</label
+                    >
+                    <div class="relative">
+                        <div
+                            class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-[#a07942] transition-colors duration-300"
+                        >
+                            <i class="far fa-envelope"></i>
+                        </div>
+                        <input
+                            id="email"
+                            v-model="form.email"
+                            class="w-full border-2 border-gray-200 bg-gray-50/50 rounded-2xl py-4 pl-12 pr-4 font-montserrat text-sm focus:ring-0 focus:border-[#a07942] focus:bg-white transition-all duration-300 hover:border-gray-300"
+                            type="email"
+                            placeholder="nama@email.com"
+                            required
+                        />
+                    </div>
+                </div>
+
+                <div class="group">
+                    <div class="flex justify-between items-center mb-2">
+                        <label
+                            for="password"
+                            class="font-montserrat text-xs font-semibold text-gray-700 ml-2 uppercase tracking-wider"
+                            >Kata Sandi</label
+                        >
+                        <Link
+                            :href="route('login')"
+                            class="text-xs text-[#a07942] hover:text-[#8b6835] font-montserrat font-medium hover:underline"
+                            >Lupa kata sandi?</Link
+                        >
+                    </div>
+                    <div class="relative">
+                        <div
+                            class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-[#a07942] transition-colors duration-300"
+                        >
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <input
+                            id="password"
+                            v-model="form.password"
+                            class="w-full border-2 border-gray-200 bg-gray-50/50 rounded-2xl py-4 pl-12 pr-12 font-montserrat text-sm focus:outline-none focus:ring-0 focus:border-[#a07942] focus:bg-white"
+                            :type="passwordFieldType"
+                            placeholder="••••••••••"
+                            required
+                        />
+                        <button
+                            type="button"
+                            @click="togglePasswordVisibility"
+                            class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-[#a07942] p-1"
+                        >
+                            <i
+                                class="far transition-transform duration-300 hover:scale-110"
+                                :class="passwordIconClass"
+                            ></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <button
+                type="submit"
+                :disabled="form.processing"
+                class="w-full bg-gradient-to-r from-[#1a1a1a] to-[#2d2d2d] hover:from-[#2d2d2d] hover:to-[#1a1a1a] text-white font-montserrat font-semibold py-4 rounded-2xl transition-all duration-500 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+                <span>{{
+                    form.processing ? "Memproses..." : "Masuk ke Akun"
+                }}</span>
+            </button>
+        </form>
+
+        <div class="text-center font-montserrat text-sm mt-8">
+            <span class="text-gray-600">Belum memiliki akun?</span>
+            <Link
+                :href="route('register')"
+                class="text-[#a07942] font-semibold ml-2 hover:text-[#8b6835] hover:underline"
+            >
+                Buat akun baru
+            </Link>
+        </div>
+    </AuthLayout>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { Link, useForm } from '@inertiajs/vue3';
-import { route } from 'ziggy-js';
-import AuthLayout from '@/Layouts/AuthLayout.vue'; // <-- Import Layout
+import { ref, computed } from "vue";
+import { Link, useForm } from "@inertiajs/vue3";
+import { route } from "ziggy-js";
+import AuthLayout from "@/Layouts/AuthLayout.vue"; // <-- Import Layout
 
 // Menggunakan useForm dari Inertia untuk state management yang lebih mudah
 const form = useForm({
-  email: '',
-  password: '',
+    email: "",
+    password: "",
 });
 
 const props = defineProps<{
-  errors: Record<string, string>;
+    errors: Record<string, string>;
 }>();
 
 // Logika untuk menampilkan/menyembunyikan password
-const passwordFieldType = ref<'password' | 'text'>('password');
+const passwordFieldType = ref<"password" | "text">("password");
 const passwordIconClass = computed(() => {
-  return passwordFieldType.value === 'password' ? 'fa-eye' : 'fa-eye-slash';
+    return passwordFieldType.value === "password" ? "fa-eye" : "fa-eye-slash";
 });
 const togglePasswordVisibility = () => {
-  passwordFieldType.value = passwordFieldType.value === 'password' ? 'text' : 'password';
+    passwordFieldType.value =
+        passwordFieldType.value === "password" ? "text" : "password";
 };
 
 // Cek apakah ada error dari backend
@@ -127,13 +161,14 @@ const hasErrors = computed(() => Object.keys(props.errors).length > 0);
 
 // Fungsi untuk submit form
 const submit = () => {
-  form.post(route('login'), { // Ganti 'login' dengan nama route login Anda
-    onFinish: () => form.reset('password'), // Kosongkan field password setelah submit
-  });
+    form.post(route("login"), {
+        // Ganti 'login' dengan nama route login Anda
+        onFinish: () => form.reset("password"), // Kosongkan field password setelah submit
+    });
 };
 
 // Fungsi untuk login dengan Google
 const loginWithGoogle = () => {
-  window.location.href = route('auth.google'); // Redirect ke route otentikasi Google
+    window.location.href = route("auth.google"); // Redirect ke route otentikasi Google
 };
 </script>

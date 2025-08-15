@@ -1,92 +1,63 @@
 <template>
     <AppLayout title="Detail">
-        <section class="min-h-screen py-8 text-gray-800 pt-24">
+        <section class="min-h-screen py-8 pt-24">
             <div class="max-w-7xl mx-auto px-4">
-                <!-- Coffee Shop Style Breadcrumb -->
+                <!-- Classic Breadcrumb -->
                 <nav class="mb-8" aria-label="Breadcrumb">
                     <div
-                        class="flex items-center space-x-3 text-sm bg-white rounded-xl px-6 py-4 shadow-sm border border-stone-200"
+                        class="bg-lunen border border-stone-200 px-8 py-4 shadow-sm"
                     >
-                        <Link
-                            href="/"
-                            class="flex items-center hover:text-amber-800 transition-colors duration-200 font-medium text-stone-700"
+                        <div
+                            class="flex items-center space-x-3 text-sm text-stone-600"
                         >
-                            <svg
-                                class="w-4 h-4 mr-2"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
+                            <Link
+                                href="/"
+                                class="hover:text-coklat transition-colors duration-200 flex items-center"
                             >
-                                <path
-                                    d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"
-                                />
-                            </svg>
-                            Beranda
-                        </Link>
-                        <svg
-                            class="w-4 h-4 text-stone-400"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                        >
-                            <path
-                                fill-rule="evenodd"
-                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                clip-rule="evenodd"
-                            />
-                        </svg>
-                        <Link
-                            :href="route('menu.index')"
-                            class="hover:text-amber-800 transition-colors duration-200 font-medium text-stone-700"
-                            >Menu</Link
-                        >
-                        <svg
-                            class="w-4 h-4 text-stone-400"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                        >
-                            <path
-                                fill-rule="evenodd"
-                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                clip-rule="evenodd"
-                            />
-                        </svg>
-                        <Link
-                            :href="
-                                route(
-                                    'menu.category',
-                                    menu.kategori.kode_kategori
-                                )
-                            "
-                            class="hover:text-amber-800 transition-colors duration-200 font-medium text-stone-700"
-                        >
-                            {{ menu.kategori.nama }}
-                        </Link>
-                        <svg
-                            class="w-4 h-4 text-stone-400"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                        >
-                            <path
-                                fill-rule="evenodd"
-                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                clip-rule="evenodd"
-                            />
-                        </svg>
-                        <span class="text-amber-900 font-semibold">{{
-                            menu.nama
-                        }}</span>
+                                <svg
+                                    class="w-4 h-4 mr-2"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                >
+                                    <path
+                                        d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"
+                                    />
+                                </svg>
+                                Home
+                            </Link>
+                            <span class="text-stone-400">/</span>
+                            <Link
+                                :href="route('menu.index')"
+                                class="hover:text-coklat transition-colors duration-200"
+                            >
+                                Menu
+                            </Link>
+                            <span class="text-stone-400">/</span>
+                            <Link
+                                :href="
+                                    route(
+                                        'menu.category',
+                                        menu.kategori.kode_kategori
+                                    )
+                                "
+                                class="hover:text-coklat transition-colors duration-200"
+                            >
+                                {{ menu.kategori.nama }}
+                            </Link>
+                            <span class="text-stone-400">/</span>
+                            <span class="text-coklat font-medium">{{
+                                menu.nama
+                            }}</span>
+                        </div>
                     </div>
                 </nav>
 
-                <!-- Coffee Shop Product Detail Grid -->
-                <div
-                    class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start mb-16"
-                >
-                    <!-- Coffee Shop Style Product Image -->
+                <!-- Classic Product Layout -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
+                    <!-- Product Image -->
                     <div class="space-y-6">
-                        <div
-                            class="relative bg-white rounded-2xl shadow-lg overflow-hidden border border-stone-200 transform hover:scale-[1.02] transition-transform duration-500 sticky top-8"
-                        >
-                            <div class="relative group">
+                        <div class="bg-lunen border border-stone-200 shadow-sm">
+                            <div class="relative">
                                 <img
                                     :src="
                                         menu.path_img
@@ -94,104 +65,133 @@
                                             : '/images/coffe.png'
                                     "
                                     :alt="menu.nama"
-                                    class="w-full h-[500px] object-cover group-hover:scale-105 transition-transform duration-700 relative z-10"
+                                    class="w-full h-[600px] object-cover"
                                 />
 
-                                <!-- Coffee Category Badge -->
-                                <div class="absolute top-6 left-6 z-20">
-                                    <span
-                                        class="bg-coklat text-amber-50 px-4 py-2 rounded-full text-sm font-semibold shadow-md flex items-center space-x-2"
+                                <!-- Category Badge -->
+                                <div class="absolute top-6 left-6">
+                                    <div
+                                        class="bg-coklat border border-stone-300 px-4 py-2 shadow-sm"
                                     >
-                                        <svg
-                                            class="w-4 h-4"
-                                            fill="currentColor"
-                                            viewBox="0 0 20 20"
+                                        <span
+                                            class="text-stone-700 font-medium text-sm flex items-center text-white"
                                         >
-                                            <path
-                                                d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"
-                                            />
-                                        </svg>
-                                        <span>{{ menu.kategori.nama }}</span>
-                                    </span>
-                                </div>
-
-                                <!-- Coffee Steam Effect -->
-                                <div class="absolute bottom-4 right-4 z-20">
-                                    <div class="flex space-x-1">
-                                        <div
-                                            class="w-1 h-8 bg-stone-300 rounded-full opacity-60 animate-pulse"
-                                            style="animation-delay: 0s"
-                                        ></div>
-                                        <div
-                                            class="w-1 h-6 bg-stone-400 rounded-full opacity-70 animate-pulse"
-                                            style="animation-delay: 0.2s"
-                                        ></div>
-                                        <div
-                                            class="w-1 h-10 bg-stone-300 rounded-full opacity-60 animate-pulse"
-                                            style="animation-delay: 0.4s"
-                                        ></div>
+                                            <svg
+                                                class="w-4 h-4 mr-2"
+                                                fill="#d6d3d1"
+                                                viewBox="0 0 20 20"
+                                            >
+                                                <path
+                                                    d="M4 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H4zM2 16a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H3a1 1 0 0 1-1-1z"
+                                                />
+                                                <path
+                                                    d="M15 6a1 1 0 0 1 1-1h1a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-1a1 1 0 0 1-1-1V6z"
+                                                />
+                                            </svg>
+                                            {{ menu.kategori.nama }}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Coffee Shop Style Product Info -->
-                    <div
-                        class="bg-white rounded-2xl p-6 px-6 shadow-lg border border-stone-200 h-full relative overflow-hidden"
-                    >
-                        <div class="space-y-8 relative">
-                            <!-- Coffee Shop Title & Price -->
-                            <div
-                                class="space-y-4 border-b border-stone-100 pb-6"
-                            >
+                    <!-- Product Information -->
+                    <div class="bg-lunen border border-stone-200 shadow-sm">
+                        <div class="p-8 space-y-8">
+                            <!-- Title & Price -->
+                            <div class="border-b border-stone-200 pb-6">
                                 <h1
-                                    class="text-4xl font-bold text-coklat mb-2 leading-tight"
+                                    class="text-4xl font-serif text-coklat mb-4 leading-tight"
                                 >
                                     {{ menu.nama }}
                                 </h1>
-                                <div class="flex items-center justify-between">
-                                    <div
-                                        class="text-3xl font-bold text-stone-800"
-                                    >
-                                        Rp {{ formatPrice(menu.harga) }}
-                                    </div>
+                                <div class="text-3xl font-bold text-coklat">
+                                    Rp {{ formatPrice(menu.harga) }}
                                 </div>
                             </div>
 
-                            <!-- Coffee Description with Cup Icon -->
-                            <div
-                                class="bg-amber-50 rounded-xl p-4 border border-amber-200 relative"
-                            >
+                            <!-- Description -->
+                            <div class="py-6 border-b border-stone-200">
+                                <h3 class="text-lg font-serif text-coklat mb-4">
+                                    Description
+                                </h3>
                                 <p
-                                    class="text-stone-700 leading-relaxed text-base"
+                                    class="text-stone-600 leading-relaxed text-base"
                                 >
                                     {{
                                         menu.deskripsi ||
-                                        "Minuman lezat yang dibuat dengan penuh keahlian oleh barista kami. Sempurna untuk dinikmati kapan saja."
+                                        "A carefully crafted beverage made with expertise by our skilled baristas. Perfect to enjoy at any time of day."
                                     }}
                                 </p>
                             </div>
 
-                            <!-- Coffee Shop Purchase Section -->
-                            <div
-                                v-if="menu.jumlah > 0"
-                                class="space-y-4 bg-stone-50 rounded-xl p-6 border border-stone-200"
-                            >
-                                <!-- Total Price Display -->
-                                <div
-                                    class="bg-white rounded-lg p-4 shadow-sm border border-stone-200"
-                                >
-                                    <div
-                                        class="flex items-center justify-between"
-                                    >
-                                        <div>
-                                            <span
-                                                class="text-sm text-stone-600 font-medium block"
-                                                >Total Harga</span
+                            <!-- Purchase Section -->
+                            <div v-if="menu.jumlah > 0" class="space-y-6">
+                                <!-- Quantity & Total -->
+                                <div class="grid grid-cols-2 gap-6">
+                                    <div>
+                                        <label
+                                            class="block text-sm font-medium text-stone-700 mb-3"
+                                            >Quantity</label
+                                        >
+                                        <div
+                                            class="flex items-center border w-min border-coklat"
+                                        >
+                                            <button
+                                                @click="decrement"
+                                                class="w-12 h-12 flex items-center justify-center text-stone-600 hover:bg-coklat 100 border-r border-coklat transition-colors duration-200"
                                             >
+                                                <svg
+                                                    class="w-4 h-4"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M20 12H4"
+                                                    />
+                                                </svg>
+                                            </button>
+                                            <input
+                                                type="number"
+                                                v-model="quantity"
+                                                min="1"
+                                                :max="menu.jumlah"
+                                                class="w-20 h-12 text-center border-0 focus:ring-0 text-coklat font-medium"
+                                            />
+                                            <button
+                                                @click="increment"
+                                                class="w-12 h-12 flex items-center justify-center text-stone-600 hover:bg-coklat 100 border-l border-coklat transition-colors duration-200"
+                                            >
+                                                <svg
+                                                    class="w-4 h-4"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M12 4v16m8-8H4"
+                                                    />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label
+                                            class="block text-sm font-medium text-stone-700 mb-3"
+                                            >Total Price</label
+                                        >
+                                        <div class="h-12 flex items-center">
                                             <span
-                                                class="text-2xl font-bold text-amber-900"
+                                                class="text-2xl font-bold text-coklat"
                                             >
                                                 Rp
                                                 {{
@@ -201,39 +201,39 @@
                                                 }}
                                             </span>
                                         </div>
-                                        <div
-                                            class="flex items-center bg-white rounded-lg shadow-sm border border-stone-300 overflow-hidden"
-                                        >
-                                            <button
-                                                @click="decrement"
-                                                class="px-4 py-3 text-stone-600 hover:bg-amber-800 hover:text-white transition-all duration-200 font-bold text-lg border-r border-stone-300"
-                                            >
-                                                −
-                                            </button>
-                                            <input
-                                                type="number"
-                                                v-model="quantity"
-                                                min="1"
-                                                :max="menu.jumlah"
-                                                class="w-16 text-center border-0 focus:ring-0 text-amber-900 font-bold text-lg py-3 bg-stone-50"
-                                            />
-                                            <button
-                                                @click="increment"
-                                                class="px-4 py-3 text-stone-600 hover:bg-amber-800 hover:text-white transition-all duration-200 font-bold text-lg border-l border-stone-300"
-                                            >
-                                                +
-                                            </button>
-                                        </div>
                                     </div>
                                 </div>
 
+                                <!-- Add to Cart Button -->
                                 <button
                                     @click="handleAddToCart"
                                     :disabled="loading"
-                                    class="w-full hovertext-white py-4 px-8 rounded-lg font-semibold text-lg transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center space-x-3 group bg-coklat text-slate-50"
+                                    class="w-full bg-coklat text-white font-medium py-4 px-8 hover:bg-stone-900 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-stone-500 focus:ring-offset-2 disabled:bg-stone-400 disabled:cursor-not-allowed flex items-center justify-center space-x-3"
                                 >
                                     <svg
-                                        class="w-6 h-6 group-hover:animate-bounce"
+                                        v-if="loading"
+                                        class="animate-spin h-5 w-5 text-white"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <circle
+                                            class="opacity-25"
+                                            cx="12"
+                                            cy="12"
+                                            r="10"
+                                            stroke="currentColor"
+                                            stroke-width="4"
+                                        ></circle>
+                                        <path
+                                            class="opacity-75"
+                                            fill="currentColor"
+                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                        ></path>
+                                    </svg>
+                                    <svg
+                                        v-else
+                                        class="w-5 h-5"
                                         fill="currentColor"
                                         viewBox="0 0 20 20"
                                     >
@@ -241,45 +241,19 @@
                                             d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"
                                         />
                                     </svg>
-                                    <span
-                                        v-if="loading"
-                                        class="flex items-center"
-                                    >
-                                        <svg
-                                            class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <circle
-                                                class="opacity-25"
-                                                cx="12"
-                                                cy="12"
-                                                r="10"
-                                                stroke="currentColor"
-                                                stroke-width="4"
-                                            ></circle>
-                                            <path
-                                                class="opacity-75"
-                                                fill="currentColor"
-                                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                            ></path>
-                                        </svg>
-                                        Menambahkan...
-                                    </span>
-                                    <span v-else>TAMBAHKAN KE KERANJANG</span>
+                                    <span>{{
+                                        loading ? "Adding..." : "Add to Cart"
+                                    }}</span>
                                 </button>
                             </div>
-                            <div
-                                v-else
-                                class="bg-stone-100 rounded-xl p-6 border border-stone-300"
-                            >
-                                <button
-                                    disabled
-                                    class="w-full bg-stone-400 text-stone-600 py-4 px-8 rounded-lg font-semibold text-lg cursor-not-allowed flex items-center justify-center space-x-2 border-2 border-stone-500"
+
+                            <!-- Out of Stock -->
+                            <div v-else class="space-y-6">
+                                <div
+                                    class="bg-stone-100 border border-stone-300 p-6 text-center"
                                 >
                                     <svg
-                                        class="w-6 h-6"
+                                        class="w-12 h-12 mx-auto text-stone-400 mb-4"
                                         fill="currentColor"
                                         viewBox="0 0 20 20"
                                     >
@@ -289,17 +263,50 @@
                                             clip-rule="evenodd"
                                         />
                                     </svg>
-                                    <span>SAAT INI TIDAK TERSEDIA</span>
-                                </button>
+                                    <h3
+                                        class="text-lg font-medium text-stone-700 mb-2"
+                                    >
+                                        Currently Unavailable
+                                    </h3>
+                                    <p class="text-stone-500">
+                                        This item is temporarily out of stock
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Stock Status -->
+                            <div class="pt-4 border-t border-stone-200">
+                                <div
+                                    class="flex items-center text-sm text-stone-600"
+                                >
+                                    <svg
+                                        class="w-4 h-4 mr-2"
+                                        fill="currentColor"
+                                        viewBox="0 0 20 20"
+                                    >
+                                        <path
+                                            fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                            clip-rule="evenodd"
+                                        />
+                                    </svg>
+                                    <span v-if="menu.jumlah > 0"
+                                        >{{ menu.jumlah }} items available in
+                                        stock</span
+                                    >
+                                    <span v-else>Out of stock</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Coffee Shop Related Products -->
-                <div v-if="relatedMenus.length > 0" class="space-y-10">
-                    <div class="text-center relative">
-                        <!-- Coffee Bean Decorative Line -->
+                <!-- Related Products -->
+                <div v-if="relatedMenus.length > 0" class="space-y-12">
+                    <div class="text-center mb-8 space-y-3">
+                        <h2 class="text-5xl font-serif italic text-lunen">
+                            Menu Lainnya
+                        </h2>
                         <div class="flex justify-center items-center">
                             <div class="h-px w-16 bg-[#e6dbd1]"></div>
                             <span class="mx-4">
@@ -325,69 +332,113 @@
                             </span>
                             <div class="h-px w-16 bg-[#e6dbd1]"></div>
                         </div>
-                        <h2 class="text-4xl italic text-slate-50 my-3">
-                            Menu Pilihan Lainnya
-                        </h2>
-                        <p class="text-slate-100 text-lg max-w-2xl mx-auto">
-                            Eksplorasi rasa istimewa lainnya dari koleksi kopi
-                            premium kami
-                        </p>
                     </div>
 
                     <div
                         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
                     >
                         <CardMenu
-                            v-for="menu in relatedMenus"
-                            :key="menu.kode_menu"
-                            :menu="menu"
+                            v-for="data in relatedMenus"
+                            :key="data.kode_menu"
+                            :menu="data"
                         />
                     </div>
                 </div>
             </div>
 
-            <!-- Coffee Shop Toast Notification -->
             <div
                 v-if="toast.show"
-                :class="
-                    toast.type === 'success'
-                        ? 'bg-emerald-800 border-emerald-600'
-                        : 'bg-red-800 border-red-600'
-                "
-                class="fixed top-6 right-6 text-white px-6 py-4 rounded-xl shadow-lg z-50 transition-all duration-500 transform border-2"
-                :style="{
-                    transform: toast.show
-                        ? 'translateX(0) translateY(0)'
-                        : 'translateX(120%) translateY(-20px)',
-                    opacity: toast.show ? 1 : 0,
+                class="fixed top-8 right-8 z-50 transform transition-all duration-300 ease-out"
+                :class="{
+                    'translate-x-0 opacity-100': toast.show,
+                    'translate-x-full opacity-0': !toast.show,
                 }"
             >
-                <div class="flex items-center space-x-3">
-                    <svg
-                        v-if="toast.type === 'success'"
-                        class="w-5 h-5"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                    >
-                        <path
-                            fill-rule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                            clip-rule="evenodd"
-                        />
-                    </svg>
-                    <svg
-                        v-else
-                        class="w-5 h-5"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                    >
-                        <path
-                            fill-rule="evenodd"
-                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                            clip-rule="evenodd"
-                        />
-                    </svg>
-                    <span class="font-semibold">{{ toast.message }}</span>
+                <div
+                    class="bg-white border shadow-lg p-6 max-w-sm"
+                    :class="{
+                        'border-green-200': toast.type === 'success',
+                        'border-red-200': toast.type === 'error',
+                    }"
+                >
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 mr-4">
+                            <div
+                                class="w-8 h-8 rounded-full flex items-center justify-center"
+                                :class="{
+                                    'bg-green-100': toast.type === 'success',
+                                    'bg-red-100': toast.type === 'error',
+                                }"
+                            >
+                                <svg
+                                    v-if="toast.type === 'success'"
+                                    class="w-5 h-5 text-green-600"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                >
+                                    <path
+                                        fill-rule="evenodd"
+                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                        clip-rule="evenodd"
+                                    />
+                                </svg>
+                                <svg
+                                    v-else
+                                    class="w-5 h-5 text-red-600"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                >
+                                    <path
+                                        fill-rule="evenodd"
+                                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                        clip-rule="evenodd"
+                                    />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <h4
+                                class="font-medium mb-1"
+                                :class="{
+                                    'text-green-900': toast.type === 'success',
+                                    'text-red-900': toast.type === 'error',
+                                }"
+                            >
+                                {{
+                                    toast.type === "success"
+                                        ? "Success"
+                                        : "Error"
+                                }}
+                            </h4>
+                            <p
+                                class="text-sm"
+                                :class="{
+                                    'text-green-700': toast.type === 'success',
+                                    'text-red-700': toast.type === 'error',
+                                }"
+                            >
+                                {{ toast.message }}
+                            </p>
+                        </div>
+                        <button
+                            @click="toast.show = false"
+                            class="ml-4 text-stone-400 hover:text-stone-600 transition-colors duration-200"
+                        >
+                            <svg
+                                class="w-4 h-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"
+                                />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -418,7 +469,7 @@ const toast = reactive({
     type: "success" as "success" | "error",
 });
 
-// --- METHODS ---
+// Methods
 const formatPrice = (value: number) => {
     return new Intl.NumberFormat("id-ID").format(value);
 };
@@ -429,7 +480,7 @@ const showToast = (message: string, type: "success" | "error" = "success") => {
     toast.show = true;
     setTimeout(() => {
         toast.show = false;
-    }, 3000);
+    }, 4000);
 };
 
 const increment = () => {
@@ -451,9 +502,9 @@ const handleAddToCart = async () => {
     }
     const success = await addToCart(props.menu.kode_menu, quantity.value);
     if (success) {
-        showToast(`"${props.menu.nama}" ditambahkan ke keranjang!`);
+        showToast(`"${props.menu.nama}" added to cart successfully!`);
     } else {
-        showToast(error.value || "Gagal menambahkan item.", "error");
+        showToast(error.value || "Failed to add item to cart.", "error");
     }
 };
 
@@ -464,9 +515,9 @@ const handleRelatedAddToCart = async (kodeMenu: string) => {
     }
     const success = await addToCart(kodeMenu, 1);
     if (success) {
-        showToast("Item ditambahkan ke keranjang!");
+        showToast("Item added to cart successfully!");
     } else {
-        showToast(error.value || "Gagal menambahkan item.", "error");
+        showToast(error.value || "Failed to add item to cart.", "error");
     }
 };
 </script>

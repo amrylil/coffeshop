@@ -72,7 +72,7 @@ onUnmounted(() => {
                 >Menu</Link
             >
             <Link
-                :href="route('reservasi.index')"
+                :href="route('reservasi.meja')"
                 :class="{
                     'bg-[#422424] py-1 px-3 rounded text-white':
                         $page.url.startsWith('/reservasi'),

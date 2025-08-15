@@ -1,3 +1,5 @@
+import { InertiaForm } from "@inertiajs/vue3";
+
 export type TableStatus = "kosong" | "dipesan" | "perbaikan";
 
 export interface Meja {
@@ -7,10 +9,8 @@ export interface Meja {
 
 export interface ReservationForm {
     [key: string]: any;
-    nomor_meja: string | null;
-    nama_pelanggan: string;
-    no_telepon: string;
+    nomor_meja: string | number | null;
     tanggal_reservasi: string;
     jam_reservasi: string;
-    catatan: string | null;
+    catatan: string;
 }

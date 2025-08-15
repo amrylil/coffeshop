@@ -3,7 +3,7 @@
         <div
             v-if="isOpen"
             @click="closeSidebar"
-            class="fixed inset-0 bg-gradient-to-br from-amber-900/40 to-stone-900/60 backdrop-blur-sm z-50 transition-opacity"
+            class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 transition-opacity"
         ></div>
     </Transition>
 
@@ -11,26 +11,24 @@
         <aside
             v-if="isOpen"
             ref="sidebarPanel"
-            class="fixed top-0 right-0 h-full w-80 bg-gradient-to-br from-amber-50 via-orange-50 to-stone-50 shadow-2xl z-50 flex flex-col border-l-2 border-amber-200/50"
+            class="fixed top-0 right-0 h-full w-80 shadow-2xl z-50 flex flex-col bg-lunen"
         >
-            <!-- Coffee-themed pattern overlay -->
-            <div class="absolute inset-0 opacity-5 pointer-events-none">
-                <div class="w-full h-full bg-repeat"></div>
+            <!-- Wood texture pattern overlay -->
+            <div class="absolute inset-0 opacity-8 pointer-events-none">
+                <div class="w-full h-full"></div>
             </div>
 
             <header
-                class="relative flex items-center justify-between p-6 border-b border-amber-200/30 bg-gradient-to-r from-amber-100/80 to-orange-100/80 backdrop-blur-sm"
+                class="relative flex items-center justify-between p-6 bg-coklat"
             >
                 <div class="flex items-center gap-3">
                     <div
-                        class="w-8 h-8 bg-coklat rounded-full flex items-center justify-center shadow-lg"
+                        class="w-8 h-8 rounded-full flex items-center justify-center bg-lunen"
                     >
-                        <i class="fas fa-coffee text-amber-100 text-sm"></i>
+                        <i class="fas fa-coffee text-coklat text-sm"></i>
                     </div>
-                    <h3
-                        class="text-xl font-bold font-playfair bg-gradient-to-r from-amber-800 to-amber-900 bg-clip-text text-transparent"
-                    >
-                        Profil & Pengaturan
+                    <h3 class="text-xl font-bold font-playfair text-lunen">
+                        Profil Saya
                     </h3>
                 </div>
             </header>
@@ -38,7 +36,8 @@
             <div class="flex-grow p-6 overflow-y-auto">
                 <!-- User Profile Section -->
                 <div
-                    class="bg-white/70 backdrop-blur-sm rounded-2xl p-5 mb-6 shadow-lg border border-amber-200/50"
+                    class="p-5 mb-6 shadow-md border-2"
+                    style="background-color: #faf0e6; border-color: #8b4513"
                 >
                     <div class="flex items-center gap-4">
                         <div class="relative">
@@ -46,35 +45,48 @@
                                 v-if="user.profile_photo"
                                 :src="user.profile_photo"
                                 :alt="user.name"
-                                class="w-16 h-16 rounded-full object-cover border-3 border-amber-300 shadow-lg"
+                                class="w-16 h-16 rounded-full object-cover border-3 shadow-md"
+                                style="border-color: #654321"
                             />
                             <div
                                 v-else
-                                class="w-16 h-16 rounded-full bg-gradient-to-br from-amber-600 to-amber-800 flex items-center justify-center text-white text-xl font-bold shadow-lg border-3 border-amber-300"
+                                class="w-16 h-16 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-md border-3"
+                                style="
+                                    background-color: #654321;
+                                    border-color: #5d2f02;
+                                "
                             >
                                 {{ userInitials }}
                             </div>
                             <!-- Coffee bean accent -->
                             <div
-                                class="absolute -bottom-1 -right-1 w-6 h-6 bg-amber-600 rounded-full flex items-center justify-center shadow-md"
+                                class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center shadow-md border"
+                                style="
+                                    background-color: #8b4513;
+                                    border-color: #654321;
+                                "
                             >
-                                <i class="fas fa-coffee text-white text-xs"></i>
+                                <i class="fas fa-coffee text-lunen text-xs"></i>
                             </div>
                         </div>
                         <div class="font-montserrat flex-1 min-w-0">
                             <p
-                                class="font-bold text-amber-900 truncate text-lg"
+                                class="font-bold truncate text-lg"
+                                style="color: #654321"
                             >
                                 {{ user.name }}
                             </p>
-                            <p class="text-sm text-amber-700/80 truncate">
+                            <p class="text-sm truncate" style="color: #8b4513">
                                 {{ user.email }}
                             </p>
                             <div class="flex items-center gap-1 mt-1">
                                 <i
-                                    class="fas fa-star text-amber-400 text-xs"
+                                    class="fas fa-star text-xs"
+                                    style="color: #daa520"
                                 ></i>
-                                <span class="text-xs text-amber-600 font-medium"
+                                <span
+                                    class="text-xs font-medium"
+                                    style="color: #654321"
                                     >Coffee Lover</span
                                 >
                             </div>
@@ -86,86 +98,72 @@
                 <nav class="space-y-3 font-montserrat">
                     <Link
                         :href="route('profile.edit')"
-                        class="group flex items-center gap-4 px-4 py-4 text-sm text-amber-800 rounded-2xl bg-white/60 hover:bg-white/90 transition-all duration-200 shadow-md hover:shadow-lg border border-amber-200/50 hover:border-amber-300"
+                        class="group flex items-center gap-4 px-4 py-4 text-sm transition-all duration-200 shadow-md hover:shadow-lg border-2 border-coklat"
                     >
                         <div
-                            class="w-10 h-10 bg-coklat rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-200"
+                            class="w-10 h-10 flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-200 border-coklat border"
                         >
-                            <i class="fas fa-user-edit text-white text-sm"></i>
+                            <i class="fas fa-user-edit text-coklat text-sm"></i>
                         </div>
                         <div class="flex-1">
                             <span
-                                class="font-semibold group-hover:text-amber-900 transition-colors"
+                                class="font-semibold group-hover:opacity-80 transition-"
                                 >Edit Profil</span
                             >
-                            <p class="text-xs text-amber-600/70 mt-0.5">
+                            <p class="text-xs mt-0.5" style="color: #8b4513">
                                 Kelola informasi pribadi
                             </p>
                         </div>
                         <i
-                            class="fas fa-chevron-right text-amber-400 group-hover:text-amber-600 group-hover:translate-x-1 transition-all duration-200"
+                            class="fas fa-chevron-right group-hover:translate-x-1 transition-all duration-200"
+                            style="color: #8b4513"
                         ></i>
                     </Link>
 
                     <Link
-                        href="#"
-                        class="group flex items-center gap-4 px-4 py-4 text-sm text-amber-800 rounded-2xl bg-white/60 hover:bg-white/90 transition-all duration-200 shadow-md hover:shadow-lg border border-amber-200/50 hover:border-amber-300"
+                        :href="route('transaksi.index')"
+                        class="group flex items-center gap-4 px-4 py-4 text-sm transition-all duration-200 shadow-md hover:shadow-lg border-2 border-coklat"
                     >
                         <div
-                            class="w-10 h-10 bg-coklat rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-200"
+                            class="w-10 h-10 flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-200 border-coklat border"
                         >
-                            <i class="fas fa-receipt text-white text-sm"></i>
+                            <i class="fas fa-receipt text-coklat text-sm"></i>
                         </div>
                         <div class="flex-1">
                             <span
-                                class="font-semibold group-hover:text-amber-900 transition-colors"
+                                class="font-semibold group-hover:opacity-80 transition-"
                                 >Riwayat Pesanan</span
                             >
-                            <p class="text-xs text-amber-600/70 mt-0.5">
-                                Lihat pesanan kopi Anda
+                            <p class="text-xs mt-0.5" style="color: #8b4513">
+                                Lihat riwayat pesanan anda
                             </p>
                         </div>
                         <i
-                            class="fas fa-chevron-right text-amber-400 group-hover:text-amber-600 group-hover:translate-x-1 transition-all duration-200"
-                        ></i>
-                    </Link>
-
-                    <Link
-                        href="#"
-                        class="group flex items-center gap-4 px-4 py-4 text-sm text-amber-800 rounded-2xl bg-white/60 hover:bg-white/90 transition-all duration-200 shadow-md hover:shadow-lg border border-amber-200/50 hover:border-amber-300"
-                    >
-                        <div
-                            class="w-10 h-10 bg-coklat rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-200"
-                        >
-                            <i class="fas fa-cog text-white text-sm"></i>
-                        </div>
-                        <div class="flex-1">
-                            <span
-                                class="font-semibold group-hover:text-amber-900 transition-colors"
-                                >Pengaturan Akun</span
-                            >
-                            <p class="text-xs text-amber-600/70 mt-0.5">
-                                Preferensi & keamanan
-                            </p>
-                        </div>
-                        <i
-                            class="fas fa-chevron-right text-amber-400 group-hover:text-amber-600 group-hover:translate-x-1 transition-all duration-200"
+                            class="fas fa-chevron-right group-hover:translate-x-1 transition-all duration-200"
+                            style="color: #8b4513"
                         ></i>
                     </Link>
                 </nav>
 
                 <!-- Coffee Quote -->
                 <div
-                    class="mt-8 p-4 bg-gradient-to-r from-amber-100/80 to-orange-100/80 rounded-2xl border border-amber-200/50"
+                    class="mt-8 p-4 border-2 shadow-inner"
+                    style="background-color: #f5deb3"
                 >
                     <div class="flex items-center gap-2 mb-2">
-                        <i class="fas fa-quote-left text-amber-600 text-xs"></i>
-                        <span class="text-xs font-semibold text-amber-800"
+                        <i
+                            class="fas fa-quote-left text-xs"
+                            style="color: #654321"
+                        ></i>
+                        <span
+                            class="text-xs font-semibold"
+                            style="color: #654321"
                             >Coffee Quote</span
                         >
                     </div>
                     <p
-                        class="text-xs text-amber-700 italic font-medium leading-relaxed"
+                        class="text-xs italic font-medium leading-relaxed"
+                        style="color: #8b4513"
                     >
                         "Life is too short for bad coffee. Enjoy every sip,
                         every moment."
@@ -173,19 +171,21 @@
                 </div>
             </div>
 
-            <footer
-                class="p-6 border-t border-amber-200/30 bg-gradient-to-r from-amber-50/80 to-orange-50/80 backdrop-blur-sm"
-            >
+            <footer class="p-6 border-t-2 bg-coklat">
                 <Link
                     as="button"
                     method="post"
                     :href="route('logout')"
-                    class="w-full flex items-center justify-center gap-3 px-4 py-4 text-sm font-bold text-slate-50 bg-coklat rounded-2xl transition-all duration-200 shadow-lg hover:shadow-xl border border-red-300/50 group"
+                    class="w-full flex items-center justify-center gap-3 px-4 py-4 text-sm font-bold text-lunen transition-all duration-200 shadow-lg hover:shadow-xl border-2 group"
                 >
                     <div
-                        class="w-8 h-8 bg-slate-50 rounded-full flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-200"
+                        class="w-8 h-8 rounded-full flex items-center justify-center shadow-md group-hover:scale-105 transition-transform duration-200 border"
+                        style="background-color: #f5f5dc; border-color: #d2b48c"
                     >
-                        <i class="fas fa-sign-out-alt text-coklat text-xs"></i>
+                        <i
+                            class="fas fa-sign-out-alt text-xs"
+                            style="color: #654321"
+                        ></i>
                     </div>
                     <span class="transition-colors">Logout</span>
                 </Link>
@@ -268,20 +268,22 @@ onUnmounted(() => {
 
 /* Custom scrollbar */
 .overflow-y-auto::-webkit-scrollbar {
-    width: 6px;
+    width: 8px;
 }
 
 .overflow-y-auto::-webkit-scrollbar-track {
-    background: rgba(245, 158, 11, 0.1);
-    border-radius: 3px;
+    background: #fef3c7;
+    border-radius: 4px;
+    border: 1px solid #d97706;
 }
 
 .overflow-y-auto::-webkit-scrollbar-thumb {
-    background: rgba(245, 158, 11, 0.3);
-    border-radius: 3px;
+    background: #d97706;
+    border-radius: 4px;
+    border: 1px solid #92400e;
 }
 
 .overflow-y-auto::-webkit-scrollbar-thumb:hover {
-    background: rgba(245, 158, 11, 0.5);
+    background: #92400e;
 }
 </style>

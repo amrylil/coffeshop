@@ -1,6 +1,6 @@
 <template>
     <div class="mt-8 relative">
-        <!-- Header dengan subtle background -->
+        <!-- Card container -->
         <div
             class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden"
         >
@@ -12,7 +12,7 @@
                     Detail Reservasi
                 </h3>
                 <p class="text-gray-600 mt-1 text-sm">
-                    Lengkapi informasi reservasi Anda
+                    Lengkapi waktu dan detail reservasi Anda.
                 </p>
             </div>
 
@@ -31,7 +31,9 @@
                             <input
                                 type="text"
                                 name="nomor_meja"
-                                :value="form.nomor_meja"
+                                :value="
+                                    form.nomor_meja || 'Pilih meja dari denah'
+                                "
                                 class="w-full bg-gradient-to-r from-gray-50 to-slate-50 rounded-xl border-2 border-gray-200 px-6 py-4 text-lg font-medium text-gray-700 shadow-sm transition-all duration-200"
                                 readonly
                             />
@@ -55,83 +57,11 @@
                         </div>
                     </div>
 
-                    <!-- Input Nama Pelanggan -->
-                    <div class="group">
-                        <label
-                            for="nama_pelanggan"
-                            class="block text-sm font-semibold text-gray-800 mb-3"
-                        >
-                            Nama Pemesan
-                        </label>
-                        <div class="relative">
-                            <input
-                                type="text"
-                                v-model="form.nama_pelanggan"
-                                required
-                                class="w-full rounded-xl border-2 border-gray-200 px-6 py-4 text-lg placeholder-gray-400 transition-all duration-200 focus:border-[#6f4e37] focus:ring-4 focus:ring-[#6f4e37]/10 focus:outline-none shadow-sm hover:border-gray-300"
-                                placeholder="Masukkan nama lengkap"
-                            />
-                            <div
-                                class="absolute right-4 top-1/2 transform -translate-y-1/2"
-                            >
-                                <svg
-                                    class="w-5 h-5 text-gray-300"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                                    ></path>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Input No Telepon -->
-                    <div class="group">
-                        <label
-                            for="no_telepon"
-                            class="block text-sm font-semibold text-gray-800 mb-3"
-                        >
-                            Nomor Telepon
-                        </label>
-                        <div class="relative">
-                            <input
-                                type="tel"
-                                v-model="form.no_telepon"
-                                required
-                                class="w-full rounded-xl border-2 border-gray-200 px-6 py-4 text-lg placeholder-gray-400 transition-all duration-200 focus:border-[#6f4e37] focus:ring-4 focus:ring-[#6f4e37]/10 focus:outline-none shadow-sm hover:border-gray-300"
-                                placeholder="08xxxxxxxxxx"
-                            />
-                            <div
-                                class="absolute right-4 top-1/2 transform -translate-y-1/2"
-                            >
-                                <svg
-                                    class="w-5 h-5 text-gray-300"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                                    ></path>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Input Tanggal dan Jam -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="group">
                             <label
-                                for="tanggal"
+                                for="tanggal_reservasi"
                                 class="block text-sm font-semibold text-gray-800 mb-3"
                             >
                                 Tanggal Reservasi
@@ -139,7 +69,7 @@
                             <div class="relative">
                                 <input
                                     type="date"
-                                    v-model="form.tanggal"
+                                    v-model="form.tanggal_reservasi"
                                     required
                                     class="w-full rounded-xl border-2 border-gray-200 px-6 py-4 text-lg transition-all duration-200 focus:border-[#6f4e37] focus:ring-4 focus:ring-[#6f4e37]/10 focus:outline-none shadow-sm hover:border-gray-300"
                                 />
@@ -148,7 +78,7 @@
 
                         <div class="group">
                             <label
-                                for="jam"
+                                for="jam_reservasi"
                                 class="block text-sm font-semibold text-gray-800 mb-3"
                             >
                                 Jam Reservasi
@@ -156,7 +86,7 @@
                             <div class="relative">
                                 <input
                                     type="time"
-                                    v-model="form.jam"
+                                    v-model="form.jam_reservasi"
                                     required
                                     class="w-full rounded-xl border-2 border-gray-200 px-6 py-4 text-lg transition-all duration-200 focus:border-[#6f4e37] focus:ring-4 focus:ring-[#6f4e37]/10 focus:outline-none shadow-sm hover:border-gray-300"
                                 />
@@ -180,7 +110,7 @@
                                 v-model="form.catatan"
                                 rows="4"
                                 class="w-full rounded-xl border-2 border-gray-200 px-6 py-4 text-lg placeholder-gray-400 transition-all duration-200 focus:border-[#6f4e37] focus:ring-4 focus:ring-[#6f4e37]/10 focus:outline-none shadow-sm hover:border-gray-300 resize-none"
-                                placeholder="Tambahkan permintaan khusus atau catatan lainnya..."
+                                placeholder="Tambahkan permintaan khusus..."
                             ></textarea>
                         </div>
                     </div>
@@ -242,34 +172,6 @@
                             </div>
                         </button>
                     </div>
-
-                    <!-- Info tambahan -->
-                    <div
-                        class="bg-blue-50 border border-blue-200 rounded-xl p-4 mt-6"
-                    >
-                        <div class="flex items-start">
-                            <svg
-                                class="w-5 h-5 text-blue-500 mt-0.5 mr-3 flex-shrink-0"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                            >
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                                    clip-rule="evenodd"
-                                ></path>
-                            </svg>
-                            <div>
-                                <h4 class="font-semibold text-blue-800 text-sm">
-                                    Informasi Reservasi
-                                </h4>
-                                <p class="text-blue-700 text-sm mt-1">
-                                    Konfirmasi reservasi akan dikirim melalui
-                                    WhatsApp ke nomor yang Anda berikan.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
                 </form>
             </div>
         </div>
@@ -277,8 +179,8 @@
 </template>
 
 <script setup lang="ts">
-import { InertiaForm } from "@inertiajs/vue3";
 import { ReservationForm } from "@/types/reservasi";
+import { InertiaForm } from "@inertiajs/vue3";
 
 defineProps<{
     form: InertiaForm<ReservationForm>;

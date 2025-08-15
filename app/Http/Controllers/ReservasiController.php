@@ -1,201 +1,164 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Http\Services\ReservasiService;
 use App\Models\Reservasi;
+use App\Services\MejaService;
+use App\Services\ReservasiService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class ReservasiController extends Controller
 {
     protected $reservasiService;
+    protected $mejaService;
 
     /**
      * Constructor untuk inject ReservasiService.
      *
      * @param ReservasiService $reservasiService
      */
-    public function __construct(ReservasiService $reservasiService)
+    public function __construct(ReservasiService $reservasiService, MejaService $mejaService)
     {
         $this->reservasiService = $reservasiService;
+        $this->mejaService      = $mejaService;
+        $this->middleware('auth');
     }
 
+    /**
+     * Menampilkan halaman daftar semua reservasi untuk admin.
+     *
+     * @return \Inertia\Response
+     */
     public function index()
     {
-        $mejas = $this->reservasiService->getAllMeja();
-        return Inertia::render('Users/Reservasi', [
-            'mejas' => $mejas,
+        return Inertia::render('Admin/Reservasi/Index', [
+            'reservations' => $this->reservasiService->getAll(),
         ]);
     }
 
+    public function getAllMeja()
+    {
+        $mejas = $this->mejaService->getAll();
+        return Inertia::render('Users/Reservasi', ['mejas' => $mejas]);
+    }
+
+    /**
+     * Menampilkan form untuk membuat reservasi baru.
+     *
+     * @return \Inertia\Response
+     */
+    public function create()
+    {
+        // Anda bisa mengirimkan data pendukung seperti daftar user atau meja yang tersedia ke halaman create
+        return Inertia::render('Admin/Reservasi/Create');
+    }
+
+    /**
+     * Menyimpan reservasi baru ke database.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'nama_pelanggan'    => 'required|string|max:255',
-            'no_telepon'        => 'required|string|max:15',
-            'tanggal_reservasi' => 'required|date|after_or_equal:today',
-            'jam_reservasi'     => 'required|date_format:H:i',
-            'nomor_meja'        => 'required|string|exists:meja,nomor_meja',
-            'catatan'           => 'nullable|string',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
-        try {
-            $reservasi = $this->reservasiService->createUserReservation($validator->validated());
-            return redirect()
-                ->route('reservasi.detail', ['kode_reservasi' => $reservasi->kode_reservasi])
-                ->with('success', 'Reservasi Anda berhasil dibuat!');
-        } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat membuat reservasi.')->withInput();
-        }
-    }
-
-    public function detail($kode_reservasi)
-    {
-        $reservasi = $this->reservasiService->getReservationByCode($kode_reservasi);
-        return view('pages.users.reservasi-detail', compact('reservasi'));
-    }
-
-    /**
-     * Menampilkan riwayat reservasi pengguna.
-     */
-    public function history()
-    {
-        $reservasi = $this->reservasiService->getUserHistory();
-        return view('pages.users.reservasi-history', compact('reservasi'));
-    }
-
-    // =================================================================
-    // Metode untuk Admin Panel
-    // =================================================================
-
-    /**
-     * Menampilkan halaman utama reservasi admin.
-     */
-    public function adminIndex()
-    {
-        $reservasis = $this->reservasiService->getAdminReservations();
-        return view('pages.admin.reservasi.index', compact('reservasis'));
-    }
-
-    /**
-     * Menampilkan form untuk membuat reservasi baru oleh admin.
-     */
-    public function adminCreate()
-    {
-        $mejas = $this->reservasiService->getAllMeja();
-        return view('pages.admin.reservasi.create', compact('mejas'));
-    }
-
-    public function adminStore(Request $request)
-    {
-        $request->validate([
-            'nama_pelanggan'    => 'required|string|max:255',
-            'no_telepon'        => 'required|string|max:15',
-            'tanggal_reservasi' => 'required|date|after_or_equal:today',
-            'jam_reservasi'     => 'required|date_format:H:i',
+        $validatedData = $request->validate([
             'nomor_meja'        => 'required|exists:meja,nomor_meja',
-            'catatan'           => 'nullable|string',
+            'tanggal_reservasi' => 'required|date|after_or_equal:today',
+            'jam_reservasi'     => 'required',
+            'catatan'           => 'nullable|string|max:255',
         ]);
 
         try {
-            $this->reservasiService->createAdminReservation($request->all());
-            return redirect()->route('admin.reservasi.index')->with('success', 'Reservasi berhasil dibuat.');
-        } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Gagal membuat reservasi.')->withInput();
-        }
-    }
+            $dataToCreate = array_merge($validatedData, [
+                'user_id' => Auth::id(),
+            ]);
 
-    public function adminShow($kode_reservasi)
-    {
-        $reservasi = $this->reservasiService->getReservationByCode($kode_reservasi);
-        return view('pages.admin.reservasi.show', compact('reservasi'));
+            $this->reservasiService->create($dataToCreate);
+
+            return Redirect::back()->with('success', 'Reservasi Anda berhasil dibuat!');
+
+        } catch (Exception $e) {
+            return Redirect::back()->with('error', $e->getMessage())->withInput();
+        }
     }
 
     /**
-     * Menampilkan form edit reservasi di panel admin.
+     * Menampilkan form untuk mengedit data reservasi.
+     *
+     * @param  \App\Models\Reservasi  $reservasi
+     * @return \Inertia\Response
      */
-    public function adminEdit($kode_reservasi)
+    public function edit(Reservasi $reservasi)
     {
-        $reservasi = $this->reservasiService->getReservationByCode($kode_reservasi);
-        $mejas     = $this->reservasiService->getAllMeja();
-        return view('pages.admin.reservasi.edit', compact('reservasi', 'mejas'));
-    }
-
-    public function adminUpdate(Request $request, $kode_reservasi)
-    {
-        $request->validate([
-            'nama_pelanggan'    => 'required|string|max:255',
-            'no_telepon'        => 'required|string|max:15',
-            'tanggal_reservasi' => 'required|date',
-            'jam_reservasi'     => 'required|date_format:H:i',
-            'nomor_meja'        => 'required|exists:meja,nomor_meja',
-            'catatan'           => 'nullable|string',
-        ]);
-
-        try {
-            $this->reservasiService->updateAdminReservation($kode_reservasi, $request->all());
-            return redirect()->route('admin.reservasi.index')->with('success', 'Reservasi berhasil diperbarui.');
-        } catch (Exception $e) {
-            return redirect()->back()->with('error', 'Gagal memperbarui reservasi.')->withInput();
-        }
-    }
-
-    public function adminDestroy($kode_reservasi)
-    {
-        try {
-            $this->reservasiService->deleteReservation($kode_reservasi);
-            return redirect()->route('admin.reservasi.index')->with('success', 'Reservasi berhasil dihapus.');
-        } catch (Exception $e) {
-            return redirect()->route('admin.reservasi.index')->with('error', 'Gagal menghapus reservasi.');
-        }
-    }
-
-    public function show(Reservasi $reservasi)
-    {
-        return response()->json([
-            'success' => true,
-            'data'    => $reservasi->load('meja'),
+        return Inertia::render('Admin/Reservasi/Edit', [
+            'reservasi' => $reservasi->load(['user', 'meja']), // Kirim data reservasi beserta relasi
         ]);
     }
 
+    /**
+     * Memperbarui data reservasi di database.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Reservasi  $reservasi
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(Request $request, Reservasi $reservasi)
     {
-        $validator = Validator::make($request->all(), [
-            'nama_pelanggan' => 'sometimes|required|string|max:255',
-            'jumlah_orang'   => 'sometimes|required|integer|min:1',
-            'catatan'        => 'nullable|string',
+        $validatedData = $request->validate([
+            'user_id'           => 'required|exists:users,id',
+            'tanggal_reservasi' => 'required|date',
+            'jam_reservasi'     => 'required',
+            'nomor_meja'        => 'required|exists:meja,nomor_meja',
+            'catatan'           => 'nullable|string|max:255',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
-        }
-
         try {
-            $updatedReservasi = $this->reservasiService->updateUserReservation($reservasi, $validator->validated());
-            return response()->json([
-                'success' => true,
-                'message' => 'Reservasi berhasil diperbarui.',
-                'data'    => $updatedReservasi,
-            ]);
+            $this->reservasiService->update($reservasi, $validatedData);
+            return Redirect::route('admin.reservasi.index')->with('success', 'Reservasi berhasil diperbarui.');
         } catch (Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Gagal memperbarui reservasi.'], 500);
+            return Redirect::back()->with('error', $e->getMessage());
         }
     }
 
+    /**
+     * Memperbarui status reservasi (misal: confirmed, cancelled).
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Reservasi  $reservasi
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateStatus(Request $request, Reservasi $reservasi)
+    {
+        $validatedData = $request->validate([
+            'status' => 'required|string|in:pending,confirmed,cancelled,completed',
+        ]);
+
+        try {
+            $this->reservasiService->updateStatus($reservasi, $validatedData['status']);
+            return Redirect::back()->with('success', 'Status reservasi berhasil diperbarui.');
+        } catch (Exception $e) {
+            return Redirect::back()->with('error', $e->getMessage());
+        }
+    }
+
+    /**
+     * Menghapus reservasi dari database.
+     *
+     * @param  \App\Models\Reservasi  $reservasi
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function destroy(Reservasi $reservasi)
     {
         try {
-            $this->reservasiService->deleteReservation($reservasi->kode_reservasi);
-            return response()->json(['success' => true, 'message' => 'Reservasi berhasil dibatalkan.']);
+            $this->reservasiService->delete($reservasi);
+            // Redirect ke halaman index setelah berhasil hapus
+            return Redirect::route('admin.reservasi.index')->with('success', 'Reservasi berhasil dihapus.');
         } catch (Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Gagal membatalkan reservasi.'], 500);
+            return Redirect::back()->with('error', $e->getMessage());
         }
     }
 }

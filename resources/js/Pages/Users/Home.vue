@@ -30,14 +30,14 @@ defineProps<{
                 >
                     <Link
                         href="/menu"
-                        class="bg-amber-600 text-[#e6dbd1] px-8 py-4 rounded-full hover:bg-amber-700 transition"
+                        class="bg-lunen text-coklat border border-black px-8 py-4 hover:brightness-90 transition"
                     >
                         Jelajahi Toko
                     </Link>
                     <button
-                        class="border-2 border-amber-600 text-amber-600 px-8 py-4 rounded-full hover:bg-amber-600/10 transition"
+                        class="border-2 border-lunen text-lunen px-8 py-4 hover:bg-amber-600/10 transition"
                     >
-                        Buat Sendiri
+                        Cari Kopi
                     </button>
                 </div>
             </div>
@@ -70,7 +70,7 @@ defineProps<{
                 class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 text-[#e6dbd1]"
             >
                 <div
-                    class="p-6 bg-[#523433] rounded-lg flex justify-center items-center flex-col gap-4 text-center"
+                    class="p-6 bg-[#523433] flex justify-center items-center flex-col gap-4 text-center"
                 >
                     <img
                         src="/svg/sangrai.svg"
@@ -81,7 +81,7 @@ defineProps<{
                     <h4 class="text-xl font-bold mb-4">Sangrai Tangan</h4>
                 </div>
                 <div
-                    class="p-6 bg-[#523433] rounded-lg flex justify-center items-center flex-col gap-4 text-center"
+                    class="p-6 bg-[#523433] flex justify-center items-center flex-col gap-4 text-center"
                 >
                     <img
                         src="/svg/kopi.svg"
@@ -91,7 +91,7 @@ defineProps<{
                     <h4 class="text-xl font-bold mb-4">Kopi Organik</h4>
                 </div>
                 <div
-                    class="p-6 bg-[#523433] rounded-lg flex justify-center items-center flex-col gap-4 text-center"
+                    class="p-6 bg-[#523433] flex justify-center items-center flex-col gap-4 text-center"
                 >
                     <img
                         src="/svg/mesin.svg"
@@ -144,7 +144,7 @@ defineProps<{
                     </p>
                     <a
                         href="#"
-                        class="inline-block bg-[#3C1E1E] text-white px-6 py-3 rounded-full font-medium hover:bg-[#2a1616] transition"
+                        class="inline-block bg-coklat text-white px-6 py-3 font-medium hover:brightness-90 transition"
                     >
                         Reservasi Sekarang
                     </a>
@@ -155,7 +155,7 @@ defineProps<{
                     <img
                         src="images/reservasi.jpg"
                         alt="Reservasi Meja"
-                        class="max-w-sm md:max-w-md w-full rounded-xl shadow-lg object-cover"
+                        class="max-w-sm md:max-w-md w-full border-2 border-coklat shadow-lg object-cover"
                     />
                 </div>
             </div>

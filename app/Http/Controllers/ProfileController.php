@@ -1,87 +1,72 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use App\Services\ProfileService;
+use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use Illuminate\Routing\Controller as RoutingController;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;  // <-- PENTING: Tambahkan ini untuk menggunakan Log
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
-use Illuminate\Validation\Rule;
+use Inertia\Inertia;
 
-class ProfileController extends Controller
+class ProfileController extends RoutingController
 {
-  public function edit()
-  {
-    $user = Auth::user();
-    // Path view disesuaikan dengan kode Anda
-    return view('pages.users.profile', compact('user'));
-  }
+    protected $profileService;
 
-  public function update(Request $request)
-  {
-    // -- Kode di bawah ini tidak akan berjalan jika dd() di atas aktif --
-    // -- Hapus atau beri komentar pada dd() di atas untuk melanjutkan ke Log --
-    $request->validate([
-      'profile_photo' => 'required|image|max:2048',
-    ]);
-    Log::info('Memulai proses update profil untuk user: ' . Auth::id());
-
-    $user = Auth::user();
-
-    $validator = Validator::make($request->all(), [
-      'name'          => 'required|string|max:255',
-      'gender'        => 'nullable|in:male,female',
-      'address'       => 'nullable|string',
-      'phone'         => 'nullable|string',
-      'birth_date'    => 'nullable|date',
-      'profile_photo' => 'nullable|image|max:2048',
-      'password'      => ['nullable', 'confirmed', Password::min(8)],
-    ]);
-
-    if ($validator->fails()) {
-      Log::error('Validasi Gagal!', $validator->errors()->toArray());
-      return redirect()
-        ->back()
-        ->withErrors($validator)
-        ->withInput();
+    public function __construct(ProfileService $profileService)
+    {
+        $this->profileService = $profileService;
+        $this->middleware('auth');
     }
 
-    Log::info('Validasi Berhasil.');
+    /**
+     * Menampilkan halaman edit profil.
+     */
+    public function edit()
+    {
+        return Inertia::render(
+            'Users/Profile', ['user' => Auth::user()]);
 
-    $userData = $request->except(['_token', '_method', 'password', 'profile_photo']);
-    Log::info('Data awal yang akan diupdate (sebelum foto & password):', $userData);
-
-    if ($request->filled('password')) {
-      $userData['password'] = Hash::make($request->password);
-      Log::info('Password baru telah di-hash.');
     }
 
-    if ($request->hasFile('profile_photo')) {
-      Log::info('Terdeteksi file foto baru. Memulai proses upload.');
+    /**
+     * Menangani permintaan untuk memperbarui profil.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(Request $request)
+    {
+        $user = Auth::user();
 
-      if ($user->profile_photo) {
-        Log::info('Menghapus foto lama: ' . $user->profile_photo);
-        Storage::disk('public')->delete($user->profile_photo);
-      }
+        // Validasi data yang masuk
+        $validatedData = $request->validate([
+            'name'          => 'required|string|max:255',
+            'gender'        => 'nullable|in:male,female',
+            'address'       => 'nullable|string',
+            'phone'         => 'nullable|string',
+            'birth_date'    => 'nullable|date',
+            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'password'      => ['nullable', 'confirmed', Password::min(8)],
+        ]);
 
-      $path = $request->file('profile_photo')->store('profile_photos', 'public');
-      Log::info('Foto baru berhasil disimpan di path: ' . $path);
+        try {
+            // Memanggil service untuk melakukan update
+            $this->profileService->update(
+                $user,
+                $validatedData,
+                $request->hasFile('profile_photo') ? $request->file('profile_photo') : null
+            );
 
-      $userData['profile_photo'] = $path;
-    } else {
-      Log::warning('Tidak ada file foto baru yang diupload pada request ini.');
+            return redirect()
+                ->route('profile.edit')
+                ->with('success', 'Profil berhasil diperbarui!');
+
+        } catch (Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', $e->getMessage())
+                ->withInput();
+        }
     }
-
-    Log::info('Data final yang siap di-update ke database:', $userData);
-    $user->update($userData);
-    Log::info('Proses update ke database selesai.');
-
-    return redirect()
-      ->route('profile.edit')
-      ->with('success', 'Profile updated successfully!');
-  }
 }

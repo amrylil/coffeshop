@@ -1,7 +1,8 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Http\Services\CheckoutService;
+use App\Models\Transaksi;
+use App\Services\CheckoutService;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -55,11 +56,82 @@ class TransaksiController extends Controller
         }
     }
 
+    public function handleWebhook(Request $request)
+    {
+        $serverKey = config('midtrans.server_key');
+
+        // Validasi Signature Key
+        $expectedSignature = hash("sha512",
+            $request->order_id .
+            $request->status_code .
+            $request->gross_amount .
+            $serverKey
+        );
+
+        if ($expectedSignature !== $request->signature_key) {
+            Log::warning("Invalid Midtrans signature", $request->all());
+            return response()->json(['message' => 'Invalid signature key'], 403);
+        }
+
+        $transaction = Transaksi::where('order_id_midtrans', $request->order_id)->first();
+
+        if (! $transaction) {
+            return response()->json(['message' => 'Transaction not found'], 404);
+        }
+
+        $statusMap = [
+            'settlement' => 'paid',
+            'capture'    => 'paid',
+            'pending'    => 'pending',
+            'cancel'     => 'failed',
+            'expire'     => 'failed',
+            'deny'       => 'failed',
+        ];
+
+        $midtransStatus = $request->transaction_status;
+        if (isset($statusMap[$midtransStatus])) {
+            $transaction->status = $statusMap[$midtransStatus];
+            $transaction->save();
+        }
+
+        Log::info("Webhook processed for Order {$request->order_id} - Status: {$midtransStatus}");
+
+        return response()->json(['message' => 'Webhook processed successfully']);
+    }
+
+    public function updateStatus(Request $request)
+    {
+        $request->validate([
+            'order_id' => 'required|string',
+            'status'   => 'required|string|in:pending,paid,failed,cancelled',
+        ]);
+
+        try {
+            $transaksi = $this->checkoutService->updateStatus(
+                $request->order_id,
+                $request->status
+            );
+
+            return response()->json([
+                'success'   => true,
+                'message'   => 'Status transaksi berhasil diupdate.',
+                'transaksi' => $transaksi,
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error("Gagal update status transaksi: " . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
     public function index()
     {
         $transaksis = $this->checkoutService->getUserTransactions(Auth::user());
 
-        return Inertia::render('Transaksi/Index', [
+        return Inertia::render('Users/Transaksi', [
             'transaksis' => $transaksis,
         ]);
     }
@@ -68,8 +140,6 @@ class TransaksiController extends Controller
     {
         $transaksis = $this->checkoutService->getAllTransactions();
 
-        // --- PERBAIKAN ---
-        // Sesuaikan nama komponen dengan struktur folder Anda, misal 'Admin/Transaksi/Index'
         return Inertia::render('Admin/Transaksi/Index', [
             'transaksis' => $transaksis,
         ]);

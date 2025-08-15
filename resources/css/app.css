@@ -17,7 +17,8 @@
     --font-jost: "Jost", sans-serif;
     --color-beige: #f5f5dc;
     --color-linen: #faf0e6;
-    --color-coklat: #523433
+    --color-coklat: #523433;
+    --color-lunen: #e6dbd1;
 }
 
 @keyframes shimmer {

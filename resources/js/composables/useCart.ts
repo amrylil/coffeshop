@@ -12,8 +12,10 @@ interface UseCart {
     loadCartCount: () => Promise<void>;
     isProcessing: Ref<boolean>;
     updateQuantity: (kodeItemKeranjang: number, newQuantity: number) => void;
-    removeItem: (kodeItemKeranjang: number) => void;
-    clearCart: () => void;
+    removeItem: (
+        kodeItemKeranjang: number
+    ) => Promise<{ success: boolean; error?: string }>;
+    clearCart: () => Promise<boolean>;
 }
 
 const getCsrfToken = (): string => {
@@ -120,39 +122,38 @@ export function useCart(): UseCart {
         );
     };
 
-    const removeItem = (kodeItemKeranjang: number) => {
-        if (confirm("Yakin ingin menghapus item ini?")) {
-            router.delete(
-                route("keranjang.remove", kodeItemKeranjang),
-
-                {
-                    preserveScroll: true,
-                    onStart: () => {
-                        isProcessing.value = true;
-                    },
-                    onFinish: () => {
-                        isProcessing.value = false;
-                    },
-                }
-            );
+    const removeItem = async (
+        kodeItemKeranjang: number
+    ): Promise<{ success: boolean; error?: string }> => {
+        isProcessing.value = true;
+        try {
+            await router.delete(route("keranjang.remove", kodeItemKeranjang), {
+                preserveScroll: true,
+            });
+            return { success: true };
+        } catch (err: any) {
+            console.error("Gagal menghapus item keranjang:", err);
+            return {
+                success: false,
+                error: err.message || "Gagal menghapus item keranjang",
+            };
+        } finally {
+            isProcessing.value = false;
         }
     };
 
-    const clearCart = () => {
-        if (confirm("Yakin ingin mengosongkan keranjang?")) {
-            router.post(
-                route("keranjang.clear"),
-                {},
-                {
-                    preserveScroll: true,
-                    onStart: () => {
-                        isProcessing.value = true;
-                    },
-                    onFinish: () => {
-                        isProcessing.value = false;
-                    },
-                }
-            );
+    const clearCart = async (): Promise<boolean> => {
+        isProcessing.value = true;
+        try {
+            await router.delete(route("keranjang.clear"), {
+                preserveScroll: true,
+            });
+            return true;
+        } catch (err) {
+            console.error("Gagal mengosongkan keranjang:", err);
+            return false;
+        } finally {
+            isProcessing.value = false;
         }
     };
 
