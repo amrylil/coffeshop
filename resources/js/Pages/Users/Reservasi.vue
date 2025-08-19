@@ -210,8 +210,8 @@
 
 <script setup lang="ts">
 import AppLayout from "@/Layouts/AppLayout.vue";
-import TableSelectionGrid from "@/components/ui/reservasi/TableSelectionGrid.vue";
-import ReservationForm from "@/components/ui/reservasi/ReservationForm.vue";
+import TableSelectionGrid from "@/components/reservasi/TableSelectionGrid.vue";
+import ReservationForm from "@/components/reservasi/ReservationForm.vue";
 import { Meja } from "@/types/reservasi";
 import { useReservation } from "@/composables/useReservasi";
 

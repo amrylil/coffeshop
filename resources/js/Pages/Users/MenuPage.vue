@@ -58,8 +58,8 @@ import {
     useMenuFilter,
 } from "@/composables/useMenu";
 import type { MenuPageProps } from "@/types/menu";
-import MenuHeader from "@/components/ui/menu/MenuHeader.vue";
-import SearchFilter from "@/components/ui/menu/SearchFilter.vue";
+import MenuHeader from "@/components/menu/MenuHeader.vue";
+import SearchFilter from "@/components/menu/SearchFilter.vue";
 import ScrollToTop from "@/components/ui/ScrollToTop.vue";
 import { route } from "ziggy-js";
 import CardMenu from "@/components/ui/CardMenu.vue";

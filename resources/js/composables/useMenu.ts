@@ -3,6 +3,8 @@ import { ref, onMounted, onUnmounted } from "vue";
 import { router } from "@inertiajs/vue3";
 import type { Menu, ApiResponse, ToastType } from "@/types/menu";
 import { route } from "ziggy-js";
+import { reactive, watch } from "vue";
+import { pickBy } from "lodash";
 
 export const useScrollToTop = () => {
     const isVisible = ref(false);
@@ -58,10 +60,6 @@ export const useToast = () => {
     };
 };
 
-import { reactive, watch } from "vue";
-import { pickBy } from "lodash";
-
-// Composable baru yang lebih baik untuk filtering
 export const useMenuFilter = (initialFilters: any) => {
     const filters = reactive({
         search: initialFilters.search || "",

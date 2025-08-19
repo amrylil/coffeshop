@@ -97,7 +97,6 @@ export function useCart(): UseCart {
 
     const isProcessing = ref(false);
 
-    // Pindahkan semua fungsi aksi ke sini
     const updateQuantity = (kodeItemKeranjang: number, newQuantity: number) => {
         if (newQuantity < 1) {
             removeItem(kodeItemKeranjang);

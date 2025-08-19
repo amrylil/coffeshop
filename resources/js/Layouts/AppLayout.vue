@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Navbar from "@/components/Partials/Navbar.vue";
-import UserSidebar from "@/components/ui/user/UserSidebar.vue";
+import UserSidebar from "@/components/Partials/UserSidebar.vue";
 import { PageProps, User } from "@/types";
 import { Head, usePage } from "@inertiajs/vue3";
 import { ref, computed } from "vue"; // <-- PERUBAHAN DI SINI
