@@ -30,6 +30,49 @@ const navLinks = [
         aria-label="Main navigation"
     >
         <div
+            class="absolute right-2 top-10 py-2 transition-all duration-300 ease-in-out"
+            @click="emit('toggle')"
+            :class="
+                isMinimized && 'bg-[#6F4E37]  absolute translate-x-5 rounded  '
+            "
+        >
+            <button
+                class="rounded-lg text-slate-50 flex justify-center"
+                aria-label="Toggle Sidebar"
+            >
+                <svg
+                    v-if="!isMinimized"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M15 19l-7-7 7-7"
+                    />
+                </svg>
+                <svg
+                    v-else
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M9 5l7 7-7 7"
+                    />
+                </svg>
+            </button>
+        </div>
+        <div
             class="flex h-full flex-col overflow-y-auto px-3 py-4 text-amber-900 shadow-md"
         >
             <div class="py-6 flex items-center gap-2">
@@ -37,7 +80,7 @@ const navLinks = [
                     src="/images/logo.png"
                     alt="Logo"
                     class="w-10 h-10 transition-all duration-300 ease-in-out"
-                    :class="isMinimized ? 'w-8 h-8 mx-auto' : 'w-10 h-10'"
+                    :class="isMinimized ? 'w-8 h-8 mx-auto' : 'w-10 h-10 ml-2'"
                 />
 
                 <transition name="fade" mode="out-in">
@@ -64,45 +107,6 @@ const navLinks = [
                     </li>
                 </ul>
             </nav>
-
-            <div class="mt-auto flex justify-center border-t pt-4">
-                <button
-                    @click="emit('toggle')"
-                    class="flex h-10 w-full items-center justify-center rounded-lg text-amber-800 hover:bg-amber-100"
-                    aria-label="Toggle Sidebar"
-                >
-                    <svg
-                        v-if="!isMinimized"
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        stroke-width="2"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
-                        />
-                    </svg>
-                    <svg
-                        v-else
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        stroke-width="2"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M13 5l7 7-7 7M5 5l7 7-7 7"
-                        />
-                    </svg>
-                </button>
-            </div>
         </div>
     </aside>
 </template>
