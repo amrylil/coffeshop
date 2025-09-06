@@ -159,8 +159,8 @@ const formatCurrency = (value: number) =>
 
 <template>
     <AdminLayout>
-        <div class="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100">
-            <div class="py-8 px-4 sm:px-6 lg:px-8">
+        <div class="min-h-screen">
+            <div class="py-4 px-4 sm:px-6 lg:px-8">
                 <div class="max-w-7xl mx-auto">
                     <!-- Header with modern design -->
                     <div
