@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import { User } from "@/types";
 import SidebarLink from "./SidebarLink.vue";
+import UserMenu from "./UserMenu.vue";
 
-// TAMBAHKAN: Terima prop dan definisikan emit
 const props = defineProps<{
     isMinimized: boolean;
+    user: User | null;
 }>();
 const emit = defineEmits(["toggle"]);
 
@@ -72,17 +74,15 @@ const navLinks = [
                 </svg>
             </button>
         </div>
-        <div
-            class="flex h-full flex-col overflow-y-auto px-3 py-4 text-amber-900 shadow-md"
-        >
-            <div class="py-6 flex items-center gap-2">
+
+        <div class="flex h-full flex-col px-3 py-4 text-amber-900 shadow-md">
+            <div class="py-6 flex items-center gap-2 flex-shrink-0">
                 <img
                     src="/images/logo.png"
                     alt="Logo"
-                    class="w-10 h-10 transition-all duration-300 ease-in-out"
+                    class="transition-all duration-300 ease-in-out"
                     :class="isMinimized ? 'w-8 h-8 mx-auto' : 'w-10 h-10 ml-2'"
                 />
-
                 <transition name="fade" mode="out-in">
                     <h1
                         v-if="!isMinimized"
@@ -94,19 +94,36 @@ const navLinks = [
                 </transition>
             </div>
 
-            <nav aria-label="Main menu" class="flex-grow mt-10">
-                <ul class="space-y-1 px-1 font-medium">
-                    <li v-for="link in navLinks" :key="link.name">
-                        <SidebarLink
-                            :href="link.href"
-                            :iconType="link.icon.type"
-                            :is-minimized="isMinimized"
-                        >
-                            {{ link.name }}
-                        </SidebarLink>
-                    </li>
-                </ul>
-            </nav>
+            <div class="flex-grow overflow-y-auto">
+                <nav aria-label="Main menu" class="mt-10">
+                    <ul class="space-y-1 px-1 font-medium">
+                        <li v-for="link in navLinks" :key="link.name">
+                            <SidebarLink
+                                :href="link.href"
+                                :iconType="link.icon.type"
+                                :is-minimized="isMinimized"
+                            >
+                                {{ link.name }}
+                            </SidebarLink>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <div class="p-2 flex-shrink-0">
+                <UserMenu :user="user" :is-minimized="isMinimized" />
+            </div>
         </div>
     </aside>
 </template>
+
+<style>
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.2s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+</style>

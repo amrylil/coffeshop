@@ -16,7 +16,11 @@ const user = computed<User | null>(() => page.props.auth.user);
 
 <template>
     <div class="font-jost bg-[#6F4E37]">
-        <Sidebar :is-minimized="isSidebarMinimized" @toggle="toggleSidebar" />
+        <Sidebar
+            :is-minimized="isSidebarMinimized"
+            @toggle="toggleSidebar"
+            :user="user"
+        />
 
         <!-- <Header :user="user" :is-minimized="isSidebarMinimized" /> -->
 
@@ -25,7 +29,7 @@ const user = computed<User | null>(() => page.props.auth.user);
             :class="isSidebarMinimized ? 'sm:ml-20' : 'sm:ml-64'"
         >
             <div
-                class="bg-gradient-to-br h-screen from-slate-50 to-gray-100 rounded-l-4xl overflow-auto"
+                class="bg-gradient-to-br h-screen from-slate-50 to-gray-100 overflow-auto"
             >
                 <slot />
             </div>

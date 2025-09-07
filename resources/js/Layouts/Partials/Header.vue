@@ -18,6 +18,6 @@ defineProps<{
             <h1 class="text-2xl font-semibold text-amber-900">Administrator</h1>
         </div>
 
-        <UserMenu :user="user" />
+        <!-- <UserMenu :user="user" /> -->
     </header>
 </template>

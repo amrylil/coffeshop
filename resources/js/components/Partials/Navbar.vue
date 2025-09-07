@@ -41,15 +41,28 @@ onUnmounted(() => {
 <template>
     <header
         :class="{ 'bg-[#e6dbd1] shadow-md': scrolled || !isHome }"
-        class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between w-full px-6 py-4 transition-all duration-300 md:px-12 lg:px-24 font-jost"
+        class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between w-full px-6 py-4 transition-all duration-300 md:px-12 lg:px-24 font-jost ease-in-out"
         :style="{ color: scrolled || !isHome ? '#0f172a' : '#f8fafc' }"
     >
-        <Link href="/" class="text-2xl font-semibold shrink-0">
-            Coffee Shop
+        <Link
+            href="/"
+            class="text-2xl font-semibold shrink-0 flex items-center gap-x-1"
+        >
+            <img
+                src="/images/logo.png"
+                alt="logo"
+                class="h-8 transition-all duration-300 ease-in-out"
+                :class="{
+                    'filter invert sepia hue-rotate-90 saturate-200':
+                        scrolled || !isHome,
+                    'filter-none': !scrolled && isHome,
+                }"
+            />
+            <h1>Sruput</h1>
         </Link>
 
         <nav
-            class="hidden md:flex items-center gap-x-3 lg:gap-x-5"
+            class="hidden md:flex items-center gap-x-3 lg:gap-x-8"
             :class="{
                 'md:-translate-x-[50px]': authUser,
                 'md:-translate-x-[65px]': !authUser,
@@ -101,7 +114,7 @@ onUnmounted(() => {
             <template v-if="authUser">
                 <Link
                     :href="route('keranjang.index')"
-                    class="relative p-2 rounded-full hover:bg-[#422424]/10 transition-colors"
+                    class="relative p-2 rounded-full hover:bg-[#422424]/10 transition-colors text-coklat"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -122,12 +135,7 @@ onUnmounted(() => {
                 <div @click="emit('toggle-sidebar')" class="cursor-pointer">
                     <div
                         v-if="authUser.profile_photo"
-                        class="w-10 h-10 rounded-full overflow-hidden border-2"
-                        :class="
-                            scrolled || !isHome
-                                ? 'border-gray-700'
-                                : 'border-white/50'
-                        "
+                        class="w-10 h-10 rounded-full overflow-hidden border-2 border-coklat"
                     >
                         <img
                             :alt="authUser.name"
