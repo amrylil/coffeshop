@@ -1,99 +1,101 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Services\MejaService;
-use Exception;
+use App\Models\Meja;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use Illuminate\Routing\Controller as RoutingController;
 use Inertia\Inertia;
+use Inertia\Response;
 
-class MejaController extends Controller
+class MejaController extends RoutingController
 {
-    protected $mejaService;
-
-    public function __construct(MejaService $mejaService)
+    /**
+     * Display the main table management page.
+     */
+    public function index(): Response
     {
-        $this->mejaService = $mejaService;
+        $mejas = Meja::orderBy('nomor_meja')->get();
+
+        // Prepare statistics to be sent as props
+        $stats = [
+            'total'     => $mejas->count(),
+            'kosong'    => $mejas->where('status', 'kosong')->count(),
+            'dipesan'   => $mejas->where('status', 'dipesan')->count(),
+            'digunakan' => $mejas->where('status', 'digunakan')->count(),
+        ];
+
+        return Inertia::render('Admin/Meja', [
+            'mejas' => $mejas,
+            'stats' => $stats,
+        ]);
     }
 
-    public function index()
-    {
-        $mejas = $this->mejaService->getAll();
-        return Inertia::render('Users/Reservasi', ['mejas' => $mejas]);
-    }
-
-    public function create()
-    {
-        return view('pages.admin.meja.create');
-    }
-
-    public function store(Request $request)
+    /**
+     * Store a new table from the modal form.
+     */
+    public function store(Request $request): RedirectResponse
     {
         $validatedData = $request->validate([
-            'nomor_meja_222297' => 'nullable|string|max:50|unique:meja,nomor_meja_222297',
-            'kapasitas_222297'  => 'required|integer|min:1',
-            'status_222297'     => 'required|string|max:50',
+            'nomor_meja' => 'required|string|max:50|unique:meja,nomor_meja',
+            'kapasitas'  => 'required|integer|min:1',
+            'status'     => 'required|string|in:kosong,dipesan,digunakan',
         ]);
 
-        try {
-            $this->mejaService->create($validatedData);
-            return redirect()->route('admin.meja.index')->with('success', 'Meja berhasil ditambahkan!');
-        } catch (Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage())->withInput();
-        }
+        Meja::create($validatedData);
+
+        return redirect()->route('admin.meja.index')->with('success', 'Table added successfully!');
     }
 
-    public function show($id)
-    {
-        $meja = $this->mejaService->findById($id);
-        return view('pages.admin.meja.show', compact('meja'));
-    }
-
-    public function edit($id)
-    {
-        $meja = $this->mejaService->findById($id);
-        return view('pages.admin.meja.edit', compact('meja'));
-    }
-
-    public function update(Request $request, $id)
+    /**
+     * Update an existing table from the modal form.
+     */
+    public function update(Request $request, Meja $meja): RedirectResponse
     {
         $validatedData = $request->validate([
-            'kapasitas_222297' => 'required|integer|min:1',
-            'status_222297'    => 'required|string|max:50',
+            'nomor_meja' => 'required|string|max:50|unique:meja,nomor_meja,' . $meja->id,
+            'kapasitas'  => 'required|integer|min:1',
+            'status'     => 'required|string|in:kosong,dipesan,digunakan',
         ]);
 
-        try {
-            $meja = $this->mejaService->findById($id);
-            $this->mejaService->update($meja, $validatedData);
-            return redirect()->route('admin.meja.index')->with('success', 'Meja berhasil diperbarui!');
-        } catch (Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage())->withInput();
-        }
+        $meja->update($validatedData);
+
+        return redirect()->route('admin.meja.index')->with('success', 'Table updated successfully!');
     }
 
-    public function destroy($id)
-    {
-        try {
-            $meja = $this->mejaService->findById($id);
-            $this->mejaService->delete($meja);
-            return redirect()->route('admin.meja.index')->with('success', 'Meja berhasil dihapus!');
-        } catch (Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
-        }
-    }
-
-    public function updateStatus(Request $request, $id)
+    /**
+     * Update the status of a single table directly from the card.
+     */
+    public function updateStatus(Request $request, Meja $meja): RedirectResponse
     {
         $validatedData = $request->validate([
-            'status_222297' => 'required|string|in:kosong,dipesan,digunakan',
+            'status' => 'required|string|in:kosong,dipesan,digunakan',
         ]);
 
-        try {
-            $meja    = $this->mejaService->findById($id);
-            $message = $this->mejaService->updateStatus($meja, $validatedData['status_222297']);
-            return redirect()->route('admin.meja.index')->with('success', $message);
-        } catch (Exception $e) {
-            return redirect()->route('admin.meja.index')->with('error', $e->getMessage());
+        $meja->update(['status' => $validatedData['status']]);
+
+        return redirect()->back()->with('success', "Status for Table {$meja->nomor_meja} has been updated.");
+    }
+
+    public function show(Meja $meja): Response
+    {
+
+        return Inertia::render('Admin/Meja/Show', [
+            'meja' => $meja,
+        ]);
+    }
+
+    /**
+     * Delete a table.
+     */
+    public function destroy(Meja $meja): RedirectResponse
+    {
+        if (in_array($meja->status, ['dipesan', 'digunakan'])) {
+            return redirect()->back()->with('error', 'Cannot delete a table that is currently reserved or in use.');
         }
+
+        $meja->delete();
+
+        return redirect()->route('admin.meja.index')->with('success', 'Table deleted successfully!');
     }
 }

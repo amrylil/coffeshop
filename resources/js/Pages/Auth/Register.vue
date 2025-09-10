@@ -26,7 +26,7 @@
                     <label
                         for="name"
                         class="font-montserrat text-xs font-semibold text-gray-700 ml-2 mb-2 block uppercase tracking-wider"
-                        >Nama Lengkap</label
+                        >Nama </label
                     >
                     <div class="relative">
                         <div

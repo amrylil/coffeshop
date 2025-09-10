@@ -6,7 +6,6 @@ import DataTable from "@/components/ui/DataTable.vue";
 import Modal from "@/components/ui/ModalForm.vue";
 import { route } from "ziggy-js";
 
-// --- Interfaces ---
 interface Kategori {
     kode_kategori: string;
     nama: string;
