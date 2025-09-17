@@ -14,21 +14,12 @@
                 <!-- Actual Image -->
                 <img
                     v-show="!imageLoading"
-                    :src="
-                        menu.path_img
-                            ? `/images/${menu.path_img}`
-                            : '/images/coffe.png'
-                    "
+                    :src="`/images/${menu.path_img}`"
                     :alt="menu.nama"
                     class="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                     @load="imageLoading = false"
                     @error="handleImageError"
                 />
-
-                <!-- Overlay on hover -->
-                <div
-                    class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300"
-                ></div>
             </Link>
 
             <!-- Category Badge -->

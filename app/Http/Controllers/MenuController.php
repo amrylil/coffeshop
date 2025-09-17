@@ -50,7 +50,6 @@ class MenuController extends Controller
             'image'         => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Pass the file object directly if it exists
         if ($request->hasFile('image')) {
             $validatedData['image'] = $request->file('image');
         }
