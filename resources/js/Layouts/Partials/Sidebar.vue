@@ -10,17 +10,14 @@ const props = defineProps<{
 const emit = defineEmits(["toggle"]);
 
 const navLinks = [
+    { name: "Dashboard", href: "/admin/dashboard", icon: { type: "grid" } },
     { name: "Menu", href: "/admin/menu", icon: { type: "coffee" } },
     { name: "Kategori", href: "/admin/kategori", icon: { type: "grid" } },
     { name: "Users", href: "/admin/users", icon: { type: "users" } },
     { name: "Meja", href: "/admin/meja", icon: { type: "table" } },
     { name: "Reservasi", href: "/admin/reservasi", icon: { type: "calendar" } },
     { name: "Transaksi", href: "/admin/transaksi", icon: { type: "receipt" } },
-    {
-        name: "Laporan",
-        href: "/admin/transaksi/report",
-        icon: { type: "report" },
-    },
+    { name: "Laporan", href: "/admin/laporan", icon: { type: "report" } },
 ] as const;
 </script>
 

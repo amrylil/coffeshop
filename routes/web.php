@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\MejaController;
 use App\Http\Controllers\MenuController;
@@ -90,10 +91,9 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('admin')->name('admin.')->group(function () {
     // Dashboard
-    Route::get('/', function () {
-        return view('pages.admin.index');
-    })->name('dashboard');
 
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/laporan', [DashboardController::class, 'laporan'])->name('laporan.index');
     // Menu routes
     Route::resource('menu', MenuController::class);
     // Add these routes to your web.php file inside the admin group
@@ -108,7 +108,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::patch('users/{id}/change-role', [UserController::class, 'changeRole'])->name('users.change-role');
 
     Route::prefix('transaksi')->name('transaksi.')->group(function () {
-        Route::get('/', [TransaksiController::class, 'adminIndex'])->name('index');
+        Route::get('/', [TransaksiController::class, 'indexAdmin'])->name('index');
         Route::get('/stats', [TransaksiController::class, 'adminStats'])->name('stats');
         Route::get('/export', [TransaksiController::class, 'adminExport'])->name('export');
         Route::get('/create', [TransaksiController::class, 'adminCreate'])->name('create');

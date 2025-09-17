@@ -138,9 +138,9 @@ class TransaksiController extends Controller
 
     public function indexAdmin()
     {
-        $transaksis = $this->checkoutService->getAllTransactions();
+        $transaksis = $this->checkoutService->getAllTransactions()->items();
 
-        return Inertia::render('Admin/Transaksi/Index', [
+        return Inertia::render('Admin/Transaksi', [
             'transaksis' => $transaksis,
         ]);
     }
@@ -150,8 +150,6 @@ class TransaksiController extends Controller
         try {
             $transaksi = $this->checkoutService->getTransactionDetails($kode_transaksi, Auth::user());
 
-            // --- PERBAIKAN ---
-            // Render komponen 'Transaksi/Show' dengan data detail transaksi.
             return Inertia::render('Transaksi/Show', [
                 'transaksi' => $transaksi,
             ]);

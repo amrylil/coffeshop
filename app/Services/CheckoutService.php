@@ -103,9 +103,11 @@ class CheckoutService
      */
     public function getAllTransactions(): LengthAwarePaginator
     {
-        return Transaksi::with(['pengguna', 'items.menu'])
+        $data = Transaksi::with(['pengguna', 'items.menu'])
             ->latest()
             ->paginate(15);
+
+        return $data;
     }
 
     /**
