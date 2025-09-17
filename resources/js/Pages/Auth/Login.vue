@@ -1,21 +1,21 @@
 <template>
-    <AuthLayout background-image-url="/images/login.jpg">
-        <div class="text-center mb-8">
+    <AuthLayout>
+        <div class="text-center mb-10">
             <h2
-                class="font-playfair text-3xl font-bold text-[#1a1a1a] mb-3 bg-gradient-to-r from-[#1a1a1a] to-[#4a4a4a] bg-clip-text text-transparent"
+                class="font-playfair text-4xl font-bold mb-3 bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent"
             >
                 Selamat Datang Kembali
             </h2>
-            <p class="font-montserrat text-gray-600 text-sm">
-                Masuk ke akun Anda untuk melanjutkan perjalanan kopi
+            <p class="font-montserrat text-gray-500">
+                Masuk untuk melanjutkan petualangan kopi Anda.
             </p>
         </div>
 
         <div
             v-if="hasErrors"
-            class="mb-6 bg-red-50/80 backdrop-blur-sm border border-red-200/50 text-red-700 p-4 rounded-2xl text-sm"
+            class="mb-6 bg-red-50 border border-red-300 text-red-800 p-4 text-sm"
         >
-            <ul class="list-disc pl-4">
+            <ul class="list-disc list-inside">
                 <li v-for="(error, key) in errors" :key="key">{{ error }}</li>
             </ul>
         </div>
@@ -23,8 +23,26 @@
         <button
             @click="loginWithGoogle"
             :disabled="form.processing"
-            class="w-full mb-6 bg-white border-2 border-gray-200 hover:border-gray-300 text-gray-700 font-montserrat font-medium py-4 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center space-x-3 group"
+            class="w-full mb-6 bg-white border border-gray-300 hover:bg-gray-50 text-gray-800 font-montserrat font-semibold py-3 px-4 transition-all duration-300 shadow-sm hover:shadow-md flex items-center justify-center space-x-3 group"
         >
+            <svg class="w-5 h-5" viewBox="0 0 48 48">
+                <path
+                    fill="#FFC107"
+                    d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
+                ></path>
+                <path
+                    fill="#FF3D00"
+                    d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
+                ></path>
+                <path
+                    fill="#4CAF50"
+                    d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.223,0-9.657-3.356-11.303-7.918l-6.573,4.818C9.656,39.663,16.318,44,24,44z"
+                ></path>
+                <path
+                    fill="#1976D2"
+                    d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571l6.19,5.238C42.012,35.24,44,30.038,44,24C44,22.659,43.862,21.35,43.611,20.083z"
+                ></path>
+            </svg>
             <span>{{
                 form.processing ? "Memproses..." : "Masuk dengan Google"
             }}</span>
@@ -46,19 +64,19 @@
                 <div class="group">
                     <label
                         for="email"
-                        class="font-montserrat text-xs font-semibold text-gray-700 ml-2 mb-2 block uppercase tracking-wider"
+                        class="font-montserrat text-xs font-semibold text-gray-600 mb-2 block uppercase tracking-wider"
                         >Alamat Email</label
                     >
                     <div class="relative">
                         <div
-                            class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-[#a07942] transition-colors duration-300"
+                            class="absolute left-0 top-0 h-full flex items-center pl-4 text-gray-400 group-focus-within:text-[#a07942] transition-colors duration-300 pointer-events-none"
                         >
                             <i class="far fa-envelope"></i>
                         </div>
                         <input
                             id="email"
                             v-model="form.email"
-                            class="w-full border-2 border-gray-200 bg-gray-50/50 rounded-2xl py-4 pl-12 pr-4 font-montserrat text-sm focus:ring-0 focus:border-[#a07942] focus:bg-white transition-all duration-300 hover:border-gray-300"
+                            class="w-full border border-gray-300 bg-white py-3 pl-12 pr-4 font-montserrat text-base placeholder-gray-400 focus:ring-2 focus:ring-[#a07942]/50 focus:border-[#a07942] focus:outline-none transition-all duration-300"
                             type="email"
                             placeholder="nama@email.com"
                             required
@@ -70,7 +88,7 @@
                     <div class="flex justify-between items-center mb-2">
                         <label
                             for="password"
-                            class="font-montserrat text-xs font-semibold text-gray-700 ml-2 uppercase tracking-wider"
+                            class="font-montserrat text-xs font-semibold text-gray-600 uppercase tracking-wider"
                             >Kata Sandi</label
                         >
                         <Link
@@ -81,14 +99,14 @@
                     </div>
                     <div class="relative">
                         <div
-                            class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-[#a07942] transition-colors duration-300"
+                            class="absolute left-0 top-0 h-full flex items-center pl-4 text-gray-400 group-focus-within:text-[#a07942] transition-colors duration-300 pointer-events-none"
                         >
                             <i class="fas fa-lock"></i>
                         </div>
                         <input
                             id="password"
                             v-model="form.password"
-                            class="w-full border-2 border-gray-200 bg-gray-50/50 rounded-2xl py-4 pl-12 pr-12 font-montserrat text-sm focus:outline-none focus:ring-0 focus:border-[#a07942] focus:bg-white"
+                            class="w-full border border-gray-300 bg-white py-3 pl-12 pr-12 font-montserrat text-base placeholder-gray-400 focus:ring-2 focus:ring-[#a07942]/50 focus:border-[#a07942] focus:outline-none transition-all duration-300"
                             :type="passwordFieldType"
                             placeholder="••••••••••"
                             required
@@ -96,7 +114,7 @@
                         <button
                             type="button"
                             @click="togglePasswordVisibility"
-                            class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-[#a07942] p-1"
+                            class="absolute right-0 top-0 h-full px-4 flex items-center text-gray-400 hover:text-[#a07942]"
                         >
                             <i
                                 class="far transition-transform duration-300 hover:scale-110"
@@ -110,10 +128,10 @@
             <button
                 type="submit"
                 :disabled="form.processing"
-                class="w-full bg-gradient-to-r from-[#1a1a1a] to-[#2d2d2d] hover:from-[#2d2d2d] hover:to-[#1a1a1a] text-white font-montserrat font-semibold py-4 rounded-2xl transition-all duration-500 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                class="w-full bg-gray-900 hover:bg-gray-800 text-white font-montserrat font-semibold py-3 px-4 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-60 disabled:cursor-not-allowed"
             >
                 <span>{{
-                    form.processing ? "Memproses..." : "Masuk ke Akun"
+                    form.processing ? "MEMPROSES..." : "Masuk ke Akun"
                 }}</span>
             </button>
         </form>
@@ -122,7 +140,7 @@
             <span class="text-gray-600">Belum memiliki akun?</span>
             <Link
                 :href="route('register')"
-                class="text-[#a07942] font-semibold ml-2 hover:text-[#8b6835] hover:underline"
+                class="text-[#a07942] font-semibold ml-1 hover:text-[#8b6835] hover:underline"
             >
                 Buat akun baru
             </Link>
@@ -133,20 +151,18 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { Link, useForm } from "@inertiajs/vue3";
+import AuthLayout from "@/Layouts/AuthLayout.vue";
 import { route } from "ziggy-js";
-import AuthLayout from "@/Layouts/AuthLayout.vue"; // <-- Import Layout
-
-// Menggunakan useForm dari Inertia untuk state management yang lebih mudah
-const form = useForm({
-    email: "",
-    password: "",
-});
 
 const props = defineProps<{
     errors: Record<string, string>;
 }>();
 
-// Logika untuk menampilkan/menyembunyikan password
+const form = useForm({
+    email: "",
+    password: "",
+});
+
 const passwordFieldType = ref<"password" | "text">("password");
 const passwordIconClass = computed(() => {
     return passwordFieldType.value === "password" ? "fa-eye" : "fa-eye-slash";
@@ -156,19 +172,15 @@ const togglePasswordVisibility = () => {
         passwordFieldType.value === "password" ? "text" : "password";
 };
 
-// Cek apakah ada error dari backend
 const hasErrors = computed(() => Object.keys(props.errors).length > 0);
 
-// Fungsi untuk submit form
 const submit = () => {
     form.post(route("login"), {
-        // Ganti 'login' dengan nama route login Anda
-        onFinish: () => form.reset("password"), // Kosongkan field password setelah submit
+        onFinish: () => form.reset("password"),
     });
 };
 
-// Fungsi untuk login dengan Google
 const loginWithGoogle = () => {
-    window.location.href = route("auth.google"); // Redirect ke route otentikasi Google
+    // window.location.href = route("auth.google");
 };
 </script>
