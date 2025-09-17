@@ -6,7 +6,7 @@ import tailwindcss from "@tailwindcss/vite"; // <-- Impor plugin resmi Tailwind
 export default defineConfig({
     plugins: [
         laravel({
-            input: ["resources/css/app.css", "resources/js/app.ts"],
+            input: ["resources/css/app.css", "resources/js/app.js"],
             refresh: true,
         }),
         vue({
