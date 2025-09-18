@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use App\Helpers\IDGeneratorHelper;
@@ -25,7 +24,7 @@ class Menu extends Model
         'harga',
         'kode_kategori',
         'path_img',
-        'jumlah',
+        'status',
     ];
 
     protected static function boot()
@@ -33,7 +32,7 @@ class Menu extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            if (!$model->kode_menu) {
+            if (! $model->kode_menu) {
                 $model->kode_menu = IDGeneratorHelper::generateMenuID();
             }
         });

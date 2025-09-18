@@ -20,12 +20,12 @@ class MenuController extends Controller
 
     public function index()
     {
-        $menus      = Menu::with('kategori')->latest()->get();
-        $categories = KategoriProduk::all(); // <-- TAMBAHKAN: Ambil semua kategori
+        $menus      = Menu::with('kategori')->latest('created_at')->get();
+        $categories = KategoriProduk::all();
 
         return Inertia::render('Admin/Menu', [
             'menus'      => $menus,
-            'categories' => $categories, // <-- TAMBAHKAN: Kirim kategori ke frontend
+            'categories' => $categories,
             'flash'      => [
                 'success' => session('success'),
                 'error'   => session('error'),
@@ -46,12 +46,13 @@ class MenuController extends Controller
             'deskripsi'     => 'required|string',
             'harga'         => 'required|numeric|min:0',
             'kode_kategori' => 'required|exists:kategori_produk,kode_kategori',
-            'jumlah'        => 'required|integer|min:0',
-            'image'         => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'status'        => 'required|in:available,unavailable',
+            'path_img'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        if ($request->hasFile('image')) {
-            $validatedData['image'] = $request->file('image');
+        // handle upload gambar
+        if ($request->hasFile('path_img')) {
+            $validatedData['path_img'] = $request->file('path_img')->store('menu', 'public');
         }
 
         try {
@@ -62,27 +63,28 @@ class MenuController extends Controller
         }
     }
 
-    public function edit($id)
+    public function edit($kode_menu)
     {
-        $menu       = Menu::findOrFail($id);
+        $menu       = Menu::findOrFail($kode_menu);
         $categories = KategoriProduk::all();
         return view('pages.admin.menu.edit', compact('menu', 'categories'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $kode_menu)
     {
-        $menu          = Menu::findOrFail($id);
+        $menu = Menu::findOrFail($kode_menu);
+
         $validatedData = $request->validate([
             'nama'          => 'required|string|max:255',
             'deskripsi'     => 'required|string',
             'harga'         => 'required|numeric|min:0',
             'kode_kategori' => 'required|exists:kategori_produk,kode_kategori',
-            'jumlah'        => 'required|integer|min:0',
-            'image'         => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'status'        => 'required|in:available,unavailable',
+            'path_img'      => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        if ($request->hasFile('image')) {
-            $validatedData['image'] = $request->file('image');
+        if ($request->hasFile('path_img')) {
+            $validatedData['path_img'] = $request->file('path_img')->store('menu', 'public');
         }
 
         try {
@@ -93,10 +95,10 @@ class MenuController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy($kode_menu)
     {
         try {
-            $menu = Menu::findOrFail($id);
+            $menu = Menu::findOrFail($kode_menu);
             $this->menuService->delete($menu);
             return redirect()->route('admin.menu.index')->with('success', 'Menu deleted successfully!');
         } catch (Exception $e) {

@@ -16,8 +16,8 @@ return new class extends Migration
             $table->decimal('harga', 10, 2)->nullable();
             $table->string('kode_kategori', 20)->nullable();
             $table->string('path_img', 255)->nullable();
-            $table->integer('jumlah')->nullable();
-            $table->timestamp('created_at')->nullable();
+            $table->enum('status', ['available', 'unavailable'])->default('available');
+            $table->timestamps();
 
             $table
                 ->foreign('kode_kategori')
