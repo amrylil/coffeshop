@@ -127,7 +127,7 @@
                             </div>
 
                             <!-- Purchase Section -->
-                            <div v-if="menu.jumlah > 0" class="space-y-6">
+                            <div class="space-y-6">
                                 <!-- Quantity & Total -->
                                 <div class="grid grid-cols-2 gap-6">
                                     <div>
@@ -160,7 +160,6 @@
                                                 type="number"
                                                 v-model="quantity"
                                                 min="1"
-                                                :max="menu.jumlah"
                                                 class="w-20 h-12 text-center border-0 focus:ring-0 text-coklat font-medium"
                                             />
                                             <button
@@ -245,57 +244,6 @@
                                         loading ? "Adding..." : "Add to Cart"
                                     }}</span>
                                 </button>
-                            </div>
-
-                            <!-- Out of Stock -->
-                            <div v-else class="space-y-6">
-                                <div
-                                    class="bg-stone-100 border border-stone-300 p-6 text-center"
-                                >
-                                    <svg
-                                        class="w-12 h-12 mx-auto text-stone-400 mb-4"
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20"
-                                    >
-                                        <path
-                                            fill-rule="evenodd"
-                                            d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z"
-                                            clip-rule="evenodd"
-                                        />
-                                    </svg>
-                                    <h3
-                                        class="text-lg font-medium text-stone-700 mb-2"
-                                    >
-                                        Currently Unavailable
-                                    </h3>
-                                    <p class="text-stone-500">
-                                        This item is temporarily out of stock
-                                    </p>
-                                </div>
-                            </div>
-
-                            <!-- Stock Status -->
-                            <div class="pt-4 border-t border-stone-200">
-                                <div
-                                    class="flex items-center text-sm text-stone-600"
-                                >
-                                    <svg
-                                        class="w-4 h-4 mr-2"
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20"
-                                    >
-                                        <path
-                                            fill-rule="evenodd"
-                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                            clip-rule="evenodd"
-                                        />
-                                    </svg>
-                                    <span v-if="menu.jumlah > 0"
-                                        >{{ menu.jumlah }} items available in
-                                        stock</span
-                                    >
-                                    <span v-else>Out of stock</span>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -484,7 +432,7 @@ const showToast = (message: string, type: "success" | "error" = "success") => {
 };
 
 const increment = () => {
-    if (quantity.value < props.menu.jumlah) {
+    if (quantity.value < 99) {
         quantity.value++;
     }
 };

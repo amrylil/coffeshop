@@ -53,7 +53,6 @@
 
                 <!-- Add to Cart Button -->
                 <button
-                    v-if="menu.jumlah > 0"
                     @click.prevent="handleAddToCart"
                     :disabled="loading"
                     class="bg-coklat text-white font-medium px-4 py-2 hover:bg-stone-900 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-stone-500 focus:ring-offset-2 disabled:bg-stone-400 disabled:cursor-not-allowed flex items-center space-x-2"
@@ -100,11 +99,6 @@
                         loading ? "Adding..." : "Tambah"
                     }}</span>
                 </button>
-
-                <!-- Out of Stock -->
-                <div v-else class="text-stone-400 text-sm font-medium">
-                    Out of Stock
-                </div>
             </div>
         </div>
     </div>

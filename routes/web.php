@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\MejaController;
 use App\Http\Controllers\MenuController;
@@ -100,6 +101,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('kategori', KategoriController::class);
 
     Route::resource('meja', App\Http\Controllers\MejaController::class);
+    Route::resource('inventory', InventoryController::class)->except(['show', 'create', 'edit']);
 
     Route::patch('/meja/{id}/status', [MejaController::class, 'updateStatus'])
         ->name('meja.updateStatus');

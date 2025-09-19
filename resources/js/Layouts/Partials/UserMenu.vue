@@ -72,7 +72,7 @@ const userInitials = computed(() => {
                         {{ user?.name }}
                     </p>
                     <p class="text-xs text-gray-300 truncate">
-                        {{ user?.role ?? "User" }}
+                        {{ user?.role }}
                     </p>
                 </div>
             </transition>

@@ -33,7 +33,7 @@ class AuthController extends Controller
             $request->session()->regenerate();
             $user = Auth::user();
 
-            if ($user->role === 'admin') {
+            if ($user->role === 'admin' || $user->role === 'cashier') {
                 return redirect()->intended(route('admin.menu.index'));
             }
             return redirect()->intended('/');

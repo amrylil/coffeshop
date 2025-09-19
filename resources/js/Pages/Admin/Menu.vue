@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { useForm, usePage } from "@inertiajs/vue3";
+import { useForm, Link } from "@inertiajs/vue3";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import DataTable from "@/components/ui/DataTable.vue";
 import Modal from "@/components/ui/ModalForm.vue";
 import { route } from "ziggy-js";
 
+// --- Interface ---
 interface Kategori {
     kode_kategori: string;
     nama: string;
@@ -15,7 +16,7 @@ interface Menu {
     nama: string;
     deskripsi: string;
     harga: number;
-    jumlah: number;
+    status: "available" | "unavailable";
     path_img: string | null;
     kode_kategori: string;
     kategori?: Kategori;
@@ -29,43 +30,47 @@ const props = defineProps<{
 
 // --- State ---
 const isModalOpen = ref(false);
+const isDetailModalOpen = ref(false); // State for detail modal
 const isEditing = ref(false);
 const currentMenu = ref<Menu | null>(null);
 const imagePreview = ref<string | null>(null);
 
 // --- Form ---
 const form = useForm({
+    _method: "POST", // Method spoofing for update
     kode_menu: "",
     nama: "",
     deskripsi: "",
     harga: 0,
     kode_kategori: "",
-    jumlah: 0,
+    status: "available" as "available" | "unavailable",
     image: null as File | null,
 });
 
 // --- Computed Properties ---
 const modalTitle = computed(() =>
-    isEditing.value ? "Edit Menu" : "Add New Menu"
+    isEditing.value ? "Edit Menu" : "Tambah Menu Baru"
 );
 
 const currentImageUrl = computed(() => {
-    if (isEditing.value && currentMenu.value?.path_img) {
+    // Computes the URL for the existing image of the menu being edited or viewed
+    if (currentMenu.value?.path_img) {
         return `/storage/images/${currentMenu.value.path_img}`;
     }
     return null;
 });
 
-// [NEW] Computed properties for stat cards
+// Stat cards computations
 const totalMenus = computed(() => props.menus.length);
 const totalCategories = computed(() => props.categories.length);
-const inStockCount = computed(
-    () => props.menus.filter((menu) => menu.jumlah > 0).length
+const availableCount = computed(
+    () => props.menus.filter((menu) => menu.status === "available").length
 );
-const outOfStockCount = computed(
-    () => props.menus.filter((menu) => menu.jumlah === 0).length
+const unavailableCount = computed(
+    () => props.menus.filter((menu) => menu.status === "unavailable").length
 );
 
+// Filter options for DataTable
 const categoryFilter = computed(() => {
     const uniqueKategori = Array.from(
         new Set(
@@ -74,31 +79,29 @@ const categoryFilter = computed(() => {
                 .filter((nama): nama is string => Boolean(nama))
         )
     );
-
     return {
-        key: "kategori.nama", // Fix: Make sure filter key matches nested object path
+        key: "kategori.nama",
         label: "Kategori",
-        options: uniqueKategori.map((nama) => ({
-            value: nama,
-            label: nama,
-        })),
+        options: uniqueKategori.map((nama) => ({ value: nama, label: nama })),
     };
 });
 
+// DataTable headers
 const tableHeaders = [
-    { key: "image", label: "Image" },
-    { key: "nama", label: "Name" },
-    { key: "kategori.nama", label: "Category" }, // Fix: Use nested path for sorting/display
-    { key: "harga", label: "Price" },
-    { key: "jumlah", label: "Stock" },
+    { key: "image", label: "Gambar" },
+    { key: "nama", label: "Nama" },
+    { key: "kategori.nama", label: "Kategori" },
+    { key: "harga", label: "Harga" },
+    { key: "status", label: "Status" },
 ];
 
 // --- Functions ---
 const openCreateModal = () => {
     isEditing.value = false;
     form.reset();
+    form._method = "POST"; // Set method for creation
     isModalOpen.value = true;
-    imagePreview.value = null; // Ensure preview is cleared
+    imagePreview.value = null;
 };
 
 const openEditModal = (menu: Menu) => {
@@ -109,10 +112,16 @@ const openEditModal = (menu: Menu) => {
     form.deskripsi = menu.deskripsi;
     form.harga = menu.harga;
     form.kode_kategori = menu.kode_kategori;
-    form.jumlah = menu.jumlah;
+    form.status = menu.status;
     form.image = null;
+    form._method = "PUT"; // Spoof method to PUT for update
     isModalOpen.value = true;
     imagePreview.value = null;
+};
+
+const openDetailModal = (menu: Menu) => {
+    currentMenu.value = menu;
+    isDetailModalOpen.value = true;
 };
 
 const closeModal = () => {
@@ -122,11 +131,19 @@ const closeModal = () => {
     imagePreview.value = null;
 };
 
+const closeDetailModal = () => {
+    isDetailModalOpen.value = false;
+    currentMenu.value = null;
+};
+
 const submitForm = () => {
     const options = {
         onSuccess: () => closeModal(),
+        preserveScroll: true,
     };
     if (isEditing.value) {
+        // Inertia recommends using POST for forms with file uploads,
+        // and spoofing the method with a hidden `_method` field.
         form.post(
             route("admin.menu.update", currentMenu.value!.kode_menu),
             options
@@ -137,8 +154,10 @@ const submitForm = () => {
 };
 
 const deleteMenu = (menu: Menu) => {
-    if (confirm("Are you sure you want to delete this menu?")) {
-        useForm({}).delete(route("admin.menu.destroy", menu.kode_menu));
+    if (confirm(`Apakah Anda yakin ingin menghapus "${menu.nama}"?`)) {
+        useForm({}).delete(route("admin.menu.destroy", menu.kode_menu), {
+            preserveScroll: true,
+        });
     }
 };
 
@@ -154,7 +173,9 @@ const handleImageUpload = (event: Event) => {
 const removeImagePreview = () => {
     imagePreview.value = null;
     form.image = null;
-    const fileInput = document.getElementById("image") as HTMLInputElement;
+    const fileInput = document.getElementById(
+        "image-upload"
+    ) as HTMLInputElement;
     if (fileInput) fileInput.value = "";
 };
 
@@ -170,13 +191,14 @@ const formatCurrency = (value: number) =>
     <AdminLayout>
         <div class="p-4 sm:p-6 lg:p-8">
             <div class="max-w-7xl mx-auto">
+                <!-- Breadcrumbs & Header -->
                 <nav class="text-sm mb-4" aria-label="Breadcrumb">
                     <ol class="list-none p-0 inline-flex space-x-2">
                         <li class="flex items-center">
-                            <a
-                                href="#"
+                            <Link
+                                :href="route('admin.dashboard.index')"
                                 class="text-gray-500 hover:text-gray-700"
-                                >Admin</a
+                                >Admin</Link
                             >
                         </li>
                         <li class="flex items-center">
@@ -203,10 +225,10 @@ const formatCurrency = (value: number) =>
                 >
                     <div>
                         <h1 class="text-3xl font-bold text-gray-900">
-                            Menu Management
+                            Manajemen Menu
                         </h1>
                         <p class="mt-1 text-sm text-gray-600">
-                            Manage your restaurant menu items and categories.
+                            Kelola menu restoran dan kategori Anda.
                         </p>
                     </div>
                     <button
@@ -226,10 +248,11 @@ const formatCurrency = (value: number) =>
                                 d="M12 4v16m8-8H4"
                             ></path>
                         </svg>
-                        Add New Menu
+                        Tambah Menu Baru
                     </button>
                 </div>
 
+                <!-- Stat Cards -->
                 <div
                     class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
                 >
@@ -252,7 +275,7 @@ const formatCurrency = (value: number) =>
                             </svg>
                         </div>
                         <div>
-                            <p class="text-sm text-gray-500">Total Menus</p>
+                            <p class="text-sm text-gray-500">Total Menu</p>
                             <p class="text-2xl font-bold text-gray-900">
                                 {{ totalMenus }}
                             </p>
@@ -277,7 +300,7 @@ const formatCurrency = (value: number) =>
                             </svg>
                         </div>
                         <div>
-                            <p class="text-sm text-gray-500">Categories</p>
+                            <p class="text-sm text-gray-500">Kategori</p>
                             <p class="text-2xl font-bold text-gray-900">
                                 {{ totalCategories }}
                             </p>
@@ -302,9 +325,9 @@ const formatCurrency = (value: number) =>
                             </svg>
                         </div>
                         <div>
-                            <p class="text-sm text-gray-500">In Stock</p>
+                            <p class="text-sm text-gray-500">Tersedia</p>
                             <p class="text-2xl font-bold text-gray-900">
-                                {{ inStockCount }}
+                                {{ availableCount }}
                             </p>
                         </div>
                     </div>
@@ -327,14 +350,15 @@ const formatCurrency = (value: number) =>
                             </svg>
                         </div>
                         <div>
-                            <p class="text-sm text-gray-500">Out of Stock</p>
+                            <p class="text-sm text-gray-500">Habis</p>
                             <p class="text-2xl font-bold text-gray-900">
-                                {{ outOfStockCount }}
+                                {{ unavailableCount }}
                             </p>
                         </div>
                     </div>
                 </div>
 
+                <!-- DataTable -->
                 <div
                     class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
                 >
@@ -346,53 +370,93 @@ const formatCurrency = (value: number) =>
                         class="border-0"
                     >
                         <template #cell(image)="{ item }">
-                            <div class="flex items-center justify-center p-2">
+                            <div class="p-2">
                                 <img
+                                    v-if="item.path_img"
                                     :src="`/storage/images/${item.path_img}`"
                                     :alt="item.nama"
                                     class="h-14 w-14 object-cover rounded-xl ring-1 ring-gray-200"
                                 />
+                                <div
+                                    v-else
+                                    class="h-14 w-14 bg-gray-100 rounded-xl ring-1 ring-gray-200 flex items-center justify-center"
+                                >
+                                    <svg
+                                        class="w-6 h-6 text-gray-400"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="1.5"
+                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                        ></path>
+                                    </svg>
+                                </div>
                             </div>
                         </template>
-                        <template #cell(kategori.nama)="{ item }">
-                            <span
+                        <template #cell(kategori.nama)="{ item }"
+                            ><span
                                 class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800"
-                            >
-                                {{ item.kategori?.nama || "N/A" }}
-                            </span>
-                        </template>
-                        <template #cell(harga)="{ item }">
-                            <span class="font-semibold text-gray-800 text-sm">
-                                {{ formatCurrency(item.harga) }}
-                            </span>
-                        </template>
-                        <template #cell(jumlah)="{ item }">
-                            <span
+                                >{{ item.kategori?.nama || "N/A" }}</span
+                            ></template
+                        >
+                        <template #cell(harga)="{ item }"
+                            ><span
+                                class="font-semibold text-gray-800 text-sm"
+                                >{{ formatCurrency(item.harga) }}</span
+                            ></template
+                        >
+                        <template #cell(status)="{ item }"
+                            ><span
                                 class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold"
                                 :class="{
                                     'bg-green-100 text-green-800':
-                                        item.jumlah > 10,
-                                    'bg-yellow-100 text-yellow-800':
-                                        item.jumlah > 0 && item.jumlah <= 10,
+                                        item.status === 'available',
                                     'bg-red-100 text-red-800':
-                                        item.jumlah === 0,
+                                        item.status === 'unavailable',
                                 }"
-                            >
-                                {{
-                                    item.jumlah > 0
-                                        ? `${item.jumlah} in stock`
-                                        : "Out of stock"
-                                }}
-                            </span>
-                        </template>
+                                >{{
+                                    item.status === "available"
+                                        ? "Tersedia"
+                                        : "Habis"
+                                }}</span
+                            ></template
+                        >
                         <template #actions="{ item }">
                             <div class="flex items-center gap-2">
                                 <button
-                                    @click="openEditModal(item)"
-                                    class="inline-flex items-center p-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-lg text-xs font-medium transition-colors duration-150"
+                                    @click="openDetailModal(item)"
+                                    class="p-2 text-gray-500 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
                                 >
                                     <svg
-                                        class="w-4 h-4"
+                                        class="w-5 h-5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                        ></path>
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                                        ></path>
+                                    </svg>
+                                </button>
+                                <button
+                                    @click="openEditModal(item)"
+                                    class="p-2 text-blue-500 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-colors"
+                                >
+                                    <svg
+                                        class="w-5 h-5"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -407,10 +471,10 @@ const formatCurrency = (value: number) =>
                                 </button>
                                 <button
                                     @click="deleteMenu(item)"
-                                    class="inline-flex items-center p-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg text-xs font-medium transition-colors duration-150"
+                                    class="p-2 text-red-500 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors"
                                 >
                                     <svg
-                                        class="w-4 h-4"
+                                        class="w-5 h-5"
                                         fill="none"
                                         stroke="currentColor"
                                         viewBox="0 0 24 24"
@@ -430,216 +494,296 @@ const formatCurrency = (value: number) =>
             </div>
         </div>
 
+        <!-- Create/Edit Modal -->
         <Modal :show="isModalOpen" :title="modalTitle" @close="closeModal">
-            <form @submit.prevent="submitForm" class="p-4 space-y-4">
-                <div>
-                    <label
-                        for="nama"
-                        class="block text-sm font-medium text-gray-700"
-                        >Name</label
-                    >
-                    <input
-                        v-model="form.nama"
-                        type="text"
-                        id="nama"
-                        class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500"
-                    />
-                    <div
-                        v-if="form.errors.nama"
-                        class="text-red-500 text-xs mt-1"
-                    >
-                        {{ form.errors.nama }}
-                    </div>
-                </div>
-                <div>
-                    <label
-                        for="deskripsi"
-                        class="block text-sm font-medium text-gray-700"
-                        >Description</label
-                    >
-                    <textarea
-                        v-model="form.deskripsi"
-                        id="deskripsi"
-                        rows="3"
-                        class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500"
-                    ></textarea>
-                    <div
-                        v-if="form.errors.deskripsi"
-                        class="text-red-500 text-xs mt-1"
-                    >
-                        {{ form.errors.deskripsi }}
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label
-                            for="harga"
-                            class="block text-sm font-medium text-gray-700"
-                            >Price</label
+            <form @submit.prevent="submitForm" class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Image Uploader -->
+                    <div class="md:col-span-1 space-y-2">
+                        <label class="block text-sm font-medium text-gray-700"
+                            >Gambar Menu</label
                         >
-                        <input
-                            v-model="form.harga"
-                            type="number"
-                            id="harga"
-                            class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500"
-                        />
                         <div
-                            v-if="form.errors.harga"
-                            class="text-red-500 text-xs mt-1"
+                            class="aspect-square w-full bg-gray-100 rounded-xl flex items-center justify-center overflow-hidden border-2 border-dashed"
                         >
-                            {{ form.errors.harga }}
-                        </div>
-                    </div>
-                    <div>
-                        <label
-                            for="jumlah"
-                            class="block text-sm font-medium text-gray-700"
-                            >Stock</label
-                        >
-                        <input
-                            v-model="form.jumlah"
-                            type="number"
-                            id="jumlah"
-                            class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500"
-                        />
-                        <div
-                            v-if="form.errors.jumlah"
-                            class="text-red-500 text-xs mt-1"
-                        >
-                            {{ form.errors.jumlah }}
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <label
-                        for="kode_kategori"
-                        class="block text-sm font-medium text-gray-700"
-                        >Category</label
-                    >
-                    <select
-                        v-model="form.kode_kategori"
-                        id="kode_kategori"
-                        class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500"
-                    >
-                        <option disabled value="">Select a category</option>
-                        <option
-                            v-for="cat in categories"
-                            :key="cat.kode_kategori"
-                            :value="cat.kode_kategori"
-                        >
-                            {{ cat.nama }}
-                        </option>
-                    </select>
-                    <div
-                        v-if="form.errors.kode_kategori"
-                        class="text-red-500 text-xs mt-1"
-                    >
-                        {{ form.errors.kode_kategori }}
-                    </div>
-                </div>
-                <div>
-                    <label
-                        for="image"
-                        class="block text-sm font-medium text-gray-700 mb-2"
-                        >Image</label
-                    >
-                    <div class="flex items-center gap-4">
-                        <img
-                            v-if="imagePreview"
-                            :src="imagePreview"
-                            alt="Preview"
-                            class="w-20 h-20 object-cover rounded-lg border"
-                        />
-                        <img
-                            v-else-if="currentImageUrl"
-                            :src="currentImageUrl"
-                            alt="Current"
-                            class="w-20 h-20 object-cover rounded-lg border"
-                        />
-                        <div
-                            v-else
-                            class="w-20 h-20 bg-gray-100 flex items-center justify-center rounded-lg border"
-                        >
-                            <svg
-                                class="w-8 h-8 text-gray-400"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="1.5"
-                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                ></path>
-                            </svg>
-                        </div>
-                        <div class="flex-grow">
-                            <input
-                                @change="handleImageUpload"
-                                type="file"
-                                id="image"
-                                class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100"
+                            <img
+                                v-if="imagePreview || currentImageUrl"
+                                :src="imagePreview! || currentImageUrl!"
+                                alt="Preview"
+                                class="w-full h-full object-cover"
                             />
+                            <div v-else class="text-center text-gray-500 p-4">
+                                <svg
+                                    class="w-10 h-10 mx-auto"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="1.5"
+                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                    ></path>
+                                </svg>
+                                <p class="text-xs mt-1">Pilih gambar</p>
+                            </div>
+                        </div>
+                        <input
+                            @change="handleImageUpload"
+                            type="file"
+                            id="image-upload"
+                            class="hidden"
+                        />
+                        <div class="flex items-center justify-center gap-2">
+                            <label
+                                for="image-upload"
+                                class="cursor-pointer text-sm font-semibold text-amber-600 hover:text-amber-800"
+                                >Unggah</label
+                            >
                             <button
                                 v-if="
                                     imagePreview ||
-                                    (isEditing && currentImageUrl)
+                                    (isEditing && currentMenu?.path_img)
                                 "
                                 type="button"
                                 @click="removeImagePreview"
-                                class="text-xs text-red-500 hover:underline mt-2"
+                                class="text-sm text-red-500 hover:text-red-700"
                             >
-                                Remove Image
+                                Hapus
                             </button>
                         </div>
+                        <div
+                            v-if="form.errors.image"
+                            class="text-red-500 text-xs text-center"
+                        >
+                            {{ form.errors.image }}
+                        </div>
                     </div>
-                    <div
-                        v-if="form.errors.image"
-                        class="text-red-500 text-xs mt-1"
-                    >
-                        {{ form.errors.image }}
+
+                    <!-- Form Fields -->
+                    <div class="md:col-span-2 space-y-4">
+                        <div>
+                            <label
+                                for="nama"
+                                class="block text-sm font-medium text-gray-700"
+                                >Nama Menu</label
+                            >
+                            <input
+                                v-model="form.nama"
+                                type="text"
+                                id="nama"
+                                class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500"
+                            />
+                            <div
+                                v-if="form.errors.nama"
+                                class="text-red-500 text-xs mt-1"
+                            >
+                                {{ form.errors.nama }}
+                            </div>
+                        </div>
+                        <div>
+                            <label
+                                for="deskripsi"
+                                class="block text-sm font-medium text-gray-700"
+                                >Deskripsi</label
+                            >
+                            <textarea
+                                v-model="form.deskripsi"
+                                id="deskripsi"
+                                rows="3"
+                                class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500"
+                            ></textarea>
+                            <div
+                                v-if="form.errors.deskripsi"
+                                class="text-red-500 text-xs mt-1"
+                            >
+                                {{ form.errors.deskripsi }}
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label
+                                    for="harga"
+                                    class="block text-sm font-medium text-gray-700"
+                                    >Harga</label
+                                >
+                                <input
+                                    v-model="form.harga"
+                                    type="number"
+                                    id="harga"
+                                    class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500"
+                                />
+                                <div
+                                    v-if="form.errors.harga"
+                                    class="text-red-500 text-xs mt-1"
+                                >
+                                    {{ form.errors.harga }}
+                                </div>
+                            </div>
+                            <div>
+                                <label
+                                    for="kode_kategori"
+                                    class="block text-sm font-medium text-gray-700"
+                                    >Kategori</label
+                                >
+                                <select
+                                    v-model="form.kode_kategori"
+                                    id="kode_kategori"
+                                    class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500"
+                                >
+                                    <option disabled value="">
+                                        Pilih kategori
+                                    </option>
+                                    <option
+                                        v-for="cat in categories"
+                                        :key="cat.kode_kategori"
+                                        :value="cat.kode_kategori"
+                                    >
+                                        {{ cat.nama }}
+                                    </option>
+                                </select>
+                                <div
+                                    v-if="form.errors.kode_kategori"
+                                    class="text-red-500 text-xs mt-1"
+                                >
+                                    {{ form.errors.kode_kategori }}
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label
+                                for="status"
+                                class="block text-sm font-medium text-gray-700"
+                                >Status</label
+                            >
+                            <select
+                                v-model="form.status"
+                                id="status"
+                                class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500"
+                            >
+                                <option value="available">Tersedia</option>
+                                <option value="unavailable">Habis</option>
+                            </select>
+                            <div
+                                v-if="form.errors.status"
+                                class="text-red-500 text-xs mt-1"
+                            >
+                                {{ form.errors.status }}
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <div class="pt-4 flex justify-end space-x-3">
+                <div class="pt-6 flex justify-end space-x-3">
                     <button
                         type="button"
                         @click="closeModal"
                         class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition-colors"
                     >
-                        Cancel
+                        Batal
                     </button>
                     <button
                         type="submit"
                         :disabled="form.processing"
-                        class="px-4 py-2 bg-[#6F4E37] text-white rounded-lg hover:bg-[#5D4037] disabled:opacity-50 transition-colors"
+                        class="px-4 py-2 bg-[#6F4E37] text-white rounded-lg hover:bg-[#5D4037] disabled:opacity-50 transition-colors flex items-center"
                     >
-                        {{ form.processing ? "Saving..." : "Save Changes" }}
+                        <svg
+                            v-if="form.processing"
+                            class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <circle
+                                class="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                stroke-width="4"
+                            ></circle>
+                            <path
+                                class="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                        </svg>
+                        {{ form.processing ? "Menyimpan..." : "Simpan" }}
                     </button>
                 </div>
             </form>
         </Modal>
+
+        <!-- Detail Modal -->
+        <Modal
+            :show="isDetailModalOpen"
+            title="Detail Menu"
+            @close="closeDetailModal"
+        >
+            <div v-if="currentMenu" class="p-6">
+                <div
+                    class="aspect-video w-full bg-gray-100 rounded-xl flex items-center justify-center overflow-hidden mb-4"
+                >
+                    <img
+                        v-if="currentImageUrl"
+                        :src="currentImageUrl"
+                        :alt="currentMenu.nama"
+                        class="w-full h-full object-cover"
+                    />
+                    <div v-else class="text-gray-500">
+                        <svg
+                            class="w-12 h-12"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="1.5"
+                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            ></path>
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900">
+                    {{ currentMenu.nama }}
+                </h3>
+                <div class="flex items-center gap-4 mt-2 mb-4 text-sm">
+                    <span
+                        class="inline-flex items-center px-3 py-1 rounded-full font-medium bg-gray-100 text-gray-800"
+                        >{{ currentMenu.kategori?.nama || "N/A" }}</span
+                    >
+                    <span
+                        class="inline-flex items-center px-3 py-1 rounded-full font-semibold"
+                        :class="{
+                            'bg-green-100 text-green-800':
+                                currentMenu.status === 'available',
+                            'bg-red-100 text-red-800':
+                                currentMenu.status === 'unavailable',
+                        }"
+                        >{{
+                            currentMenu.status === "available"
+                                ? "Tersedia"
+                                : "Habis"
+                        }}</span
+                    >
+                </div>
+                <p class="text-gray-600 mb-4">{{ currentMenu.deskripsi }}</p>
+                <p class="text-3xl font-extrabold text-[#6F4E37]">
+                    {{ formatCurrency(currentMenu.harga) }}
+                </p>
+
+                <div class="pt-6 flex justify-end">
+                    <button
+                        type="button"
+                        @click="closeDetailModal"
+                        class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition-colors"
+                    >
+                        Tutup
+                    </button>
+                </div>
+            </div>
+        </Modal>
     </AdminLayout>
 </template>
-
-<style scoped>
-/* Custom scrollbar for better aesthetics */
-::-webkit-scrollbar {
-    width: 6px;
-}
-
-::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
-    border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #a1a1a1;
-}
-</style>

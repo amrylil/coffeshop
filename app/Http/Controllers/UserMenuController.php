@@ -28,7 +28,8 @@ class UserMenuController extends RoutingController
 
         $categories = KategoriProduk::all();
 
-        $query = Menu::with('kategori')->where('jumlah', '>', 0);
+        $query = Menu::with('kategori')->where('status', 'available', )
+        ;
 
         $query->when($request->input('search'), function ($q, $search) {
             $q->where(function ($subQ) use ($search) {
@@ -60,7 +61,7 @@ class UserMenuController extends RoutingController
     public function latestMenus()
     {
         $latestMenus = Menu::with('kategori')
-            ->where('jumlah', '>', 0)
+            ->where('status', 'available', )
             ->orderBy('created_at', 'desc')
             ->take(4)
             ->get();
@@ -80,7 +81,8 @@ class UserMenuController extends RoutingController
     {
         $category = KategoriProduk::findOrFail($categoryId);
         $menus    = Menu::where('kode_kategori', $categoryId)
-            ->where('jumlah', '>', 0)
+            ->where('status', 'available', )
+
             ->paginate(12);
         $categories = KategoriProduk::all();
 
@@ -99,7 +101,8 @@ class UserMenuController extends RoutingController
 
         $relatedMenus = Menu::where('kode_kategori', $menu->kode_kategori)
             ->where('kode_menu', '!=', $menu->kode_menu)
-            ->where('jumlah', '>', 0)
+            ->where('status', 'available', )
+
             ->limit(4)
             ->get();
 

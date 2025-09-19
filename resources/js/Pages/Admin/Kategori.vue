@@ -1,57 +1,68 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { useForm, usePage, Link } from "@inertiajs/vue3";
+import { useForm, Link } from "@inertiajs/vue3";
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import DataTable from "@/components/ui/DataTable.vue";
 import Modal from "@/components/ui/ModalForm.vue";
 import { route } from "ziggy-js";
 
+// --- Interface ---
 interface Kategori {
     kode_kategori: string;
     nama: string;
     deskripsi: string | null;
     path_img: string | null;
-    menu_count?: number;
+    menus_count?: number; // Laravel's withCount typically uses snake_case
 }
 
+// --- Props ---
 const props = defineProps<{
     categories: Kategori[];
 }>();
 
 // --- State ---
 const isModalOpen = ref(false);
+const isDetailModalOpen = ref(false);
 const isEditing = ref(false);
 const currentCategory = ref<Kategori | null>(null);
+const imagePreview = ref<string | null>(null);
 
+// --- Form ---
 const form = useForm({
+    _method: "POST", // For method spoofing on update
     kode_kategori: "",
     nama: "",
     deskripsi: "",
-    path_img: null as File | null,
+    image: null as File | null, // Use 'image' for file input for clarity
+});
+
+// --- Computed Properties ---
+const modalTitle = computed(() =>
+    isEditing.value ? "Edit Kategori" : "Tambah Kategori Baru"
+);
+
+const currentImageUrl = computed(() => {
+    if (currentCategory.value?.path_img) {
+        return `/storage/images/${currentCategory.value.path_img}`;
+    }
+    return null;
 });
 
 // --- Table Configuration ---
 const tableHeaders = [
-    { key: "image", label: "Image" },
-    { key: "kode_kategori", label: "Code" },
-    { key: "nama", label: "Name" },
-    { key: "deskripsi", label: "Description" },
-    { key: "menu_count", label: "Menu Count" },
+    { key: "image", label: "Gambar" },
+    { key: "nama", label: "Nama Kategori" },
+    { key: "deskripsi", label: "Deskripsi" },
+    { key: "menus_count", label: "Jumlah Menu" },
 ];
-
-// --- Computed Properties ---
-const modalTitle = computed(() =>
-    isEditing.value ? "Edit Category" : "Add New Category"
-);
-const flash = computed(
-    () => usePage().props.flash as { success?: string; error?: string }
-);
 
 // --- Functions ---
 const openCreateModal = () => {
     isEditing.value = false;
     form.reset();
+    form._method = "POST";
     isModalOpen.value = true;
+    imagePreview.value = null;
 };
 
 const openEditModal = (category: Kategori) => {
@@ -60,33 +71,41 @@ const openEditModal = (category: Kategori) => {
     form.kode_kategori = category.kode_kategori;
     form.nama = category.nama;
     form.deskripsi = category.deskripsi || "";
-    form.path_img = null;
+    form.image = null;
+    form._method = "PUT";
     isModalOpen.value = true;
+    imagePreview.value = null;
+};
+
+const openDetailModal = (category: Kategori) => {
+    currentCategory.value = category;
+    isDetailModalOpen.value = true;
 };
 
 const closeModal = () => {
     isModalOpen.value = false;
     form.reset();
     form.clearErrors();
+    imagePreview.value = null;
+};
+
+const closeDetailModal = () => {
+    isDetailModalOpen.value = false;
+    currentCategory.value = null;
 };
 
 const submitForm = () => {
     const options = {
         onSuccess: () => closeModal(),
-        // Preserve state to keep the modal open on validation errors
-        preserveState: true,
+        preserveScroll: true,
     };
-
     if (isEditing.value) {
-        form.put(
+        form.post(
             route(
                 "admin.kategori.update",
                 currentCategory.value!.kode_kategori
             ),
-            {
-                ...options,
-                // transform: (data) => ({ ...data, _method: "PATCH" }),
-            }
+            options
         );
     } else {
         form.post(route("admin.kategori.store"), options);
@@ -94,9 +113,16 @@ const submitForm = () => {
 };
 
 const deleteCategory = (category: Kategori) => {
-    if (confirm("Are you sure you want to delete this category?")) {
+    if (
+        confirm(
+            `Apakah Anda yakin ingin menghapus kategori "${category.nama}"?`
+        )
+    ) {
         useForm({}).delete(
-            route("admin.kategori.destroy", category.kode_kategori)
+            route("admin.kategori.destroy", category.kode_kategori),
+            {
+                preserveScroll: true,
+            }
         );
     }
 };
@@ -104,169 +130,430 @@ const deleteCategory = (category: Kategori) => {
 const handleImageUpload = (event: Event) => {
     const target = event.target as HTMLInputElement;
     if (target.files && target.files.length > 0) {
-        form.path_img = target.files[0];
+        const file = target.files[0];
+        form.image = file;
+        imagePreview.value = URL.createObjectURL(file);
     }
+};
+
+const removeImagePreview = () => {
+    imagePreview.value = null;
+    form.image = null;
+    const fileInput = document.getElementById(
+        "image-upload"
+    ) as HTMLInputElement;
+    if (fileInput) fileInput.value = "";
 };
 </script>
 
 <template>
     <AdminLayout>
-        <div class="py-8 px-4 sm:px-6 lg:px-8">
+        <div class="p-4 sm:p-6 lg:p-8">
             <div class="max-w-7xl mx-auto">
-                <!-- Header -->
-                <div class="mb-6 flex justify-between items-center">
-                    <h1 class="text-3xl font-bold text-[#6F4E37]">
-                        Category Management
-                    </h1>
+                <!-- Breadcrumbs & Header -->
+                <nav class="text-sm mb-4" aria-label="Breadcrumb">
+                    <ol class="list-none p-0 inline-flex space-x-2">
+                        <li class="flex items-center">
+                            <Link
+                                :href="route('admin.dashboard.index')"
+                                class="text-gray-500 hover:text-gray-700"
+                                >Admin</Link
+                            >
+                        </li>
+                        <li class="flex items-center">
+                            <svg
+                                class="h-5 w-5 text-gray-400"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd"
+                                />
+                            </svg>
+                            <span class="text-gray-800 font-semibold"
+                                >Kategori</span
+                            >
+                        </li>
+                    </ol>
+                </nav>
+
+                <div
+                    class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8"
+                >
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900">
+                            Manajemen Kategori
+                        </h1>
+                        <p class="mt-1 text-sm text-gray-600">
+                            Buat dan kelola kategori untuk menu Anda.
+                        </p>
+                    </div>
                     <button
                         @click="openCreateModal"
-                        class="px-4 py-2 bg-[#6F4E37] text-white rounded-md hover:bg-[#5D4037] transition"
+                        class="mt-4 sm:mt-0 inline-flex items-center px-5 py-2.5 bg-[#6F4E37] text-white text-sm font-medium rounded-lg hover:bg-[#5D4037] transition-all duration-200 shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
                     >
-                        Add New Category
+                        <svg
+                            class="w-4 h-4 mr-2"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 4v16m8-8H4"
+                            ></path>
+                        </svg>
+                        Tambah Kategori
                     </button>
                 </div>
 
-                <!-- Data Table -->
-                <DataTable
-                    :headers="tableHeaders"
-                    :items="categories"
-                    :searchKeys="['nama', 'kode_kategori']"
+                <!-- DataTable -->
+                <div
+                    class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
                 >
-                    <template #cell(image)="{ item }">
-                        <img
-                            v-if="item.path_img"
-                            :src="`/storage/${item.path_img}`"
-                            :alt="item.nama"
-                            class="h-16 w-16 object-cover rounded"
-                        />
-                        <div
-                            v-else
-                            class="h-16 w-16 bg-gray-200 flex items-center justify-center rounded text-gray-400"
-                        >
-                            No Img
-                        </div>
-                    </template>
-                    <template #cell(deskripsi)="{ item }">
-                        <p class="max-w-xs truncate">
-                            {{ item.deskripsi || "No description" }}
-                        </p>
-                    </template>
-                    <template #actions="{ item }">
-                        <button
-                            @click="openEditModal(item)"
-                            class="px-2 py-1 bg-[#F5E6DD] text-[#6F4E37] hover:text-[#5D4037] rounded-md text-xs"
-                        >
-                            Edit
-                        </button>
-                        <button
-                            @click="deleteCategory(item)"
-                            class="px-2 py-1 bg-red-100 text-red-600 hover:text-red-800 rounded-md text-xs"
-                        >
-                            Delete
-                        </button>
-                    </template>
-                </DataTable>
+                    <DataTable
+                        :headers="tableHeaders"
+                        :items="categories"
+                        :searchKeys="['nama', 'kode_kategori']"
+                        class="border-0"
+                    >
+                        <template #cell(image)="{ item }">
+                            <div class="p-2">
+                                <img
+                                    v-if="item.path_img"
+                                    :src="`/storage/images/${item.path_img}`"
+                                    :alt="item.nama"
+                                    class="h-14 w-14 object-cover rounded-xl ring-1 ring-gray-200"
+                                />
+                                <div
+                                    v-else
+                                    class="h-14 w-14 bg-gray-100 rounded-xl ring-1 ring-gray-200 flex items-center justify-center"
+                                >
+                                    <svg
+                                        class="w-6 h-6 text-gray-400"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="1.5"
+                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                        ></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </template>
+                        <template #cell(deskripsi)="{ item }">
+                            <p class="max-w-xs truncate text-sm text-gray-600">
+                                {{ item.deskripsi || "Tidak ada deskripsi" }}
+                            </p>
+                        </template>
+                        <template #cell(menus_count)="{ item }">
+                            <span class="text-sm font-medium text-gray-800">{{
+                                item.menus_count
+                            }}</span>
+                        </template>
+                        <template #actions="{ item }">
+                            <div class="flex items-center gap-2">
+                                <button
+                                    @click="openDetailModal(item)"
+                                    class="p-2 text-gray-500 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
+                                >
+                                    <svg
+                                        class="w-5 h-5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                        ></path>
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                                        ></path>
+                                    </svg>
+                                </button>
+                                <button
+                                    @click="openEditModal(item)"
+                                    class="p-2 text-blue-500 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-colors"
+                                >
+                                    <svg
+                                        class="w-5 h-5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                        ></path>
+                                    </svg>
+                                </button>
+                                <button
+                                    @click="deleteCategory(item)"
+                                    class="p-2 text-red-500 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors"
+                                >
+                                    <svg
+                                        class="w-5 h-5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                        ></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </template>
+                    </DataTable>
+                </div>
             </div>
         </div>
 
         <!-- Create/Edit Modal -->
         <Modal :show="isModalOpen" :title="modalTitle" @close="closeModal">
-            <form @submit.prevent="submitForm" class="space-y-4">
-                <div>
-                    <label
-                        for="kode_kategori"
-                        class="block text-sm font-medium text-gray-700"
-                        >Category Code</label
-                    >
-                    <input
-                        v-model="form.kode_kategori"
-                        type="text"
-                        id="kode_kategori"
-                        :disabled="isEditing"
-                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                        :class="{ 'bg-gray-100': isEditing }"
-                    />
-                    <div
-                        v-if="form.errors.kode_kategori"
-                        class="text-red-500 text-xs mt-1"
-                    >
-                        {{ form.errors.kode_kategori }}
+            <form @submit.prevent="submitForm" class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="md:col-span-1 space-y-2">
+                        <label class="block text-sm font-medium text-gray-700"
+                            >Gambar Kategori</label
+                        >
+                        <div
+                            class="aspect-square w-full bg-gray-100 rounded-xl flex items-center justify-center overflow-hidden border-2 border-dashed"
+                        >
+                            <img
+                                v-if="imagePreview || currentImageUrl"
+                                :src="imagePreview! || currentImageUrl!"
+                                alt="Preview"
+                                class="w-full h-full object-cover"
+                            />
+                            <div v-else class="text-center text-gray-500 p-4">
+                                <svg
+                                    class="w-10 h-10 mx-auto"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="1.5"
+                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                    ></path>
+                                </svg>
+                                <p class="text-xs mt-1">Pilih gambar</p>
+                            </div>
+                        </div>
+                        <input
+                            @change="handleImageUpload"
+                            type="file"
+                            id="image-upload"
+                            class="hidden"
+                        />
+                        <div class="flex items-center justify-center gap-2">
+                            <label
+                                for="image-upload"
+                                class="cursor-pointer text-sm font-semibold text-amber-600 hover:text-amber-800"
+                                >Unggah</label
+                            >
+                            <button
+                                v-if="
+                                    imagePreview ||
+                                    (isEditing && currentCategory?.path_img)
+                                "
+                                type="button"
+                                @click="removeImagePreview"
+                                class="text-sm text-red-500 hover:text-red-700"
+                            >
+                                Hapus
+                            </button>
+                        </div>
+                        <div
+                            v-if="form.errors.image"
+                            class="text-red-500 text-xs text-center"
+                        >
+                            {{ form.errors.image }}
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-2 space-y-4">
+                        <div>
+                            <label
+                                for="kode_kategori"
+                                class="block text-sm font-medium text-gray-700"
+                                >Kode Kategori</label
+                            >
+                            <input
+                                v-model="form.kode_kategori"
+                                :disabled="isEditing"
+                                type="text"
+                                id="kode_kategori"
+                                class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500 disabled:bg-gray-100"
+                            />
+                            <div
+                                v-if="form.errors.kode_kategori"
+                                class="text-red-500 text-xs mt-1"
+                            >
+                                {{ form.errors.kode_kategori }}
+                            </div>
+                        </div>
+                        <div>
+                            <label
+                                for="nama"
+                                class="block text-sm font-medium text-gray-700"
+                                >Nama Kategori</label
+                            >
+                            <input
+                                v-model="form.nama"
+                                type="text"
+                                id="nama"
+                                class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500"
+                            />
+                            <div
+                                v-if="form.errors.nama"
+                                class="text-red-500 text-xs mt-1"
+                            >
+                                {{ form.errors.nama }}
+                            </div>
+                        </div>
+                        <div>
+                            <label
+                                for="deskripsi"
+                                class="block text-sm font-medium text-gray-700"
+                                >Deskripsi</label
+                            >
+                            <textarea
+                                v-model="form.deskripsi"
+                                id="deskripsi"
+                                rows="4"
+                                class="mt-1 p-2 block w-full border-gray-300 rounded-md shadow-sm focus:ring-amber-500 focus:border-amber-500"
+                            ></textarea>
+                            <div
+                                v-if="form.errors.deskripsi"
+                                class="text-red-500 text-xs mt-1"
+                            >
+                                {{ form.errors.deskripsi }}
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div>
-                    <label
-                        for="nama"
-                        class="block text-sm font-medium text-gray-700"
-                        >Name</label
-                    >
-                    <input
-                        v-model="form.nama"
-                        type="text"
-                        id="nama"
-                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                    />
-                    <div
-                        v-if="form.errors.nama"
-                        class="text-red-500 text-xs mt-1"
-                    >
-                        {{ form.errors.nama }}
-                    </div>
-                </div>
-                <div>
-                    <label
-                        for="deskripsi"
-                        class="block text-sm font-medium text-gray-700"
-                        >Description</label
-                    >
-                    <textarea
-                        v-model="form.deskripsi"
-                        id="deskripsi"
-                        rows="3"
-                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                    ></textarea>
-                    <div
-                        v-if="form.errors.deskripsi"
-                        class="text-red-500 text-xs mt-1"
-                    >
-                        {{ form.errors.deskripsi }}
-                    </div>
-                </div>
-                <div>
-                    <label
-                        for="path_img"
-                        class="block text-sm font-medium text-gray-700"
-                        >Image</label
-                    >
-                    <input
-                        @change="handleImageUpload"
-                        type="file"
-                        id="path_img"
-                        class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-amber-50 file:text-amber-800 hover:file:bg-amber-100"
-                    />
-                    <div
-                        v-if="form.errors.path_img"
-                        class="text-red-500 text-xs mt-1"
-                    >
-                        {{ form.errors.path_img }}
-                    </div>
-                </div>
-                <div class="pt-4 flex justify-end space-x-2">
+                <div class="pt-6 flex justify-end space-x-3">
                     <button
                         type="button"
                         @click="closeModal"
-                        class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
+                        class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition-colors"
                     >
-                        Cancel
+                        Batal
                     </button>
                     <button
                         type="submit"
                         :disabled="form.processing"
-                        class="px-4 py-2 bg-[#6F4E37] text-white rounded-md hover:bg-[#5D4037] disabled:opacity-50"
+                        class="px-4 py-2 bg-[#6F4E37] text-white rounded-lg hover:bg-[#5D4037] disabled:opacity-50 transition-colors flex items-center"
                     >
-                        {{ form.processing ? "Saving..." : "Save" }}
+                        <svg
+                            v-if="form.processing"
+                            class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <circle
+                                class="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                stroke-width="4"
+                            ></circle>
+                            <path
+                                class="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                        </svg>
+                        {{ form.processing ? "Menyimpan..." : "Simpan" }}
                     </button>
                 </div>
             </form>
+        </Modal>
+
+        <!-- Detail Modal -->
+        <Modal
+            :show="isDetailModalOpen"
+            title="Detail Kategori"
+            @close="closeDetailModal"
+        >
+            <div v-if="currentCategory" class="p-6">
+                <div
+                    class="aspect-video w-full bg-gray-100 rounded-xl flex items-center justify-center overflow-hidden mb-4"
+                >
+                    <img
+                        v-if="currentImageUrl"
+                        :src="currentImageUrl"
+                        :alt="currentCategory.nama"
+                        class="w-full h-full object-cover"
+                    />
+                    <div v-else class="text-gray-500">
+                        <svg
+                            class="w-12 h-12"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="1.5"
+                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            ></path>
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900">
+                    {{ currentCategory.nama }}
+                </h3>
+                <p class="text-sm text-gray-500 mb-4">
+                    {{ currentCategory.kode_kategori }}
+                </p>
+                <p class="text-gray-600 mb-4">
+                    {{ currentCategory.deskripsi || "Tidak ada deskripsi." }}
+                </p>
+                <div class="border-t border-gray-200 pt-4">
+                    <div class="text-sm font-medium text-gray-500">
+                        Jumlah Menu
+                    </div>
+                    <div class="text-lg font-semibold text-gray-800">
+                        {{ currentCategory.menus_count }} menu
+                    </div>
+                </div>
+                <div class="pt-6 flex justify-end">
+                    <button
+                        type="button"
+                        @click="closeDetailModal"
+                        class="px-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition-colors"
+                    >
+                        Tutup
+                    </button>
+                </div>
+            </div>
         </Modal>
     </AdminLayout>
 </template>

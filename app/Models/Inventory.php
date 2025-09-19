@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 class Inventory extends Model
 {
     protected $primaryKey = 'kode_bahan';
-    public $incrementing  = false;
-    protected $keyType    = 'string';
+    protected $table      = 'inventory';
+
+    public $incrementing = false;
+    protected $keyType   = 'string';
 
     protected $fillable = [
         'kode_bahan',

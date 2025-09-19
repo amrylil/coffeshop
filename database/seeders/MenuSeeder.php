@@ -7,9 +7,6 @@ use Illuminate\Database\Seeder;
 
 class MenuSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $menus = [
@@ -21,8 +18,7 @@ class MenuSeeder extends Seeder
                 'harga'         => 15000.0,
                 'kode_kategori' => 'KAT001',
                 'path_img'      => 'images/menu/kopi-hitam.jpg',
-                'jumlah'        => 100,
-                'created_at'    => now(),
+                'status'        => 'available',
             ],
             [
                 'kode_menu'     => IDGeneratorHelper::generateMenuID(),
@@ -31,8 +27,7 @@ class MenuSeeder extends Seeder
                 'harga'         => 25000.0,
                 'kode_kategori' => 'KAT001',
                 'path_img'      => 'images/menu/cappuccino.jpg',
-                'jumlah'        => 100,
-                'created_at'    => now(),
+                'status'        => 'available',
             ],
             [
                 'kode_menu'     => IDGeneratorHelper::generateMenuID(),
@@ -41,8 +36,7 @@ class MenuSeeder extends Seeder
                 'harga'         => 27000.0,
                 'kode_kategori' => 'KAT001',
                 'path_img'      => 'images/menu/latte.jpg',
-                'jumlah'        => 100,
-                'created_at'    => now(),
+                'status'        => 'available',
             ],
             [
                 'kode_menu'     => IDGeneratorHelper::generateMenuID(),
@@ -51,8 +45,7 @@ class MenuSeeder extends Seeder
                 'harga'         => 18000.0,
                 'kode_kategori' => 'KAT001',
                 'path_img'      => 'images/menu/espresso.jpg',
-                'jumlah'        => 100,
-                'created_at'    => now(),
+                'status'        => 'available',
             ],
             // Teh
             [
@@ -62,8 +55,7 @@ class MenuSeeder extends Seeder
                 'harga'         => 20000.0,
                 'kode_kategori' => 'KAT002',
                 'path_img'      => 'images/menu/green-tea.jpg',
-                'jumlah'        => 100,
-                'created_at'    => now(),
+                'status'        => 'available',
             ],
             [
                 'kode_menu'     => IDGeneratorHelper::generateMenuID(),
@@ -72,19 +64,17 @@ class MenuSeeder extends Seeder
                 'harga'         => 22000.0,
                 'kode_kategori' => 'KAT002',
                 'path_img'      => 'images/menu/earl-grey.jpg',
-                'jumlah'        => 100,
-                'created_at'    => now(),
+                'status'        => 'available',
             ],
             // Makanan Ringan
             [
                 'kode_menu'     => IDGeneratorHelper::generateMenuID(),
                 'nama'          => 'Kentang Goreng',
-                'deskripsi'     => 'Kentang goreng renyah yang disajikan dengan saus sambal dan mayones',
+                'deskripsi'     => 'Kentang goreng renyah dengan saus sambal dan mayones',
                 'harga'         => 25000.0,
                 'kode_kategori' => 'KAT003',
                 'path_img'      => 'images/menu/kentang-goreng.jpg',
-                'jumlah'        => 50,
-                'created_at'    => now(),
+                'status'        => 'available',
             ],
             [
                 'kode_menu'     => IDGeneratorHelper::generateMenuID(),
@@ -93,8 +83,7 @@ class MenuSeeder extends Seeder
                 'harga'         => 35000.0,
                 'kode_kategori' => 'KAT003',
                 'path_img'      => 'images/menu/sandwich-chicken.jpg',
-                'jumlah'        => 30,
-                'created_at'    => now(),
+                'status'        => 'available',
             ],
             // Dessert
             [
@@ -104,8 +93,7 @@ class MenuSeeder extends Seeder
                 'harga'         => 35000.0,
                 'kode_kategori' => 'KAT004',
                 'path_img'      => 'images/menu/cheesecake.jpg',
-                'jumlah'        => 20,
-                'created_at'    => now(),
+                'status'        => 'available',
             ],
             [
                 'kode_menu'     => IDGeneratorHelper::generateMenuID(),
@@ -114,8 +102,7 @@ class MenuSeeder extends Seeder
                 'harga'         => 30000.0,
                 'kode_kategori' => 'KAT004',
                 'path_img'      => 'images/menu/chocolate-lava.jpg',
-                'jumlah'        => 25,
-                'created_at'    => now(),
+                'status'        => 'available',
             ],
         ];
 

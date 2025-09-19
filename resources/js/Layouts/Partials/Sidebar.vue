@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import { User } from "@/types";
 import SidebarLink from "./SidebarLink.vue";
 import UserMenu from "./UserMenu.vue";
@@ -9,16 +10,77 @@ const props = defineProps<{
 }>();
 const emit = defineEmits(["toggle"]);
 
-const navLinks = [
-    { name: "Dashboard", href: "/admin/dashboard", icon: { type: "grid" } },
-    { name: "Menu", href: "/admin/menu", icon: { type: "coffee" } },
-    { name: "Kategori", href: "/admin/kategori", icon: { type: "grid" } },
-    { name: "Users", href: "/admin/users", icon: { type: "users" } },
-    { name: "Meja", href: "/admin/meja", icon: { type: "table" } },
-    { name: "Reservasi", href: "/admin/reservasi", icon: { type: "calendar" } },
-    { name: "Transaksi", href: "/admin/transaksi", icon: { type: "receipt" } },
-    { name: "Laporan", href: "/admin/laporan", icon: { type: "report" } },
-] as const;
+// Computed property untuk memfilter link navigasi berdasarkan peran pengguna
+const navLinks = computed(() => {
+    // Daftar semua link dengan path statis dan peran yang diperbarui
+    const allLinks = [
+        {
+            name: "Dashboard",
+            href: "/admin/dashboard",
+            iconType: "grid",
+            roles: ["admin", "cashier"],
+        },
+        {
+            name: "Menu",
+            href: "/admin/menu",
+            iconType: "coffee",
+            roles: ["admin", "cashier"],
+        },
+        {
+            name: "Inventory",
+            href: "/admin/inventory",
+            iconType: "box",
+            roles: ["admin"],
+        },
+        {
+            name: "Kategori",
+            href: "/admin/kategori",
+            iconType: "tag",
+            roles: ["admin"],
+        },
+        {
+            name: "Users",
+            href: "/admin/users",
+            iconType: "users",
+            roles: ["admin"],
+        },
+        {
+            name: "Meja",
+            href: "/admin/meja",
+            iconType: "table",
+            roles: ["admin", "cashier"],
+        },
+        {
+            name: "Reservasi",
+            href: "/admin/reservasi",
+            iconType: "calendar",
+            roles: ["admin", "cashier"],
+        },
+        {
+            name: "Transaksi",
+            href: "/admin/transaksi",
+            iconType: "receipt",
+            roles: ["admin", "cashier"],
+        },
+        {
+            name: "Laporan",
+            href: "/admin/laporan",
+            iconType: "report",
+            roles: ["admin", "cashier"],
+        },
+    ] as const;
+
+    if (!props.user || !props.user.role) {
+        return [];
+    }
+
+    const userRole = props.user.role;
+
+    // Filter link berdasarkan peran user
+    return allLinks.filter((link) =>
+        (link.roles as readonly string[]).includes(userRole)
+    );
+});
 </script>
 
 <template>
@@ -72,7 +134,9 @@ const navLinks = [
             </button>
         </div>
 
-        <div class="flex h-full flex-col px-3 py-4 text-amber-900 shadow-md">
+        <div
+            class="flex h-full flex-col bg-[#6F4E37] px-3 py-4 text-amber-900 shadow-md"
+        >
             <div class="py-6 flex items-center gap-2 flex-shrink-0">
                 <img
                     src="/images/logo.png"
@@ -97,7 +161,7 @@ const navLinks = [
                         <li v-for="link in navLinks" :key="link.name">
                             <SidebarLink
                                 :href="link.href"
-                                :iconType="link.icon.type"
+                                :iconType="link.iconType"
                                 :is-minimized="isMinimized"
                             >
                                 {{ link.name }}

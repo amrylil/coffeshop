@@ -13,7 +13,7 @@ export interface Menu {
     deskripsi?: string;
     harga: number;
     path_img?: string;
-    jumlah: number;
+    status: "available" | "unavailable"; // DIUBAH: Menambahkan status menu
     created_at?: string;
     kategori: Category;
 }
