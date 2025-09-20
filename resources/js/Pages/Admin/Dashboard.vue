@@ -48,7 +48,6 @@ interface StokItem {
     nama: string;
     sisa: number;
     unit: string;
-    ambangBatas: number;
 }
 
 interface PesananTerbaru {
@@ -73,75 +72,9 @@ interface Props {
     menuTerlarisBulanan: MenuTerlaris[];
 }
 
-// --- PROPS DENGAN DUMMY DATA ---
-const props = withDefaults(defineProps<Props>(), {
-    kpi: () => ({
-        pendapatanHariIni: 1850000,
-        transaksiHariIni: 42,
-        rataRataTransaksi: 44047,
-        menuTerlarisHariIni: { nama: "Kopi Susu Gula Aren", terjual: 15 },
-    }),
-    penjualanPerJam: () => ({
-        labels: [
-            "08",
-            "09",
-            "10",
-            "11",
-            "12",
-            "13",
-            "14",
-            "15",
-            "16",
-            "17",
-            "18",
-            "19",
-            "20",
-            "21",
-        ],
-        data: [
-            150, 250, 180, 120, 200, 300, 280, 400, 350, 220, 180, 150, 100, 80,
-        ], // in thousands (Rp)
-    }),
-    tipePesanan: () => ({
-        labels: ["Dine-In", "Takeaway", "Online"],
-        data: [70, 110, 45],
-    }),
-    stokKritis: () => [
-        { nama: "Biji Kopi Arabika", sisa: 0.8, unit: "kg", ambangBatas: 1 },
-        { nama: "Susu Oat", sisa: 2, unit: "liter", ambangBatas: 3 },
-        { nama: "Sirup Karamel", sisa: 1, unit: "botol", ambangBatas: 1 },
-    ],
-    pesananTerbaru: () => [
-        {
-            id: "TRX001",
-            pelanggan: "Budi Santoso",
-            total: 55000,
-            waktu: "2 menit lalu",
-            items: ["Latte", "Croissant"],
-        },
-        {
-            id: "TRX002",
-            pelanggan: "Online #G123",
-            total: 40000,
-            waktu: "5 menit lalu",
-            items: ["Americano", "Americano"],
-        },
-        {
-            id: "TRX003",
-            pelanggan: "Citra Lestari",
-            total: 28000,
-            waktu: "8 menit lalu",
-            items: ["Kopi Susu Gula Aren"],
-        },
-    ],
-    menuTerlarisBulanan: () => [
-        { nama: "Kopi Susu Gula Aren", terjual: 450 },
-        { nama: "Americano", terjual: 310 },
-        { nama: "Caffe Latte", terjual: 280 },
-        { nama: "V60", terjual: 150 },
-        { nama: "Matcha Latte", terjual: 120 },
-    ],
-});
+// --- PROPS ---
+// Menghapus `withDefaults` karena sekarang kita menerima data asli dari controller
+const props = defineProps<Props>();
 
 // --- KONFIGURASI BAGAN ---
 
@@ -150,7 +83,7 @@ const hourlySalesChartData = computed(() => ({
     datasets: [
         {
             label: "Pendapatan",
-            data: props.penjualanPerJam.data.map((d) => d * 1000), // Convert back from thousands
+            data: props.penjualanPerJam.data, // <-- Menghapus perkalian 1000, karena data sudah akurat
             borderColor: "#8B5A42",
             backgroundColor: "rgba(139, 90, 66, 0.2)",
             tension: 0.4,
@@ -245,7 +178,10 @@ const formatCurrency = (value: number) =>
                             {{ item.value }}
                         </p>
                         <p
-                            v-if="item.title === 'Menu Terlaris Hari Ini'"
+                            v-if="
+                                item.title === 'Menu Terlaris Hari Ini' &&
+                                kpi.menuTerlarisHariIni.terjual > 0
+                            "
                             class="text-xs text-gray-500"
                         >
                             {{ kpi.menuTerlarisHariIni.terjual }} terjual
@@ -272,7 +208,13 @@ const formatCurrency = (value: number) =>
                         <h3 class="text-lg font-semibold text-gray-800 p-6">
                             Pesanan Terbaru
                         </h3>
-                        <div class="overflow-x-auto">
+                        <div
+                            v-if="pesananTerbaru.length === 0"
+                            class="px-6 pb-6 text-center text-gray-500"
+                        >
+                            Belum ada pesanan terbaru hari ini.
+                        </div>
+                        <div v-else class="overflow-x-auto">
                             <table class="min-w-full">
                                 <tbody class="divide-y divide-gray-200">
                                     <tr
@@ -328,7 +270,13 @@ const formatCurrency = (value: number) =>
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">
                             ⚠️ Stok Kritis
                         </h3>
-                        <ul class="space-y-3">
+                        <div
+                            v-if="stokKritis.length === 0"
+                            class="text-center text-gray-500 text-sm"
+                        >
+                            Semua stok dalam kondisi aman.
+                        </div>
+                        <ul v-else class="space-y-3">
                             <li
                                 v-for="item in stokKritis"
                                 :key="item.nama"
@@ -349,7 +297,13 @@ const formatCurrency = (value: number) =>
                         <h3 class="text-lg font-semibold text-gray-800 mb-4">
                             🏆 Menu Terlaris (Bulan Ini)
                         </h3>
-                        <ul class="space-y-3">
+                        <div
+                            v-if="menuTerlarisBulanan.length === 0"
+                            class="text-center text-gray-500 text-sm"
+                        >
+                            Belum ada data penjualan bulan ini.
+                        </div>
+                        <ul v-else class="space-y-3">
                             <li
                                 v-for="(menu, index) in menuTerlarisBulanan"
                                 :key="menu.nama"

@@ -58,7 +58,7 @@ const navLinks = computed(() => {
         },
         {
             name: "Transaksi",
-            href: "/admin/transaksi",
+            href: "/admin/cashier",
             iconType: "receipt",
             roles: ["admin", "cashier"],
         },

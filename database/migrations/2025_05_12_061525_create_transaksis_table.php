@@ -23,6 +23,8 @@ return new class extends Migration
             // Status transaksi: pending, lunas, kedaluwarsa, gagal
             $table->string('status')->default('pending');
 
+            $table->string('jenis_pembayaran')->nullable();
+
             // Catatan tambahan dari pembeli
             $table->text('catatan')->nullable();
 

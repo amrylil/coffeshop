@@ -72,6 +72,39 @@ class CheckoutService
         }
     }
 
+    public function createCashTransaction(array $data, User $cashier): Transaksi
+    {
+        DB::beginTransaction();
+        try {
+            $transaksi = Transaksi::create([
+                'user_id'          => $cashier->id,
+                'total_harga'      => $data['total_harga'],
+                'status'           => 'lunas',
+                'jenis_pembayaran' => 'tunai',
+                'catatan'          => $data['catatan'] ?? null,
+            ]);
+
+            foreach ($data['items'] as $item) {
+                ItemTransaksi::create([
+                    'transaksi_id' => $transaksi->kode_transaksi,
+                    'kode_menu'    => $item['kode_menu'],
+                    'jumlah'       => $item['jumlah'],
+                    'harga'        => $item['harga'],
+                ]);
+
+            }
+
+            DB::commit();
+
+            return $transaksi;
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('Gagal membuat transaksi tunai: ' . $e->getMessage());
+            throw new Exception('Gagal menyimpan transaksi. Silakan coba lagi.');
+        }
+    }
+
     public function updateStatus(string $orderId, string $status): Transaksi
     {
         $transaksi = Transaksi::where('order_id_midtrans', $orderId)

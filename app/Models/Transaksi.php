@@ -22,6 +22,7 @@ class Transaksi extends Model
         'user_id',
         'order_id_midtrans',
         'total_harga',
+        'jenis_pembayaran',
         'status',
         'catatan',
     ];

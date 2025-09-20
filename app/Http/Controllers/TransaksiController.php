@@ -165,4 +165,5 @@ class TransaksiController extends Controller
             return response()->json(['message' => 'Terjadi kesalahan pada server.'], 500);
         }
     }
+
 }

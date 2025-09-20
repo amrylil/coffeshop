@@ -101,6 +101,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('kategori', KategoriController::class);
 
     Route::resource('meja', App\Http\Controllers\MejaController::class);
+    Route::resource('cashier', App\Http\Controllers\CashierController::class);
     Route::resource('inventory', InventoryController::class)->except(['show', 'create', 'edit']);
 
     Route::patch('/meja/{id}/status', [MejaController::class, 'updateStatus'])
