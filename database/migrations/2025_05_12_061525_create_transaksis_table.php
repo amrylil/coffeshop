@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('transaksi', function (Blueprint $table) {
             $table->string('kode_transaksi', 100)->primary();
-            $table->string('user_id', 100);
+            $table->uuid('user_id')->nullable();
 
             $table->string('order_id_midtrans')->unique()->nullable();
 

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('keranjang', function (Blueprint $table) {
             $table->string('kode_keranjang', 100)->primary();
-            $table->string('user_id')->nullable();
+            $table->uuid('user_id')->nullable();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
 

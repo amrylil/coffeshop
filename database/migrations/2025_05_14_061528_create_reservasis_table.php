@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('kode_reservasi', 20)->primary();
             $table->date('tanggal_reservasi')->nullable();
             $table->time('jam_reservasi')->nullable();
-            $table->string('user_id', 100);
+            $table->uuid('user_id')->nullable();
             $table->string('nomor_meja', 10)->nullable();
             $table->text('catatan')->nullable();
             $table->timestamp('created_at')->nullable();
